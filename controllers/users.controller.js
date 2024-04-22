@@ -1,4 +1,4 @@
-// import movies data
+// import users data
 let users = require("../models/users.model");
 
 //-----------------------------------------------//
@@ -14,12 +14,12 @@ exports.findAll = (req, res) => {
 //POST/users
 exports.createUser = (req, res) => {
   console.table(req.body)
+  users.push(req.body)
   res.json("POST/users");
 }
 
-
 exports.bodyValidator = (req, res, next) => {
-  if(isUserRegistered(req) && req.method=='POST') {
+  if(!isUserRegistered(req) && req.method=='POST') {
     console.log("POST")
     next();
   }
@@ -29,7 +29,8 @@ exports.bodyValidator = (req, res, next) => {
 }
 
 function isUserRegistered(req) {
-  return users.some(user => user.email === req.body.email);
+  let check = users.some(user => user.email === req.body.email);console.log(check);
+  return check
 }
 
 function checkLastId() {
