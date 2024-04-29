@@ -12,7 +12,7 @@ exports.findAll = (req, res) => {
 };
 
 exports.findUserId = (req, res) => {
-  console.log("findUserId");console.table(users)
+  console.log("findUserId");//console.table(users)
   let user = users.filter(user => user.id == req.params.id)[0]
   res.json(user)
 }
@@ -22,8 +22,9 @@ exports.findUserId = (req, res) => {
 //POST/users
 exports.createUser = (req, res) => {
   console.table(req.body)
+  req.body.id = checkLastId() 
   users.push(req.body)
-  res.json("POST/users");
+  res.json(users);
 }
 
 //Funções de apoio
