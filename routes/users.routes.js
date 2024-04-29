@@ -11,6 +11,7 @@ router.route('/')
 
 // Rota ('/:')
 router.route('/:id')
+.get(usersController.findUserId)
 
 
 router.all('*', (req, res) => {
