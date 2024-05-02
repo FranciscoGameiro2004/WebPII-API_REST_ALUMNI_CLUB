@@ -21,10 +21,17 @@ exports.findUserId = (req, res) => {
 
 //POST/users
 exports.createUser = (req, res) => {
-  console.table(req.body)
-  req.body.id = checkLastId() 
+  //onsole.table(req.body)
+  req.body=
+  {
+    "id": checkLastId(),
+    "name": `${req.body.name}`,
+    "email": `${req.body.email}`,
+    "password": `${req.body.password}`,
+    "nationality": `${req.body.nationality}`
+} 
   users.push(req.body)
-  res.json(users);
+  res.status(201).json(users);
 }
 
 //Funções de apoio
@@ -39,6 +46,7 @@ exports.bodyValidator = (req, res, next) => {
 }
 
 function isUserRegistered(req) {
+  setDefaultValues(req)
   let check = users.some(user => user.email === req.body.email);console.log(check);
   return check
 }
@@ -46,4 +54,11 @@ function isUserRegistered(req) {
 function checkLastId() {
   //console.log("checkLastId")
   return ((users[users.length-1].id)+1)
+}
+
+function setDefaultValues(req) {
+  if (!req.body.name) req.body.name = "User";
+  if (!req.body.email) req.body.email = "user@gmail.com";
+  if (!req.body.password) req.body.password = "password";
+  if (!req.body.nationality) req.body.nationality = "defaultNationality";
 }
