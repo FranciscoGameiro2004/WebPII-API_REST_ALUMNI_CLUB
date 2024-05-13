@@ -2,20 +2,21 @@ const express = require('express');
 const router = express.Router();
 
 // import controller middleware
-const usersController = require("../controllers/users.controller");
+const eventsController = require("../controllers/events.controller");
 
 /*----------------Users----------------*/
 
 // Rota ('/'))
 router.route('/')
-.get(usersController.findAll)
-.post(usersController.bodyValidator, usersController.createUser)
+.get(eventsController.findAll)
 
-// Rota ('/:usersID')
+// Rota ('/:eventID')
 router.route('/:id')
-.get(usersController.findUserId)
+.get(eventsController.findEventsId)
 
-/*----------------Events---------------*/
+// Rota ('/:eventID')
+router.route('/:id/participants')
+.get(eventsController.findEventsParticipants)
 
 router.all('*', (req, res) => {
 res.status(404).json({ message: 'Error' }); //Mensagem genérica

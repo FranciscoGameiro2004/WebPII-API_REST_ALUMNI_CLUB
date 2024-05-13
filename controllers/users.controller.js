@@ -17,8 +17,6 @@ exports.findUserId = (req, res) => {
   res.json(user)
 }
 
-
-
 //POST/users
 exports.createUser = (req, res) => {
   //onsole.table(req.body)
@@ -34,9 +32,12 @@ exports.createUser = (req, res) => {
   res.status(201).json(users);
 }
 
+
+
+
 //Funções de apoio
 exports.bodyValidator = (req, res, next) => {
-  if(!isUserRegistered(req) && req.method=='POST') {
+  if(!isRegistered(req) && req.method=='POST') {
     console.log("POST")
     next();
   }
@@ -45,7 +46,7 @@ exports.bodyValidator = (req, res, next) => {
   }
 }
 
-function isUserRegistered(req) {
+function isRegistered(req) {
   setDefaultValues(req)
   let check = users.some(user => user.email === req.body.email);console.log(check);
   return check
