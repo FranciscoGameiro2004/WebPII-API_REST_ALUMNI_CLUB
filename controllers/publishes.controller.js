@@ -7,7 +7,7 @@ let publishes = require("../models/publishes.model");
 
 //GET/publishes | Obs:Content-Length: false
 exports.findAll = (req, res) => {
-  console.log("findAll");console.table(publishes)
+  console.log("findAll");//console.table(publishes)
   res.json(publishes);
 };
 

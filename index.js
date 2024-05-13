@@ -8,8 +8,8 @@ res.status(200).json({ message: 'home -- USERS api' });
 });
 // routing middleware for resource Users
 app.use('/users', require('./routes/users.routes.js'))
-// routing middleware for resource Users
 app.use('/events', require('./routes/events.routes.js'))
+app.use('/publishes', require('./routes/publishes.routes.js'))
 // handle invalid routes
 app.all('*', function (req, res) {
 res.status(404).json({ message: 'WHAT???' });
