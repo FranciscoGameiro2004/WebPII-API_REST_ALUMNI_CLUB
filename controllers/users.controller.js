@@ -17,6 +17,18 @@ exports.findUserId = (req, res) => {
   res.json(user)
 }
 
+exports.deleteAccount = (req, res) => {
+  
+}
+
+exports.updateAccount = (req, res) => {
+  
+}
+
+exports.login = (req, res) => {
+  
+}
+
 //POST/users
 exports.createUser = (req, res) => {
   //onsole.table(req.body)
@@ -47,7 +59,7 @@ exports.bodyValidator = (req, res, next) => {
 }
 
 exports.isAdmin = (req, res, next) => {
-  
+  // Verify token
 }
 
 function isRegistered(req) {
