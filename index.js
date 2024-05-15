@@ -1,17 +1,26 @@
-const express = require('express');
+require('dotenv').config();         // read environment variables from .env file
+const express = require('express'); 
+const cors = require('cors');       // middleware to enable CORS (Cross-Origin Resource Sharing)
+
 const app = express();
-const host = process.env.HOST || '127.0.0.1' ; const port = process.env.PORT || 8080;
+const port = process.env.PORT;	 	
+const host = process.env.HOST;
+
+app.use(cors()); //enable ALL CORS requests (client requests from other domain)
 app.use(express.json()); //enable parsing JSON body data
+
 // root route -- /api/
 app.get('/', function (req, res) {
-res.status(200).json({ message: 'home -- USERS api' });
+    res.status(200).json({ message: 'home -- TUTORIALS api' });
 });
-// routing middleware for resource Users
+
+// routing middleware
 app.use('/users', require('./routes/users.routes.js'))
 app.use('/events', require('./routes/events.routes.js'))
 app.use('/publishes', require('./routes/publishes.routes.js'))
+
 // handle invalid routes
 app.all('*', function (req, res) {
-res.status(404).json({ message: 'WHAT???' });
+	res.status(400).json({ success: false, msg: `The API does not recognize the request on ${req.url}` });
 })
 app.listen(port, host, () => console.log(`App listening at http://${host}:${port}/`));

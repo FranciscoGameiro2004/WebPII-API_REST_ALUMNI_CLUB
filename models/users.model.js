@@ -14,7 +14,7 @@ module.exports = users;  */
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
       id: {
-          type: DataTypes.INT,
+          type: DataTypes.INTEGER,
           primaryKey: true
       },
       name: {
@@ -39,5 +39,5 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING
       }
   }, {timestamps: false});
-  return Institution
+  return User
 }

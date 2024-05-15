@@ -1,5 +1,8 @@
 // import users data
-let users = require("../models/users.model");
+const db = require("../models/index.js");
+let users = db.users;
+
+const { Op, ValidationError, where } = require("sequelize");
 
 //-----------------------------------------------//
 //-------------Comandos apiRest------------------//
