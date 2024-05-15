@@ -36,6 +36,7 @@ db.alumniDegree = require('./DB/alumniDegree.table.js')(sequelize, DataTypes);
 db.alumniJob = require('./DB/alumniJob.table.js')(sequelize, DataTypes);
 db.company = require('./DB/company.table.js')(sequelize, DataTypes);
 //! Colocar relações
+//? Perguntar à professora como é que mudo o nome de um parâmetro
 
 db.institutions.hasMany(db.degrees)
 db.degrees.belongsTo(db.institutions)
