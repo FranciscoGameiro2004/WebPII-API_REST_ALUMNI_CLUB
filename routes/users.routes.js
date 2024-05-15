@@ -10,10 +10,13 @@ const usersController = require("../controllers/users.controller");
 router.route('/')
 .get(usersController.findAll)
 .post(usersController.bodyValidator, usersController.createUser)
+.delete(usersController.deleteAccount)
 
-// Rota ('/:usersID')
+// Rota ('/:usersID' or /me or /login)
 router.route('/:id')
 .get(usersController.findUserId)
+.patch(usersController.bodyValidator, usersController.updateAccount)
+.post(usersController.bodyValidator, usersController.login)
 
 /*----------------Events---------------*/
 

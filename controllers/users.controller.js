@@ -46,6 +46,10 @@ exports.bodyValidator = (req, res, next) => {
   }
 }
 
+exports.isAdmin = (req, res, next) => {
+  
+}
+
 function isRegistered(req) {
   setDefaultValues(req)
   let check = users.some(user => user.email === req.body.email);console.log(check);
