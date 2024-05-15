@@ -1,4 +1,4 @@
-//Users data
+/* //Users data
 const users = 
 [
   {id: 1, name: "Carlos",email: "carlos@email.com", password: "12345", nationality: "None"},
@@ -9,4 +9,35 @@ const users =
 ]
 
 //Data will go here
-module.exports = users; 
+module.exports = users;  */
+
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+      id: {
+          type: DataTypes.INT,
+          primaryKey: true
+      },
+      name: {
+          type: DataTypes.STRING
+      },
+      username: {
+          type: DataTypes.STRING
+      },
+      email: {
+          type: DataTypes.STRING
+      },
+      password: {
+          type: DataTypes.STRING
+      },
+      type: {
+          type: DataTypes.STRING
+      },
+      profilePicLink: {
+          type: DataTypes.STRING
+      },
+      address: {
+        type: DataTypes.STRING
+      }
+  }, {timestamps: false});
+  return Institution
+}
