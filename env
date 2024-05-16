@@ -1,0 +1,12 @@
+NODE_ENV=development
+# Server configuration 
+PORT=3000
+HOST='127.0.0.1'
+# Database connection information 
+DB_HOST: 'pw2.joaoferreira.eu'
+DB_USER: 'teresaterroso_pw2_user_g02'
+DB_PASSWORD: 'M9I?iRFbVFUl'
+DB_NAME: 'teresaterroso_pw2_g02'
+
+# secret key to encode and decode JWT token
+SECRET: "my-API-ultra-secure-and-ultra-long-secret"
