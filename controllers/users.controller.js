@@ -31,7 +31,42 @@ exports.deleteAccount = (req, res) => {};
 
 exports.updateAccount = (req, res) => {};
 
-exports.login = (req, res) => {};
+exports.login = async (req, res, next) => {
+  try {
+    if (!req.body.username || !req.body.password){
+      throw new ErrorHandler(400, "Please provide username and password")
+    }
+
+    let userToLogin = await users.findOne({
+      where: { username: req.body.username }
+  });
+  if (!userToLogin)
+    throw new ErrorHandler(404, "User not found.");
+
+  const check = bcrypt.compareSync(
+    req.body.password, userToLogin.password
+);
+
+//UNSAFE TO STORE EVERYTHING OF USER, including PSSWD
+        // sign the given payload (user ID) into a JWT payload – builds JWT token, using secret key
+        const token = jwt.sign({ id: userToLogin.id, type: userToLogin.type },
+          JWTconfig.SECRET, {
+          // expiresIn: '24h' // 24 hours
+          expiresIn: '20m' // 20 minutes
+          // expiresIn: '1s' // 1 second
+      });
+
+      return res.status(200).json({
+        accessToken: token
+    });
+
+
+  } catch (err) {
+    if (err instanceof ValidationError)
+      err = new ErrorHandler(400, err.errors.map(e => e.message));
+  next(err)
+  }
+};
 
 //POST/users
 exports.createUser = async (req, res, next) => {
