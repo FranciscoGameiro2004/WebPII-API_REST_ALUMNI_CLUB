@@ -1,9 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const Institution = sequelize.define('Institution', {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true
-        },
+       
         designation: {
             type: DataTypes.STRING
         },
