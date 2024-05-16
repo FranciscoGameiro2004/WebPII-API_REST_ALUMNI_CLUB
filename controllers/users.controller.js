@@ -9,42 +9,115 @@ const db = require("../models/index.js");
 let users = db.users;
 
 const { Op, ValidationError, where, JSON } = require("sequelize");
+const { pages } = require("pdf2html");
 
 //-----------------------------------------------//
 //-------------Comandos apiRest------------------//
 //-----------------------------------------------//
 
 //GET/users | Obs:Content-Length: false
-exports.findAll = (req, res) => {
-  console.log("findAll");
+exports.findAll = async (req, res, next) => {
+  /* console.log("findAll");
   console.table(users);
-  res.json(users);
+  res.json(users); */
+
+  try {
+    //! ADICIONAR MAIS FILTROS
+    const currentPage = req.query.page >= 0 ? req.query.page : 0;
+    const limit = +req.query.limit;
+
+    if (limit < 5 || !Number.isInteger(limit)) {
+      throw new ErrorHandler(
+        400,
+        "Limit must be a positive integer, greater than 5"
+      );
+    }
+
+    let userList = await users.findAndCountAll({
+      attributes: ["username", "name", "id", "profilePicLink"],
+      raw: true,
+      limit: limit, offset: currentPage ? currentPage * limit : 0,
+      where: {
+        [Op.or]: [
+          { name: { [Op.like]: `%${req.query.search}%` } },
+          { username: { [Op.like]: `%${req.query.search}%` } },
+        ],
+        nationality: { [Op.like]: `%${req.query.nationality}%` },
+      },
+    });
+
+    userList.rows.forEach((user, index) => {
+      userList.rows[index].links = [
+        { rel: "self", href: `/alumni/${user.id}`, method: "GET" },
+      ];
+    });
+
+    if (userList.rows.length < 1){
+      throw new ErrorHandler(
+        404,
+        "Page not found"
+      );
+    }
+
+    const numPages = Math.ceil(userList.length / limit);
+
+    links = []
+
+    if (currentPage > 0){
+      links.push({"rel":"next-page","href":`/alumni?limit=${limit}&page=${currentPage-1}`,"method":"GET"})
+    }
+    if (currentPage < limit){
+      links.push({"rel":"next-page","href":`/alumni?limit=${limit}&page=${currentPage+1}`,"method":"GET"})
+    }
+
+    res.status(200).json({
+      pagination: {
+        total: userList.rows.length,
+        pages: numPages,
+        current: currentPage,
+        limit: limit,
+      },
+      data: userList.rows,
+      links: links,
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.findUserId = (req, res) => {
-  console.log("findUserId"); //console.table(users)
+  /* console.log("findUserId"); //console.table(users)
   let user = users.filter((user) => user.id == req.params.id)[0];
-  res.json(user);
+  res.json(user); */
 };
 
 exports.deleteAccount = async (req, res) => {
   //! Porque é que a resposta não é dada?
   try {
-    await users.destroy({
-      where: { id: req.loggedUserId },
-    }).then( () => {
-      return res.status(204).send()
-      }).catch(err => {
-        throw new ErrorHandler(500, "Something went wrong. Please try again later")
-        });
-  } catch (error) {
-    
+    await users
+      .destroy({
+        where: { id: req.loggedUserId },
+      })
+      .then(() => {
+        return res.status(204).send();
+      })
+      .catch((err) => {
+        throw new ErrorHandler(
+          500,
+          "Something went wrong. Please try again later"
+        );
+      });
+  } catch (err) {
+    if (err instanceof ValidationError)
+      err = new ErrorHandler(
+        400,
+        err.errors.map((e) => e.message)
+      );
+    next(err);
   }
 };
 
-exports.updateAccount =  (req, res) => {
-  
-};
+exports.updateAccount = (req, res) => {};
 
 exports.login = async (req, res, next) => {
   try {
