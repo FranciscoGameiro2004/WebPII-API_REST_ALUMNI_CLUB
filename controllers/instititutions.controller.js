@@ -13,8 +13,7 @@ const { Op, ValidationError, where, JSON } = require("sequelize");
 //-----------------------------------------------//
 
 exports.findAll = async (req, res) => {
-  clear()
-  console.log("Institutions---findAll")
+  clear();console.log("Institutions---findAll")
   let allInstitutions = await institutions.findAll();
   res.json(allInstitutions)
 }
@@ -62,8 +61,10 @@ exports.createInstitution = async (req, res,next) => {
   }
 }
 
-exports.updateInstitution = (req, res) => {
-  
+exports.updateInstitution = async (req, res) => {
+  clear();console.log("Institution---updateInstitution")
+  let oneInstititution = await institutions.findOne({ where: {id: req.params.id}})
+  res.json(oneInstititution)
 }
 
 exports.deleteInstitution = (req, res) => {
