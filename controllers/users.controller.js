@@ -85,10 +85,35 @@ exports.findAll = async (req, res, next) => {
   }
 };
 
-exports.findUserId = (req, res) => {
+exports.findUserId = async (req, res, next) => {
   /* console.log("findUserId"); //console.table(users)
-  let user = users.filter((user) => user.id == req.params.id)[0];
-  res.json(user); */
+    let user = users.filter((user) => user.id == req.params.id)[0];
+    res.json(user); */
+
+  try {
+    if (!req.params.id){
+      throw new ErrorHandler(400, 'The UserID was not submitted')
+    }
+    if (isNaN(req.params.id) || Number.isInteger(req.params.id)) {
+      throw new ErrorHandler(400, 'The UserID submitted is not a valid type')
+    }
+
+    //! Colocar mais atributos!
+    foundUser = await users.findOne({
+      attributes: ["username", "name", "id", "profilePicLink", "type"],
+      raw: true,
+    where: {
+      id: req.params.id
+    }})
+
+    if (!foundUser) {
+      throw new ErrorHandler(404, `User with ID ${req.params.id} was not found`)
+    }
+
+    res.status(200).json(foundUser)
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.deleteAccount = async (req, res) => {
