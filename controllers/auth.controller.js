@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-const { JWTconfig } = require("../utils/config.js");
+const JWTconfig = require("../config/jwt.config.js");
 const { ErrorHandler } = require("../utils/error.js");
 
 const db = require("../models");
@@ -24,9 +24,13 @@ exports.verifyToken = (req, res, next) => {
 
         //jsonwebtoken's verify() function
 
+        console.log(`\n\n------\nToken: ${token}\n------\n\n`);
+
         let decoded = jwt.verify(token, JWTconfig.SECRET);
         req.loggedUserId = decoded.id;
-        req.loggedUserRole = decoded.role;
+        req.loggedUserType = decoded.type;
+        console.log(`ID: ${req.loggedUserId}`);
+        console.log(`Type: ${req.loggedUserType}`);
         next();
 
     } catch (err) {

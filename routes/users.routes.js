@@ -3,6 +3,7 @@ const router = express.Router();
 
 // import controller middleware
 const usersController = require("../controllers/users.controller");
+const authController = require("../controllers/auth.controller");
 
 /*----------------Users----------------*/
 
@@ -10,13 +11,17 @@ const usersController = require("../controllers/users.controller");
 router.route('/')
 .get(usersController.findAll)
 .post(usersController.bodyValidator, usersController.createUser)
-.delete(usersController.deleteAccount)
+.delete(authController.verifyToken, usersController.deleteAccount)
+
+router.route('/login')
+.post(usersController.bodyValidator, usersController.login)
+
+router.route('/me')
+.patch(usersController.bodyValidator, usersController.updateAccount)
 
 // Rota ('/:usersID' or /me or /login)
 router.route('/:id')
 .get(usersController.findUserId)
-.patch(usersController.bodyValidator, usersController.updateAccount)
-.post(usersController.bodyValidator, usersController.login)
 
 /*----------------Events---------------*/
 
