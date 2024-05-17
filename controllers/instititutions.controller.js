@@ -64,8 +64,8 @@ exports.createInstitution = async (req, res,next) => {
 exports.updateInstitution = async (req, res) => {
   clear();console.log("Institution---updateInstitution")
   let oneInstititution = await institutions.findOne({ where: {id: req.params.id}})
-  oneInstititution.designation = req.body.designation
-  oneInstititution.save()
+  oneInstititution.designation=req.body.designation; console.log(oneInstititution.designation)
+  await oneInstititution.save()
   res.json(oneInstititution)
 }
 
