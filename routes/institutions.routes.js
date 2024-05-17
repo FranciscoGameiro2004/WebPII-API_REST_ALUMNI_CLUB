@@ -15,7 +15,7 @@ router.route('/')
 
 // Rota(/:id)
 router.route('/:id')
-
+.put(institutionsController.updateInstitution)
 
 router.all('*', (req, res) => {
 res.status(404).json({ message: 'Error' }); //Mensagem genérica

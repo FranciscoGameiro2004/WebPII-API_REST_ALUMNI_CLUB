@@ -1,6 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
     const Institution = sequelize.define('Institution', {
-       
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
         designation: {
             type: DataTypes.STRING
         },
@@ -17,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING
         },
         phoneNumber: {
-            type: DataTypes.INTEGER
+            type: DataTypes.STRING
         }
-    }, {timestamps: false});
-    return Institution
+    }, { timestamps: false });
+    return Institution;
 }

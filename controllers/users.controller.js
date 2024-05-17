@@ -9,7 +9,7 @@ const db = require("../models/index.js");
 let users = db.users;
 
 const { Op, ValidationError, where, JSON } = require("sequelize");
-const { pages } = require("pdf2html");
+//const { pages } = require("pdf2html");
 
 //-----------------------------------------------//
 //-------------Comandos apiRest------------------//
