@@ -37,10 +37,17 @@ exports.createInstitution = async (req, res,next) => {
     });
 
     if (institutionList.length == 0 && emailList.length == 0) {
+      //! Criar e 'encher' o modelo dos zipCodes
       console.log("Institutions---condição concluida")
       let instititution = await institutions.create({
         designation: req.body.designation,
-        email: req.body.email
+        email: req.body.email,
+        address: req.body.address,
+        // ZipCodeZipCode: req.body.zipCode,
+        url: req.body.url,
+        phoneNumber: req.body.phone,
+        logoUrl: req.body.logoUrl
+
       });
     } else {
       clear()

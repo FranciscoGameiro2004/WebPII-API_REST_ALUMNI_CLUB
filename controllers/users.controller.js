@@ -142,7 +142,96 @@ exports.deleteAccount = async (req, res) => {
   }
 };
 
-exports.updateAccount = (req, res) => {};
+exports.updateAccount = async (req, res, next) => {
+  try {
+    console.log('COOOOOOOOOOOOOOOOOOOOOOL', req.loggedUserType);
+    console.log((req.loggedUserId != req.params.id));
+    console.log(req.loggedUserId);
+    console.log(req.params.id);
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+    if ((req.loggedUserId != req.params.id) && req.loggedUserType != 'admin'){
+      throw new ErrorHandler(401, 'You must be an ADMIN or be the owner of the account to make changes to it.')
+    }
+
+    //! Acrescentar atributos!
+    if (!req.body.username && !req.body.name && !req.body.email && !req.body.password){
+      throw new ErrorHandler(400, 'Please provide any change needed')
+    }
+
+    attributesToUpdate = {}
+
+    let userToUpdate = await users.findOne( {
+      where: {
+        id: req.params.id
+      },
+      raw: true
+    })
+
+    //! Acrescentar atributos!
+    if (userToUpdate.username != req.body.username) {
+      attributesToUpdate.username = req.body.username
+    }
+
+    if (userToUpdate.name != req.body.name) {
+      attributesToUpdate.name = req.body.name
+    }
+
+    if (userToUpdate.email != req.body.email) {
+      attributesToUpdate.email = req.body.email
+    }
+
+    if (userToUpdate.password != bcrypt.hashSync(req.body.password, 10)) {
+      attributesToUpdate.password = bcrypt.hashSync(req.body.password, 10)
+    }
+
+    let updatedUser = await users.update(attributesToUpdate,
+      {
+        where: {
+          id: req.params.id
+        },
+        raw: true
+      }
+    )
+
+    delete attributesToUpdate.password
+
+    res.status(200).json(
+      {
+        userInfo: {userId: req.loggedUserId, username: userToUpdate.username, type: req.loggedUserType},
+        changedData: attributesToUpdate
+      }
+    )
+  } catch (err) {
+    next(err)
+  }
+};
+
+exports.updateAlumni = async (req, res, next) => {
+  try {
+
+    attributesToUpdate = {}
+
+    
+
+    const userToUpdate = await users.update(attributesToUpdate, {
+      where: {
+        id: req.loggedUserId
+      },
+      raw: true
+    })
+
+    res.status(200).json(
+      {
+        userInfo: {userId: req.loggedUserId, type: req.loggedUserType},
+        changedData: {
+
+        }
+      }
+    )
+  } catch (err) {
+    next(err)
+  }
+};
 
 exports.login = async (req, res, next) => {
   try {
@@ -232,6 +321,8 @@ exports.createUser = async (req, res, next) => {
         address: req.body.address,
         nationality: req.body.nationality,
         restricted: false,
+        consentJobs: true,
+        consentDegrees: true,
       });
     } else {
       throw new ErrorHandler(401, "An user is already registered.");

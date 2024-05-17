@@ -24,4 +24,15 @@ app.use('/institutions', require('./routes/institutions.routes.js'))
 app.all('*', function (req, res) {
 	res.status(400).json({ success: false, msg: `The API does not recognize the request on ${req.url}` });
 })
+
+app.use((err, req, res, next) => {
+    const errorStatus = err.statusCode || 500;
+    const errorMessage = err.message || "Internal server error" + err.stack;
+  
+    return res.status(errorStatus).json({
+      success: false,
+      msg: errorMessage,
+    });
+  });
+
 app.listen(port, host, () => console.log(`App listening at http://${host}:${port}/`));

@@ -17,11 +17,12 @@ router.route('/login')
 .post(usersController.bodyValidator, usersController.login)
 
 router.route('/me')
-.patch(usersController.bodyValidator, usersController.updateAccount)
+.patch(authController.verifyToken, usersController.bodyValidator, usersController.updateAlumni)
 
 // Rota ('/:usersID' or /me or /login)
 router.route('/:id')
 .get(usersController.findUserId)
+.patch(authController.verifyToken, usersController.bodyValidator, usersController.updateAccount)
 
 /*----------------Events---------------*/
 
