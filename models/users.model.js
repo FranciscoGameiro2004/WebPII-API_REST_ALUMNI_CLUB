@@ -45,6 +45,14 @@ module.exports = (sequelize, DataTypes) => {
       },
       restricted: {
         type: DataTypes.BOOLEAN
+      },
+      consentJobs: {
+        type: DataTypes.BOOLEAN,
+        default: true
+      },
+      consentDegrees: {
+        type: DataTypes.BOOLEAN,
+        default: true
       }
   }, {timestamps: false});
   return User
