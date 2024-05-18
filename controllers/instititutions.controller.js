@@ -13,9 +13,20 @@ const { Op, ValidationError, where, JSON } = require("sequelize");
 //-----------------------------------------------//
 
 exports.findAll = async (req, res) => {
-  clear();console.log("Institutions---findAll")
-  let allInstitutions = await institutions.findAll();
-  res.json(allInstitutions)
+  try {
+    clear();console.log("Institutions---findAll")
+    let allInstitutions = await institutions.findAll();
+    res.json(allInstitutions)
+  } 
+  catch (error) {
+    if (err instanceof ValidationError)
+      err = new ErrorHandler(
+        400,
+        err.errors.map((e) => e.message)
+      );
+    next(err);
+  }
+
 }
 
 exports.createInstitution = async (req, res,next) => {
@@ -68,25 +79,47 @@ exports.createInstitution = async (req, res,next) => {
 }
 
 exports.updateInstitution = async (req, res) => {
-  clear();console.log("Institution---updateInstitution")
-  let oneInstititution = await institutions.findOne({ where: {id: req.params.id}})
-  oneInstititution.designation=req.body.designation; console.log(oneInstititution.designation)
-  await oneInstititution.save()
-
-  return res
-  .status(201)
-  .json({ success: true, msg: "Institution was updated successfully!" });
+  try {
+    clear();console.log("Institution---updateInstitution")
+    let oneInstititution = await institutions.findOne({ where: {id: req.params.id}})
+    oneInstititution.designation=req.body.designation; console.log(oneInstititution.designation)
+    await oneInstititution.save()
   
+    return res
+    .status(201)
+    .json({ success: true, msg: "Institution was updated successfully!" });
+  } 
+  catch (error) {
+    if (err instanceof ValidationError)
+      err = new ErrorHandler(
+        400,
+        err.errors.map((e) => e.message)
+      );
+    next(err);
+  }
 }
 
 exports.deleteInstitution = async (req, res) => {
-  clear();console.log("Institution---deleteInstitution")
-  let oneInstititution = await institutions.findOne({ where: {id: req.params.id}})
-  oneInstititution.destroy();
+  try {
+    clear();console.log("Institution---deleteInstitution")
+    let oneInstititution = await institutions.findOne({ where: {id: req.params.id}})
+    oneInstititution.destroy();
+  
+    return res
+    .status(201)
+    .json({ success: true, msg: "Institution was deleted successfully!" });
+  }
+  catch (error) {
+    if (err instanceof ValidationError)
+      err = new ErrorHandler(
+        400,
+        err.errors.map((e) => e.message)
+      );
+    next(err);
+  }
 
-  return res
-  .status(201)
-  .json({ success: true, msg: "Institution was deleted successfully!" });
+
+
 }
 
 exports.bodyValidator = (req, res, next) => {
