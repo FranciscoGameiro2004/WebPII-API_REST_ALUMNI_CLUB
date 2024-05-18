@@ -144,17 +144,12 @@ exports.deleteAccount = async (req, res) => {
 
 exports.updateAccount = async (req, res, next) => {
   try {
-    console.log('COOOOOOOOOOOOOOOOOOOOOOL', req.loggedUserType);
-    console.log((req.loggedUserId != req.params.id));
-    console.log(req.loggedUserId);
-    console.log(req.params.id);
-    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     if ((req.loggedUserId != req.params.id) && req.loggedUserType != 'admin'){
       throw new ErrorHandler(401, 'You must be an ADMIN or be the owner of the account to make changes to it.')
     }
 
     //! Acrescentar atributos!
-    if (!req.body.username && !req.body.name && !req.body.email && !req.body.password){
+    if (!req.body.username && !req.body.name && !req.body.email && !req.body.password && !req.body.hasOwnProperty('consentJobs') && !req.body.hasOwnProperty('consentDegrees')){
       throw new ErrorHandler(400, 'Please provide any change needed')
     }
 
@@ -180,8 +175,18 @@ exports.updateAccount = async (req, res, next) => {
       attributesToUpdate.email = req.body.email
     }
 
-    if (userToUpdate.password != bcrypt.hashSync(req.body.password, 10)) {
-      attributesToUpdate.password = bcrypt.hashSync(req.body.password, 10)
+    if (req.body.password) {
+      if (userToUpdate.password != bcrypt.hashSync(req.body.password, 10)) {
+        attributesToUpdate.password = bcrypt.hashSync(req.body.password, 10)
+      }
+    }
+
+    if (userToUpdate.consentDegrees != req.body.consentDegrees && req.body.hasOwnProperty('consentDegrees')){
+      attributesToUpdate.consentDegrees = req.body.consentDegrees
+    }
+
+    if (userToUpdate.consentJobs != req.body.consentJobs && req.body.hasOwnProperty('consentJobs')){
+      attributesToUpdate.consentJobs = req.body.consentJobs
     }
 
     let updatedUser = await users.update(attributesToUpdate,
