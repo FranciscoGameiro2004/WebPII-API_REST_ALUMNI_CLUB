@@ -19,8 +19,7 @@ exports.findAll = async (req, res) => {
 }
 
 exports.createInstitution = async (req, res,next) => {
-  clear();
-  console.log("Institutions---createInstitution")
+  clear();console.log("Institutions---createInstitution")
   //res.json(req.body)
 
   try {
@@ -73,11 +72,21 @@ exports.updateInstitution = async (req, res) => {
   let oneInstititution = await institutions.findOne({ where: {id: req.params.id}})
   oneInstititution.designation=req.body.designation; console.log(oneInstititution.designation)
   await oneInstititution.save()
-  res.json(oneInstititution)
+
+  return res
+  .status(201)
+  .json({ success: true, msg: "Institution was updated successfully!" });
+  
 }
 
-exports.deleteInstitution = (req, res) => {
+exports.deleteInstitution = async (req, res) => {
+  clear();console.log("Institution---deleteInstitution")
+  let oneInstititution = await institutions.findOne({ where: {id: req.params.id}})
+  oneInstititution.destroy();
 
+  return res
+  .status(201)
+  .json({ success: true, msg: "Institution was deleted successfully!" });
 }
 
 exports.bodyValidator = (req, res, next) => {
