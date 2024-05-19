@@ -45,14 +45,14 @@ exports.verifyToken = (req, res, next) => {
 };
 
 exports.isAdmin = async (req, res, next) => {
-    if (req.loggedUserRole === "admin")
+    if (req.loggedUserType === "admin")
         return next();
 
     next(new ErrorHandler(403, "This request requires ADMIN role!"))
 };
 
 exports.isAdminOrLoggedUser = async (req, res, next) => {
-    if (req.loggedUserRole === "admin" || req.loggedUserId == req.params.userID)
+    if (req.loggedUserType === "admin" || req.loggedUserId == req.params.userID)
         return next();
 
     next(new ErrorHandler(403, "This request requires an ADMIN Role or you can only see you own data!"));
