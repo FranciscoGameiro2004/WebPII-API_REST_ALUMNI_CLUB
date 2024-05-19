@@ -19,7 +19,7 @@ app.use('/users', require('./routes/users.routes.js'))
 app.use('/events', require('./routes/events.routes.js'))
 app.use('/publishes', require('./routes/publishes.routes.js'))
 app.use('/institutions', require('./routes/institutions.routes.js'))
-
+app.use('/degrees', require('./routes/degrees.routes.js'))
 // handle invalid routes
 app.all('*', function (req, res) {
 	res.status(400).json({ success: false, msg: `The API does not recognize the request on ${req.url}` });

@@ -10,12 +10,12 @@ const usersController = require("../controllers/users.controller");
 // Rota ('/'))
 router.route('/')
 .get(degreesController.findAll)
-.post(usersController.isAdmin, degreesController.bodyValidator, degreesController.createInstitution)
+.post(usersController.isAdmin, degreesController.bodyValidator, degreesController.createDegrees)
 
 // Rota ('/:usersID')
 router.route('/:id')
-.delete(usersController.isAdmin, degreesController.deleteInstitution)
-.patch(usersController.isAdmin, degreesController.bodyValidator, degreesController.updateInstitution)
+.delete(usersController.isAdmin, degreesController.deleteDegrees)
+.patch(usersController.isAdmin, degreesController.bodyValidator, degreesController.updateDegrees)
 
 /*----------------Events---------------*/
 

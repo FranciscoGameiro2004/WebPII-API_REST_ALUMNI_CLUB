@@ -1,22 +1,59 @@
 // import users data
+const { where } = require("sequelize");
 let degrees = require("../models/degrees.model");
+const { clear } = require("console");
 
 // Routes /
-exports.findAll = (req, res) => {
-
+exports.findAll = async (req, res) => {
+    clear();console.log("Degrees---findAll")
+    try {
+      let degreeList = await degrees.findAll();
+      res.status(200).json(degreeList)
+    }
+    catch (err) {
+      res.status(500).send('Something went wrong. Please try again later')
+    }
 }
 
-exports.createInstitution = (req, res) => {
+exports.createDegrees = async (req, res) => {
+    clear();console.log("Degrees---createDegrees");
+    try {
+      let degreeList = await degrees.findAll({
+        where: {
+          designation:req.body.designation
+        }
+      });
 
+      if (degreeList.length==0) {
+        console.log("Degrees---condição concluida")
+        let degree = await degrees.create({
+          designation:req.body.designation
+        })
+        res.status(201).send('Degree created successfully!')
+      }
+      else {
+        res.status(401).send('This degree already exists')
+      }
+
+    } 
+    catch (err) {
+      res.status(500).send('Something went wrong. Please try again later')
+    }
 }
 
 // Routes /:id
-exports.deleteInstitution = (req, res) => {
-
+exports.deleteDegrees = async (req, res) => {
+  clear();console.log("Degree---deleteDegree")
+  let oneDegree = await degrees.findOne({where:{id:req.params.id}})
+  degrees.delete(oneDegree)
 }
 
-exports.updateInstitution = (req, res) => {
-
+exports.updateDegrees = async (req, res) => {
+    clear();console.log("Degree---updateDegree")
+    let oneDegree = await degrees.findOne({where:{id:req.params.id}})
+    oneDegree.designation=req.body.designation
+    oneDegree.save()
+    res.status(200).json(oneDegree)
 }
 
 // Middlewares
