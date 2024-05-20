@@ -258,7 +258,7 @@ exports.updateAlumni = async (req, res, next) => {
       removeAttributes.jobs = req.body.removeJobs;
       removeAttributes.jobs.forEach((job) => {
         alumniJob.destroy({
-          where: { firstYear: job.firstYear, lastYear: job.lastYear },
+          where: {UserId: req.loggedUserId, firstYear: job.firstYear, lastYear: job.lastYear },
         });
       });
     }
@@ -266,7 +266,7 @@ exports.updateAlumni = async (req, res, next) => {
       removeAttributes.degrees = req.body.removeDegrees;
       removeAttributes.degrees.forEach((degree) => {
         alumniDegree.destroy({
-          where: { firstYear: degree.firstYear, lastYear: degree.lastYear },
+          where: {UserId: req.loggedUserId, firstYear: degree.firstYear, lastYear: degree.lastYear },
         });
       });
     }
