@@ -4,18 +4,19 @@ const router = express.Router();
 // import controller middleware
 const degreesController = require("../controllers/degrees.controller");
 const usersController = require("../controllers/users.controller");
+const authController = require("../controllers/auth.controller")
 
 /*----------------Users----------------*/
 
 // Rota ('/'))
 router.route('/')
 .get(degreesController.findAll)
-.post(usersController.isAdmin, degreesController.bodyValidator, degreesController.createDegrees)
+.post(authController.verifyToken, authController.isAdmin, degreesController.bodyValidator, degreesController.createDegrees)
 
 // Rota ('/:usersID')
 router.route('/:id')
-.delete(usersController.isAdmin, degreesController.deleteDegrees)
-.patch(usersController.isAdmin, degreesController.bodyValidator, degreesController.updateDegrees)
+.delete(authController.isAdmin, degreesController.deleteDegrees)
+.patch(authController.verifyToken, authController.isAdmin, degreesController.bodyValidator, degreesController.updateDegrees)
 
 /*----------------Events---------------*/
 

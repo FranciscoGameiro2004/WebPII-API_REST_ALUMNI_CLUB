@@ -1,6 +1,8 @@
 const dbConfig = require("../config/db.config.js");
 const { Sequelize, DataTypes } = require("sequelize");
 
+const bcrypt = require("bcryptjs"); //password encryption
+
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
@@ -85,5 +87,24 @@ try {
     console.log(error);
   }
 })(); */
+
+/* let user = db.users.create({
+  name: 'admin',
+  username: 'admin',
+  email: 'admin@email.com',
+  password: bcrypt.hashSync('admin', 10),
+  type: "admin",
+  profilePicLink:
+    "https://beforeigosolutions.com/wp-content/uploads/2021/12/dummy-profile-pic-300x300-1.png",
+  address: 'Rua D. Sancho I, n.º 981',
+  nationality: 'PT',
+  restricted: false,
+  consentJobs: true,
+  consentDegrees: true,
+}); */
+
+/* let ok = db.degreeType.create({
+  designation: "Doutoramento"
+}); */
 
 module.exports = db;

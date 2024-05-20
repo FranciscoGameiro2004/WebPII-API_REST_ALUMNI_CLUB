@@ -1,6 +1,8 @@
 // import users data
 const { where } = require("sequelize");
-let degrees = require("../models/degrees.model");
+
+const db = require("../models/index.js");
+let degrees = db.degrees
 const { clear } = require("console");
 
 // Routes /
@@ -15,7 +17,7 @@ exports.findAll = async (req, res) => {
     }
 }
 
-exports.createDegrees = async (req, res) => {
+exports.createDegrees = async (req, res, next) => {
     clear();console.log("Degrees---createDegrees");
     try {
       let degreeList = await degrees.findAll({
@@ -27,7 +29,9 @@ exports.createDegrees = async (req, res) => {
       if (degreeList.length==0) {
         console.log("Degrees---condição concluida")
         let degree = await degrees.create({
-          designation:req.body.designation
+          designation: req.body.designation,
+          InstitutionId: req.body.institutionId,
+          DegreeTypeId: req.body.degreeType
         })
         res.status(201).send('Degree created successfully!')
       }
@@ -37,7 +41,7 @@ exports.createDegrees = async (req, res) => {
 
     } 
     catch (err) {
-      res.status(500).send('Something went wrong. Please try again later')
+      next(err)
     }
 }
 
@@ -58,11 +62,12 @@ exports.updateDegrees = async (req, res) => {
 
 // Middlewares
 exports.bodyValidator = (req, res, next) => {
-    if(!isRegistered(req) && req.method=='POST') {
+    /* if(!isRegistered(req) && req.method=='POST') {
       console.log("POST")
       next();
     }
     else {
       res.json("user already exists")
-    }
+    } */
+    next()
   }

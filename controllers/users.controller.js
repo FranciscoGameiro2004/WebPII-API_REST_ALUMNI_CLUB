@@ -7,6 +7,8 @@ const { ErrorHandler } = require("../utils/error.js");
 // import users data
 const db = require("../models/index.js");
 let users = db.users;
+let alumniJob = db.alumniJob;
+let alumniDegree = db.alumniDegree;
 
 const { Op, ValidationError, where, JSON } = require("sequelize");
 //const { pages } = require("pdf2html");
@@ -36,7 +38,8 @@ exports.findAll = async (req, res, next) => {
     let userList = await users.findAndCountAll({
       attributes: ["username", "name", "id", "profilePicLink"],
       raw: true,
-      limit: limit, offset: currentPage ? currentPage * limit : 0,
+      limit: limit,
+      offset: currentPage ? currentPage * limit : 0,
       where: {
         [Op.or]: [
           { name: { [Op.like]: `%${req.query.search}%` } },
@@ -52,22 +55,27 @@ exports.findAll = async (req, res, next) => {
       ];
     });
 
-    if (userList.rows.length < 1){
-      throw new ErrorHandler(
-        404,
-        "Page not found"
-      );
+    if (userList.rows.length < 1) {
+      throw new ErrorHandler(404, "Page not found");
     }
 
     const numPages = Math.ceil(userList.length / limit);
 
-    links = []
+    links = [];
 
-    if (currentPage > 0){
-      links.push({"rel":"next-page","href":`/alumni?limit=${limit}&page=${currentPage-1}`,"method":"GET"})
+    if (currentPage > 0) {
+      links.push({
+        rel: "next-page",
+        href: `/alumni?limit=${limit}&page=${currentPage - 1}`,
+        method: "GET",
+      });
     }
-    if (currentPage < limit){
-      links.push({"rel":"next-page","href":`/alumni?limit=${limit}&page=${currentPage+1}`,"method":"GET"})
+    if (currentPage < limit) {
+      links.push({
+        rel: "next-page",
+        href: `/alumni?limit=${limit}&page=${currentPage + 1}`,
+        method: "GET",
+      });
     }
 
     res.status(200).json({
@@ -91,26 +99,30 @@ exports.findUserId = async (req, res, next) => {
     res.json(user); */
 
   try {
-    if (!req.params.id){
-      throw new ErrorHandler(400, 'The UserID was not submitted')
+    if (!req.params.id) {
+      throw new ErrorHandler(400, "The UserID was not submitted");
     }
     if (isNaN(req.params.id) || Number.isInteger(req.params.id)) {
-      throw new ErrorHandler(400, 'The UserID submitted is not a valid type')
+      throw new ErrorHandler(400, "The UserID submitted is not a valid type");
     }
 
     //! Colocar mais atributos!
     foundUser = await users.findOne({
       attributes: ["username", "name", "id", "profilePicLink", "type"],
       raw: true,
-    where: {
-      id: req.params.id
-    }})
+      where: {
+        id: req.params.id,
+      },
+    });
 
     if (!foundUser) {
-      throw new ErrorHandler(404, `User with ID ${req.params.id} was not found`)
+      throw new ErrorHandler(
+        404,
+        `User with ID ${req.params.id} was not found`
+      );
     }
 
-    res.status(200).json(foundUser)
+    res.status(200).json(foundUser);
   } catch (err) {
     next(err);
   }
@@ -144,97 +156,154 @@ exports.deleteAccount = async (req, res) => {
 
 exports.updateAccount = async (req, res, next) => {
   try {
-    if ((req.loggedUserId != req.params.id) && req.loggedUserType != 'admin'){
-      throw new ErrorHandler(401, 'You must be an ADMIN or be the owner of the account to make changes to it.')
+    if (req.loggedUserId != req.params.id && req.loggedUserType != "admin") {
+      throw new ErrorHandler(
+        401,
+        "You must be an ADMIN or be the owner of the account to make changes to it."
+      );
     }
 
     //! Acrescentar atributos!
-    if (!req.body.username && !req.body.name && !req.body.email && !req.body.password && !req.body.hasOwnProperty('consentJobs') && !req.body.hasOwnProperty('consentDegrees')){
-      throw new ErrorHandler(400, 'Please provide any change needed')
+    if (
+      !req.body.username &&
+      !req.body.name &&
+      !req.body.email &&
+      !req.body.password &&
+      !req.body.hasOwnProperty("consentJobs") &&
+      !req.body.hasOwnProperty("consentDegrees")
+    ) {
+      throw new ErrorHandler(400, "Please provide any change needed");
     }
 
-    attributesToUpdate = {}
+    attributesToUpdate = {};
 
-    let userToUpdate = await users.findOne( {
+    let userToUpdate = await users.findOne({
       where: {
-        id: req.params.id
+        id: req.params.id,
       },
-      raw: true
-    })
+      raw: true,
+    });
 
     //! Acrescentar atributos!
     if (userToUpdate.username != req.body.username) {
-      attributesToUpdate.username = req.body.username
+      attributesToUpdate.username = req.body.username;
     }
 
     if (userToUpdate.name != req.body.name) {
-      attributesToUpdate.name = req.body.name
+      attributesToUpdate.name = req.body.name;
     }
 
     if (userToUpdate.email != req.body.email) {
-      attributesToUpdate.email = req.body.email
+      attributesToUpdate.email = req.body.email;
     }
 
     if (req.body.password) {
       if (userToUpdate.password != bcrypt.hashSync(req.body.password, 10)) {
-        attributesToUpdate.password = bcrypt.hashSync(req.body.password, 10)
+        attributesToUpdate.password = bcrypt.hashSync(req.body.password, 10);
       }
     }
 
-    if (userToUpdate.consentDegrees != req.body.consentDegrees && req.body.hasOwnProperty('consentDegrees')){
-      attributesToUpdate.consentDegrees = req.body.consentDegrees
+    if (
+      userToUpdate.consentDegrees != req.body.consentDegrees &&
+      req.body.hasOwnProperty("consentDegrees")
+    ) {
+      attributesToUpdate.consentDegrees = req.body.consentDegrees;
     }
 
-    if (userToUpdate.consentJobs != req.body.consentJobs && req.body.hasOwnProperty('consentJobs')){
-      attributesToUpdate.consentJobs = req.body.consentJobs
+    if (
+      userToUpdate.consentJobs != req.body.consentJobs &&
+      req.body.hasOwnProperty("consentJobs")
+    ) {
+      attributesToUpdate.consentJobs = req.body.consentJobs;
     }
 
-    let updatedUser = await users.update(attributesToUpdate,
-      {
-        where: {
-          id: req.params.id
-        },
-        raw: true
-      }
-    )
+    let updatedUser = await users.update(attributesToUpdate, {
+      where: {
+        id: req.params.id,
+      },
+      raw: true,
+    });
 
-    delete attributesToUpdate.password
+    delete attributesToUpdate.password;
 
-    res.status(200).json(
-      {
-        userInfo: {userId: req.loggedUserId, username: userToUpdate.username, type: req.loggedUserType},
-        changedData: attributesToUpdate
-      }
-    )
+    res.status(200).json({
+      userInfo: {
+        userId: req.loggedUserId,
+        username: userToUpdate.username,
+        type: req.loggedUserType,
+      },
+      changedData: attributesToUpdate,
+    });
   } catch (err) {
-    next(err)
+    next(err);
   }
 };
 
 exports.updateAlumni = async (req, res, next) => {
   try {
+    //! Acrescentar atributos!
+    if (
+      !req.body.addJobs &&
+      !req.body.removeJobs &&
+      !req.body.addDegrees &&
+      !req.body.removeDegrees
+    ) {
+      throw new ErrorHandler(400, "Please provide any change needed");
+    }
 
-    attributesToUpdate = {}
+    let addedAttributes = { jobs: [], degrees: [] };
+    let removeAttributes = { jobs: [], degrees: [] };
 
-    
+    if (req.body.removeJobs.length > 0) {
+      removeAttributes.jobs = req.body.removeJobs;
+      removeAttributes.jobs.forEach((job) => {
+        alumniJob.destroy({
+          where: { firstYear: job.firstYear, lastYear: job.lastYear },
+        });
+      });
+    }
+    if (req.body.removeDegrees.length > 0) {
+      removeAttributes.degrees = req.body.removeDegrees;
+      removeAttributes.degrees.forEach((degree) => {
+        alumniDegree.destroy({
+          where: { firstYear: degree.firstYear, lastYear: degree.lastYear },
+        });
+      });
+    }
 
-    const userToUpdate = await users.update(attributesToUpdate, {
-      where: {
-        id: req.loggedUserId
+    if (req.body.addJobs.length > 0) {
+      addedAttributes.jobs = req.body.addJobs;
+      addedAttributes.jobs.forEach((job) => {
+        alumniJob.create({
+          UserId: req.loggedUserId,
+          CompanyId: job.companyId,
+          firstYear: job.firstYear,
+          lastYear: job.lastYear,
+          role: job.role,
+        });
+      });
+    }
+    if (req.body.addDegrees.length > 0) {
+      addedAttributes.degrees = req.body.addDegrees;
+      addedAttributes.degrees.forEach((degree) => {
+        alumniDegree.create({
+          UserId: req.loggedUserId,
+          DegreeId: degree.degreeId,
+          firstYear: degree.firstYear,
+          lastYear: degree.lastYear,
+        });
+      });
+    }
+
+    res.status(200).json({
+      userInfo: { userId: req.loggedUserId, type: req.loggedUserType },
+      changedData: {
+        addedAttributes,
+        removeAttributes,
       },
-      raw: true
-    })
-
-    res.status(200).json(
-      {
-        userInfo: {userId: req.loggedUserId, type: req.loggedUserType},
-        changedData: {
-
-        }
-      }
-    )
+    });
   } catch (err) {
-    next(err)
+    next(err);
   }
 };
 
