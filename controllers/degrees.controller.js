@@ -4,16 +4,22 @@ const { where } = require("sequelize");
 const db = require("../models/index.js");
 let degrees = db.degrees
 const { clear } = require("console");
+const { ErrorHandler } = require("../utils/error.js");
 
 // Routes /
 exports.findAll = async (req, res) => {
     clear();console.log("Degrees---findAll")
     try {
       let degreeList = await degrees.findAll();
-      res.status(200).json(degreeList)
+      return res.status(200).json(degreeList)
     }
     catch (err) {
-      res.status(500).send('Something went wrong. Please try again later')
+      if (err instanceof ValidationError)
+        err = new ErrorHandler(
+          400,
+          err.errors.map((e) => e.message)
+        );
+      next(err);
     }
 }
 
@@ -33,41 +39,70 @@ exports.createDegrees = async (req, res, next) => {
           InstitutionId: req.body.institutionId,
           DegreeTypeId: req.body.degreeType
         })
-        res.status(201).send('Degree created successfully!')
+        return res.status(201).send('Degree created successfully!')
       }
       else {
-        res.status(401).send('This degree already exists')
+        throw new ErrorHandler(401,'This degree already exists')
       }
 
     } 
     catch (err) {
-      next(err)
+      if (err instanceof ValidationError)
+        err = new ErrorHandler(
+          400,
+          err.errors.map((e) => e.message)
+        );
+      next(err);
     }
 }
 
 // Routes /:id
 exports.deleteDegrees = async (req, res) => {
   clear();console.log("Degree---deleteDegree")
-  let oneDegree = await degrees.findOne({where:{id:req.params.id}})
-  degrees.delete(oneDegree)
+  try {
+        let oneDegree = await degrees.findOne({where:{id:req.params.id}})
+        oneDegree.destroy()
+        return res.status(204).send('Degree successfully deleted')
+  }
+  catch (err) {
+    if (err instanceof ValidationError)
+      err = new ErrorHandler(
+        400,
+        err.errors.map((e) => e.message)
+      );
+    next(err);
+  }
+  
+  
 }
 
 exports.updateDegrees = async (req, res) => {
     clear();console.log("Degree---updateDegree")
-    let oneDegree = await degrees.findOne({where:{id:req.params.id}})
-    oneDegree.designation=req.body.designation
-    oneDegree.save()
-    res.status(200).json(oneDegree)
+    try {
+          let oneDegree = await degrees.findOne({where:{id:req.params.id}})
+          oneDegree.designation=req.body.designation
+          oneDegree.save()
+          res.status(200).json(oneDegree)
+    }
+    catch(err) {
+      if (err instanceof ValidationError)
+        err = new ErrorHandler(
+          400,
+          err.errors.map((e) => e.message)
+        );
+      next(err);
+    }
+    
 }
 
 // Middlewares
 exports.bodyValidator = (req, res, next) => {
-    /* if(!isRegistered(req) && req.method=='POST') {
+    if(!isRegistered(req) && req.method=='POST') {
       console.log("POST")
       next();
     }
     else {
       res.json("user already exists")
-    } */
+    }
     next()
   }
