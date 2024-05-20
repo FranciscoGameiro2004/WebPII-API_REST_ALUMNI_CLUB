@@ -9,6 +9,8 @@ const db = require("../models/index.js");
 let users = db.users;
 let alumniJob = db.alumniJob;
 let alumniDegree = db.alumniDegree;
+let degrees = db.degrees
+let institutions = db.institutions
 
 const { Op, ValidationError, where, JSON } = require("sequelize");
 //const { pages } = require("pdf2html");
@@ -108,7 +110,7 @@ exports.findUserId = async (req, res, next) => {
 
     //! Colocar mais atributos!
     foundUser = await users.findOne({
-      attributes: ["username", "name", "id", "profilePicLink", "type"],
+      attributes: ["username", "name", "id", "profilePicLink", "type", "consentJobs", "consentDegrees"],
       raw: true,
       where: {
         id: req.params.id,
@@ -122,7 +124,66 @@ exports.findUserId = async (req, res, next) => {
       );
     }
 
-    res.status(200).json(foundUser);
+    let userInfo = {
+      username: foundUser.username,
+      ok: foundUser.consentJobs
+    }
+
+    if (foundUser.consentJobs){
+      userInfo.jobs = []
+      foundJob = await alumniJob.findAll({
+        raw: true,
+        where: {
+          UserId: req.params.id,
+        },
+      });
+      for (const job of foundJob) {
+        const Company = await institutions.findOne({
+          raw: true,
+          where: {
+            id: Degree.InstitutionId,
+          },
+        });
+        userInfo.degrees.push({
+          company: Company.designation,
+          role: job.role,
+          firstYear: job.firstYear,
+          lastYear: job.lastYear
+        })
+      }
+    }
+
+    if (foundUser.consentDegrees){
+      userInfo.degrees = []
+      foundDegree = await alumniDegree.findAll({
+        raw: true,
+        where: {
+          UserId: req.params.id,
+        },
+      });
+      for (const degree of foundDegree) {
+        const Degree = await degrees.findOne({
+          raw: true,
+          where: {
+            id: degree.id,
+          },
+        });
+        const Institution = await institutions.findOne({
+          raw: true,
+          where: {
+            id: Degree.InstitutionId,
+          },
+        });
+        userInfo.degrees.push({
+          degree: Degree.designation,
+          institution: Institution.designation,
+          firstYear: degree.firstYear,
+          lastYear: degree.lastYear
+        })
+      }
+    }
+
+    res.status(200).json(userInfo);
   } catch (err) {
     next(err);
   }
