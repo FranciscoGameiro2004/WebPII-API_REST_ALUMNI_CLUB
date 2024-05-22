@@ -3,15 +3,12 @@ const router = express.Router();
 
 // import controller middleware
 const institutionsController = require("../controllers/instititutions.controller");
-const usersController = require("../controllers/users.controller");
-
+const authenticationController = require("../controllers/auth.controller");
 // Rota ('/'))
 router.route('/')
 .get(institutionsController.findAll)
-.post(institutionsController.createInstitution)
-//.post(usersController.isAdmin)
-//.post(usersController.isAdmin, institutionsController.bodyValidator)
-//.post(usersController.isAdmin, institutionsController.bodyValidator, institutionsController.createInstitution)
+.post(authenticationController.isAdmin,institutionsController.createInstitution)
+//.post(institutionsController.bodyValidator)
 
 // Rota(/:id)
 router.route('/:id')
