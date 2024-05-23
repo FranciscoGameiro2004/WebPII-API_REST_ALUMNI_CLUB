@@ -45,7 +45,7 @@ exports.verifyToken = (req, res, next) => {
 };
 
 exports.isAdmin = async (req, res, next) => {
-    console.log(req.loggedUserType);
+    console.log("req.loggedUserType: " + req.loggedUserType);
     if (req.loggedUserType === "admin")
         return next();
 
