@@ -7,13 +7,13 @@ const authenticationController = require("../controllers/auth.controller");
 // Rota ('/'))
 router.route('/')
 .get(institutionsController.findAll)
-.post(authenticationController.isAdmin,institutionsController.createInstitution)
+.post(authenticationController.verifyToken,authenticationController.isAdmin,institutionsController.createInstitution)
 //.post(institutionsController.bodyValidator)
 
 // Rota(/:id)
 router.route('/:id')
-.put(institutionsController.updateInstitution)
-.delete(institutionsController.deleteInstitution)
+.put(authenticationController.verifyToken,authenticationController.isAdmin,institutionsController.updateInstitution)
+.delete(authenticationController.verifyToken,authenticationController.isAdmin,institutionsController.deleteInstitution)
 
 router.all('*', (req, res) => {
 res.status(404).json({ message: 'Error' }); //Mensagem genérica
