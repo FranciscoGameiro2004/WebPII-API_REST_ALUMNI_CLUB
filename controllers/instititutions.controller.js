@@ -29,6 +29,17 @@ exports.findAll = async (req, res) => {
 
 }
 
+exports.findOne = async (req, res) => {
+  try {
+    clear();console.log("Institutions---findOne")
+    let oneInstititution = await institutions.findOne({ where: {id: req.params.id}});//console.log(oneInstititution);
+    res.json(oneInstititution)
+  } 
+  catch (error) {
+    
+  }
+}
+
 exports.createInstitution = async (req, res,next) => {
   clear();console.log("Institutions---createInstitution")
   //res.json(req.body)
@@ -60,7 +71,7 @@ exports.createInstitution = async (req, res,next) => {
 
       });
     } else {
-      clear()
+      clear();console.log("401, An institution is already registered.");
       throw new ErrorHandler(401, "An institution is already registered.");
     }
 
@@ -109,7 +120,7 @@ exports.deleteInstitution = async (req, res) => {
     .status(201)
     .json({ success: true, msg: "Institution was deleted successfully!" });
   }
-  catch (error) {
+  catch (err) {
     if (err instanceof ValidationError)
       err = new ErrorHandler(
         400,
@@ -117,9 +128,6 @@ exports.deleteInstitution = async (req, res) => {
       );
     next(err);
   }
-
-
-
 }
 
 exports.bodyValidator = (req, res, next) => {
