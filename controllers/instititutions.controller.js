@@ -31,7 +31,7 @@ exports.findAll = async (req, res) => {
 
 exports.findOne = async (req, res) => {
   try {
-    clear();console.log("Institutions---findAll")
+    clear();console.log("Institutions---findOne")
   } 
   catch (error) {
     
