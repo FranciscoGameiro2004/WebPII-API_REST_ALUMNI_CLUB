@@ -9,7 +9,7 @@ const User = db.user;
 
 exports.verifyToken = (req, res, next) => {
     console.log("Authentication---verifyToken")
-    //console.log(req.headers)
+    console.table(req.headers)
     try {
         // search token can be in the headers most commonly used for authentication
         const header = req.headers['x-access-token'] || req.headers.authorization;
