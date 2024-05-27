@@ -9,7 +9,6 @@ router.route('/')
 .get(institutionsController.findAll)
 .post(authenticationController.verifyToken,authenticationController.isAdmin,institutionsController.createInstitution)
 
-
 // Rota(/:id)
 router.route('/:id')
 .get(institutionsController.findOne)

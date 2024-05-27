@@ -127,7 +127,9 @@ exports.findUserId = async (req, res, next) => {
 
     let userInfo = {
       username: foundUser.username,
-      ok: foundUser.consentJobs
+      name: foundUser.name,
+      userId: foundUser.id,
+      type: foundUser.type
     }
 
     if (foundUser.consentJobs){
