@@ -32,6 +32,8 @@ exports.findAll = async (req, res) => {
 exports.findOne = async (req, res) => {
   try {
     clear();console.log("Institutions---findOne")
+    let oneInstititution = await institutions.findOne({ where: {id: req.params.id}});//console.log(oneInstititution);
+    res.json(oneInstititution)
   } 
   catch (error) {
     

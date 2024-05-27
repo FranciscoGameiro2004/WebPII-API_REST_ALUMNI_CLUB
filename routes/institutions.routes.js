@@ -12,6 +12,7 @@ router.route('/')
 
 // Rota(/:id)
 router.route('/:id')
+.get(institutionsController.findOne)
 .put(authenticationController.verifyToken,authenticationController.isAdmin,institutionsController.updateInstitution)
 .delete(authenticationController.verifyToken,authenticationController.isAdmin,institutionsController.deleteInstitution)
 
