@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken"); //JWT tokens creation (sign())
 const bcrypt = require("bcryptjs"); //password encryption
+const { clear } = require("console");
 
 const JWTconfig = require("../config/jwt.config.js");
 const { ErrorHandler } = require("../utils/error.js");
@@ -369,6 +370,7 @@ exports.updateAlumni = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
+  clear()
   try {
     if (!req.body.username || !req.body.password) {
       throw new ErrorHandler(400, "Please provide username and password");
