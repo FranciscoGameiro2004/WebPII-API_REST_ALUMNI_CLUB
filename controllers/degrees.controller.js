@@ -97,12 +97,12 @@ exports.updateDegrees = async (req, res) => {
 
 // Middlewares
 exports.bodyValidator = (req, res, next) => {
-    if(!isRegistered(req) && req.method=='POST') {
+    /* if(!isRegistered(req) && req.method=='POST') {
       console.log("POST")
       next();
     }
     else {
       res.json("user already exists")
-    }
+    } */
     next()
   }
