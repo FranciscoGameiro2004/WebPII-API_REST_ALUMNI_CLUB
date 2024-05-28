@@ -3,7 +3,6 @@ const router = express.Router();
 
 // import controller middleware
 const degreesController = require("../controllers/degrees.controller");
-const usersController = require("../controllers/users.controller");
 const authController = require("../controllers/auth.controller")
 
 /*----------------Users----------------*/

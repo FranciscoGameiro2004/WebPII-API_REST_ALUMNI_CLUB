@@ -1,12 +1,10 @@
-// import users data
-const { where } = require("sequelize");
-
 const db = require("../models/index.js");
 let degrees = db.degrees
 const { clear } = require("console");
+const { Op, ValidationError, where, JSON } = require("sequelize");
 const { ErrorHandler } = require("../utils/error.js");
 
-// Routes /
+// Routes //
 exports.findAll = async (req, res) => {
     clear();console.log("Degrees---findAll")
     try {
@@ -56,7 +54,24 @@ exports.createDegrees = async (req, res, next) => {
     }
 }
 
-// Routes /:id
+exports.updateDegrees = async (req, res) => {
+  clear();console.log("Degree---updateDegree")
+  try {
+        let oneDegree = await degrees.findOne({where:{id:req.params.id}})
+        oneDegree.designation=req.body.designation
+        oneDegree.save()
+        res.status(200).json(oneDegree)
+  }
+  catch(err) {
+    if (err instanceof ValidationError)
+      err = new ErrorHandler(
+        400,
+        err.errors.map((e) => e.message)
+      );
+    next(err);
+  }
+}
+
 exports.deleteDegrees = async (req, res) => {
   clear();console.log("Degree---deleteDegree")
   try {
@@ -74,25 +89,6 @@ exports.deleteDegrees = async (req, res) => {
   }
   
   
-}
-
-exports.updateDegrees = async (req, res) => {
-    clear();console.log("Degree---updateDegree")
-    try {
-          let oneDegree = await degrees.findOne({where:{id:req.params.id}})
-          oneDegree.designation=req.body.designation
-          oneDegree.save()
-          res.status(200).json(oneDegree)
-    }
-    catch(err) {
-      if (err instanceof ValidationError)
-        err = new ErrorHandler(
-          400,
-          err.errors.map((e) => e.message)
-        );
-      next(err);
-    }
-    
 }
 
 // Middlewares

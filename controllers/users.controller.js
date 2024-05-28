@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken"); //JWT tokens creation (sign())
 const bcrypt = require("bcryptjs"); //password encryption
+const { clear } = require("console");
 
 const JWTconfig = require("../config/jwt.config.js");
 const { ErrorHandler } = require("../utils/error.js");
@@ -371,6 +372,7 @@ exports.updateAlumni = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
+  clear();console.log("\nUsers---login")
   try {
     if (!req.body.username || !req.body.password) {
       throw new ErrorHandler(400, "Please provide username and password");
@@ -381,7 +383,7 @@ exports.login = async (req, res, next) => {
     });
     if (!userToLogin) throw new ErrorHandler(404, "User not found.");
 
-    const check = bcrypt.compareSync(req.body.password, userToLogin.password);
+    const check = bcrypt.compareSync(req.body.password, userToLogin.password);console.log("check: " + check);
 
     //UNSAFE TO STORE EVERYTHING OF USER, including PSSWD
     // sign the given payload (user ID) into a JWT payload – builds JWT token, using secret key
@@ -394,6 +396,8 @@ exports.login = async (req, res, next) => {
         // expiresIn: '1s' // 1 second
       }
     );
+
+    console.table(req.headers)
 
     return res.status(200).json({
       accessToken: token,
