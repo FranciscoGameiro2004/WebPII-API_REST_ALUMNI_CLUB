@@ -31,14 +31,14 @@ db.sequelize = sequelize;
 db.users = require("./users.model.js")(sequelize, DataTypes);
 db.degrees = require("./degrees.model.js")(sequelize, DataTypes);
 db.institutions = require("./institutions.model.js")(sequelize, DataTypes);
+db.notifications = require('./notifications.model.js')(sequelize, DataTypes);
 
 db.zipCode = require('./DB/zipCode.table.js')(sequelize, DataTypes);
 db.degreeType = require('./DB/degreeType.table.js')(sequelize, DataTypes);
 db.alumniDegree = require('./DB/alumniDegree.table.js')(sequelize, DataTypes);
 db.alumniJob = require('./DB/alumniJob.table.js')(sequelize, DataTypes);
 db.company = require('./DB/company.table.js')(sequelize, DataTypes);
-//! Colocar relações
-//? Perguntar à professora como é que mudo o nome de um parâmetro
+
 
 db.institutions.hasMany(db.degrees)
 db.degrees.belongsTo(db.institutions)
@@ -67,11 +67,14 @@ db.alumniDegree.belongsTo(db.degrees)
 db.company.hasMany(db.alumniJob)
 db.alumniJob.belongsTo(db.company)
 
+db.users.hasMany(db.notifications)
+db.notifications.belongsTo(db.users)
+
 // optionally: SYNC
 //? Perguntar à professora sobre o que quer que tenha ocorrido
 try {
   // sequelize.sync({ force: true }); // creates tables, dropping them first if they already existed
-  //sequelize.sync({ alter: true }); // checks the tables in the database (which columns they have, what are their data types, etc.), and then performs the necessary changes to make then match the models
+  sequelize.sync({ alter: true }); // checks the tables in the database (which columns they have, what are their data types, etc.), and then performs the necessary changes to make then match the models
   // sequelize.sync(); // creates tables if they don't exist (and does nothing if they already exist)
   console.log("DB is successfully synchronized");
 } catch (error) {
@@ -106,5 +109,12 @@ try {
 /* let ok = db.degreeType.create({
   designation: "Doutoramento"
 }); */
+
+
+/* let notification = db.notifications.create({
+        UserId: 3,
+        message: 'Message',
+        type: 'normal',
+    }) */
 
 module.exports = db;
