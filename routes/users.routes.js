@@ -24,6 +24,10 @@ router.route('/:id')
 .get(usersController.findUserId)
 .patch(authController.verifyToken, usersController.bodyValidator, usersController.updateAccount)
 
+router.route('/:id/followers')
+.post(authController.verifyToken, usersController.followUser)
+.delete(authController.verifyToken, usersController.unfollowUser)
+
 /*----------------Events---------------*/
 
 router.all('*', (req, res) => {
