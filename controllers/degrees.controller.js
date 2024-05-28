@@ -1,9 +1,7 @@
-// import users data
-const { Op, ValidationError, where, JSON } = require("sequelize");
-
 const db = require("../models/index.js");
 let degrees = db.degrees
 const { clear } = require("console");
+const { Op, ValidationError, where, JSON } = require("sequelize");
 const { ErrorHandler } = require("../utils/error.js");
 
 // Routes //
