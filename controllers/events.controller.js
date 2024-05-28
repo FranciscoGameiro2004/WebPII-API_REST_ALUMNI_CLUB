@@ -1,11 +1,10 @@
-// import users data
-let events = require("../models/events.model");
+const clear = require('clear');
 
-//-----------------------------------------------//
-//-------------Comandos apiRest------------------//
-//-----------------------------------------------//
+const db = require("../models/index.js");
+let events = db.events;
+const { ErrorHandler } = require("../utils/error.js");
+const { Op, ValidationError, where, JSON } = require("sequelize");
 
-//GET/events | Obs:Content-Length: false
 exports.findAll = (req, res) => {
   console.log("findAll");console.table(events)
   res.json(events);

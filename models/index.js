@@ -32,6 +32,7 @@ db.users = require("./users.model.js")(sequelize, DataTypes);
 db.degrees = require("./degrees.model.js")(sequelize, DataTypes);
 db.institutions = require("./institutions.model.js")(sequelize, DataTypes);
 db.notifications = require('./notifications.model.js')(sequelize, DataTypes);
+db.events = require("./events.model.js")(sequelize, DataTypes);
 
 db.zipCode = require('./DB/zipCode.table.js')(sequelize, DataTypes);
 db.degreeType = require('./DB/degreeType.table.js')(sequelize, DataTypes);

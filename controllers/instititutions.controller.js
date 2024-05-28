@@ -1,11 +1,8 @@
-// import institutions data
 const clear = require('clear');
-const { ErrorHandler } = require("../utils/error.js");
-//let institutions = require("../models/institutions.model");
 
 const db = require("../models/index.js");
 let institutions = db.institutions;
-
+const { ErrorHandler } = require("../utils/error.js");
 const { Op, ValidationError, where, JSON } = require("sequelize");
 
 exports.findAll = async (req, res) => {
