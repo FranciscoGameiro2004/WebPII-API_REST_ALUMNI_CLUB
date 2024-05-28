@@ -38,6 +38,7 @@ db.degreeType = require('./DB/degreeType.table.js')(sequelize, DataTypes);
 db.alumniDegree = require('./DB/alumniDegree.table.js')(sequelize, DataTypes);
 db.alumniJob = require('./DB/alumniJob.table.js')(sequelize, DataTypes);
 db.company = require('./DB/company.table.js')(sequelize, DataTypes);
+db.userFollowing = require('./DB/userFollowing.table.js')(sequelize, DataTypes);
 
 
 db.institutions.hasMany(db.degrees)
@@ -69,6 +70,10 @@ db.alumniJob.belongsTo(db.company)
 
 db.users.hasMany(db.notifications)
 db.notifications.belongsTo(db.users)
+
+//! Aprimorar relações
+db.users.hasMany(db.userFollowing)
+db.userFollowing.hasMany(db.users)
 
 // optionally: SYNC
 //? Perguntar à professora sobre o que quer que tenha ocorrido

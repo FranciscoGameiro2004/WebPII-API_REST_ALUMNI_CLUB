@@ -5,15 +5,19 @@ const { clear } = require("console");
 const JWTconfig = require("../config/jwt.config.js");
 const { ErrorHandler } = require("../utils/error.js");
 
+const notificationsController = require("../controllers/notifications.controller.js")
+
 // import users data
 const db = require("../models/index.js");
 let users = db.users;
+let userFollowing = db.userFollowing;
 let alumniJob = db.alumniJob;
 let alumniDegree = db.alumniDegree;
 let degrees = db.degrees
 let institutions = db.institutions
 
 const { Op, ValidationError, where, JSON } = require("sequelize");
+const { raw } = require("mysql2");
 //const { pages } = require("pdf2html");
 
 //-----------------------------------------------//
@@ -481,6 +485,77 @@ exports.createUser = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.followUser = async (req, res, next) => {
+  try {
+    if (req.params.id == req.loggedUserId){
+      throw new ErrorHandler(405, 'You cannot follow yourself')
+    }
+    const userToFollow = await users.findOne({
+      where: {
+        id: req.params.id
+      },
+      raw: true,
+    })
+    clear()
+    console.log(userToFollow);
+    if (!userToFollow){
+      throw new ErrorHandler(404, `User with ID ${req.params.id} was not found`)
+    }
+    const following = await userFollowing.findOne({
+      where: {
+        followingUser: req.params.id
+      }
+    })
+    const follower = await users.findOne({
+      where: {
+        id: req.loggedUserId
+      }
+    })
+    if (following){
+      throw new ErrorHandler(405, `User with ID ${req.params.id} was followed already`)
+    }
+    await userFollowing.create({
+      UserId: req.loggedUserId,
+      followingUser: req.params.id
+    })
+
+    //! Perceber o que se passa com esta função
+    notificationsController.createNotification(req.params.id, `${follower.name} just followed you`, 'user_following')
+
+    res.status(200).json({message: 'You are now following a user!'})
+  } catch (err) {
+    next(err)
+  }
+}
+
+exports.unfollowUser = async (req, res, next) => {
+  try {
+    if (req.params.id == req.loggedUserId){
+      throw new ErrorHandler(405, 'You cannot unfollow yourself')
+    }
+
+    const following = await userFollowing.findOne({
+      where: {
+        followingUser: req.params.id
+      }
+    })
+    if (!following){
+      throw new ErrorHandler(405, `User with ID ${req.params.id} was not followed already`)
+    }
+
+    await userFollowing.destroy({
+      where: {
+        UserId: req.loggedUserId,
+        followingUser: req.params.id
+      }
+    })
+
+    res.status(200).json({message: 'You just unfollowed a user!'})
+  } catch (err) {
+    next(err)
+  }
+}
 
 //Funções de apoio
 exports.bodyValidator = (req, res, next) => {
