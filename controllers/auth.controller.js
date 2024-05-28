@@ -8,7 +8,7 @@ const db = require("../models");
 const User = db.user;
 
 exports.verifyToken = (req, res, next) => {
-    console.log("Authentication---verifyToken")
+    console.log("\nAuthentication---verifyToken")
     console.table(req.headers)
     try {
         // search token can be in the headers most commonly used for authentication
@@ -18,7 +18,7 @@ exports.verifyToken = (req, res, next) => {
             throw new ErrorHandler(401, "No token provided!");
 
         // Authorization header format: Bearer <token>
-        let token, bearer = header.split(' ');
+        let token, bearer = header.split(' '); console.log(token + ' | ' + header);
         if (bearer.length == 2)
             token = bearer[1];
         else
@@ -26,7 +26,7 @@ exports.verifyToken = (req, res, next) => {
 
         //jsonwebtoken's verify() function
 
-        console.log(`\n\n------\nToken: ${token}\n------\n\n`);
+        console.log(`\n------\nToken: ${token}\n------\n\n`);
 
         let decoded = jwt.verify(token, JWTconfig.SECRET);
         req.loggedUserId = decoded.id;
