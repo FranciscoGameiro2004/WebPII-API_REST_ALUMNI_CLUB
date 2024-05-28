@@ -12,11 +12,11 @@ router.route('/')
 
 // Rota ('/:eventID')
 router.route('/:id')
-.get(eventsController.findEventsId)
+//.get(eventsController.findEventsId)
 
 // Rota ('/:eventID')
 router.route('/:id/participants')
-.get(eventsController.findEventsParticipants)
+//.get(eventsController.findEventsParticipants)
 
 router.all('*', (req, res) => {
 res.status(404).json({ message: 'Error' }); //Mensagem genérica
