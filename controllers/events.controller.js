@@ -11,6 +11,9 @@ exports.findAll = (req, res) => {
   res.json(events);
 };
 
+
+
+/*
 exports.findEventsId = (req, res) => {
   console.log("findEventId");//console.table(events)
   let event = events.filter(user => user.id == req.params.id)[0]
@@ -22,6 +25,7 @@ exports.findEventsParticipants = (req, res) => {
   let event = events.filter(user => user.id == req.params.id)[0]
   res.json(event.attendees);console.table(event.attendees)
 }
+*/
 
 //Funções de apoio
 exports.bodyValidator = (req, res, next) => {
