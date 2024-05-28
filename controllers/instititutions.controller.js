@@ -8,10 +8,6 @@ let institutions = db.institutions;
 
 const { Op, ValidationError, where, JSON } = require("sequelize");
 
-//-----------------------------------------------//
-//-------------Comandos apiRest------------------//
-//-----------------------------------------------//
-
 exports.findAll = async (req, res) => {
   try {
     clear();console.log("Institutions---findAll")
@@ -43,7 +39,6 @@ exports.findOne = async (req, res) => {
 exports.createInstitution = async (req, res,next) => {
   clear();console.log("Institutions---createInstitution")
   //res.json(req.body)
-
   try {
     let institutionList = await institutions.findAll({
       where: {
@@ -128,14 +123,4 @@ exports.deleteInstitution = async (req, res) => {
       );
     next(err);
   }
-}
-
-exports.bodyValidator = (req, res, next) => {
-    if(!isRegistered(req) && req.method=='POST') {
-      console.log("POST")
-      next();
-    }
-    else {
-      res.json("user already exists")
-    }
 }
