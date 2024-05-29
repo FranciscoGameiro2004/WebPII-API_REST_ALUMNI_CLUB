@@ -51,10 +51,10 @@ exports.findAll = async (req, res, next) => {
       where: {
         [Op.or]: 
         [
-          { name: { [Op.like]: `%${req.query.search}%` } },
-          { username: { [Op.like]: `%${req.query.search}%` } },
+          { name: { [Op.like]: `%${req.query.search != undefined ? req.query.search : ''}%` } },
+          { username: { [Op.like]: `%${req.query.search != undefined ? req.query.search : ''}%` } },
         ],
-        nationality: { [Op.like]: `%${req.query.nationality}%` },
+        nationality: { [Op.like]: `%${req.query.nationality != undefined ? req.query.nationality : ''}%` },
       },
     });
 
