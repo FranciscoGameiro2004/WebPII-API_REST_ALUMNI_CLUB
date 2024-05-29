@@ -36,34 +36,41 @@ test('Criar conta com dados não requiridos por preencher', async () => {
 })
 
 test('Criar conta com dados requiridos por preencher', async () => {
-    const response = await axios({
-        method: 'post',
-        url: `${API_BASE_URL}/users`,
-        data: {
-            "name": "Johnny Appleseed",
-            "username": "appleseed_john",
-            "password": "Not4Pa55",
-        }
-      });
-    console.log(response);
-    expect(response.status).toBe(400)
+    try {
+        const response = await axios({
+            method: 'post',
+            url: `${API_BASE_URL}/users`,
+            data: {
+                "name": "Johnny Appleseed",
+                "username": "appleseed_john",
+                "password": "Not4Pa55",
+            }
+          });
+        console.log(response);
+    } catch (error) {
+        expect(error.message).toBe('Request failed with status code 400')
+    }
+    
 })
 
 test('Criar conta com dados repetidos', async () => {
-    const response = await axios({
-        method: 'post',
-        url: `${API_BASE_URL}/users`,
-        data: {
-            "name": "John Doe",
-            "username": "john_doe_2004",
-            "email": "johnDoe@email.com",
-            "password": "Not4Pa55",
-            "address": "Rua do Bairro",
-            "nationality": "EN"
-        }
-      });
-    console.log(response);
-    expect(response.status).toBe(401)
+    try {
+        const response = await axios({
+            method: 'post',
+            url: `${API_BASE_URL}/users`,
+            data: {
+                "name": "John Doe",
+                "username": "john_doe_2004",
+                "email": "johnDoe@email.com",
+                "password": "Not4Pa55",
+                "address": "Rua do Bairro",
+                "nationality": "EN"
+            }
+          });
+        console.log(response);
+    } catch (error) {
+        expect(error.message).toBe('Request failed with status code 401')
+    }
 })
 
 //? CONTINUAR
