@@ -9,8 +9,17 @@ let events = db.events;
 const { Op, ValidationError, where, JSON } = require("sequelize");
 
 exports.findAll = (req, res) => {
-  console.log("findAll");console.table(events)
-  res.json(events);
+  console.log("findAll");//console.table(events)
+  const currentPage = req.query.page >= 0 ? req.query.page : 0;
+  const limit = +req.query.limit;
+
+  if (limit < 5 || !Number.isInteger(limit)) {
+    throw new ErrorHandler(
+      400,
+      "Limit must be a positive integer, greater than 5"
+    );
+  }
+  //res.json(events);
 };
 
 exports.findOne = async (req, res) => {

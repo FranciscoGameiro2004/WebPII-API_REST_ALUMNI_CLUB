@@ -49,7 +49,8 @@ exports.findAll = async (req, res, next) => {
       limit: limit,
       offset: currentPage ? currentPage * limit : 0,
       where: {
-        [Op.or]: [
+        [Op.or]: 
+        [
           { name: { [Op.like]: `%${req.query.search}%` } },
           { username: { [Op.like]: `%${req.query.search}%` } },
         ],
@@ -602,22 +603,3 @@ exports.bodyValidator = (req, res, next) => {
   } */
   next();
 };
-
-function isRegistered(req) {
-  setDefaultValues(req);
-  let check = users.some((user) => user.email === req.body.email);
-  console.log(check);
-  return check;
-}
-
-function checkLastId() {
-  //console.log("checkLastId")
-  return users[users.length - 1].id + 1;
-}
-
-function setDefaultValues(req) {
-  if (!req.body.name) req.body.name = "User";
-  if (!req.body.email) req.body.email = "user@gmail.com";
-  if (!req.body.password) req.body.password = "password";
-  if (!req.body.nationality) req.body.nationality = "defaultNationality";
-}
