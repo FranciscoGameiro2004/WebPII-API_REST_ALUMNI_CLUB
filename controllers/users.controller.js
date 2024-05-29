@@ -59,7 +59,7 @@ exports.findAll = async (req, res, next) => {
 
     userList.rows.forEach((user, index) => {
       userList.rows[index].links = [
-        { rel: "self", href: `/alumni/${user.id}`, method: "GET" },
+        { rel: "self", href: `/users/${user.id}`, method: "GET" },
       ];
     });
 
@@ -74,14 +74,14 @@ exports.findAll = async (req, res, next) => {
     if (currentPage > 0) {
       links.push({
         rel: "next-page",
-        href: `/alumni?limit=${limit}&page=${currentPage - 1}`,
+        href: `/users?limit=${limit}&page=${currentPage - 1}`,
         method: "GET",
       });
     }
     if (currentPage < limit) {
       links.push({
         rel: "next-page",
-        href: `/alumni?limit=${limit}&page=${currentPage + 1}`,
+        href: `/users?limit=${limit}&page=${currentPage + 1}`,
         method: "GET",
       });
     }

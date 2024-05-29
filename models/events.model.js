@@ -36,11 +36,6 @@ module.exports = (sequelize, DataTypes) => {
         endTime: {
             type: DataTypes.TIME, // Time only, no date
             allowNull: false
-        },
-        participants: {
-            type: DataTypes.JSON, // Store participants as JSON
-            allowNull: false,
-            defaultValue: [] // Default to an empty array
         }
     }, { 
         timestamps: false 
