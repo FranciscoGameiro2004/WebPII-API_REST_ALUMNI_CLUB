@@ -31,8 +31,13 @@ exports.findOne = async (req, res) => {
     let oneInstititution = await institutions.findOne({ where: {id: req.params.id}});//console.log(oneInstititution);
     res.json(oneInstititution)
   } 
-  catch (error) {
-    
+  catch (err) {
+    if (err instanceof ValidationError)
+      err = new ErrorHandler(
+        400,
+        err.errors.map((e) => e.message)
+      );
+    next(err);
   }
 }
 

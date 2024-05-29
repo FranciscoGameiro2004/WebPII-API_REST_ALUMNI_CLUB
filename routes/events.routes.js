@@ -13,7 +13,9 @@ router.route('/')
 
 // Rota ('/:eventID')
 router.route('/:id')
-//.get(eventsController.findEventsId)
+.get(eventsController.findOne)
+.put(eventsController.updateEvent)
+.delete(eventsController.deleteEvent)
 
 // Rota ('/:eventID')
 router.route('/:id/participants')
