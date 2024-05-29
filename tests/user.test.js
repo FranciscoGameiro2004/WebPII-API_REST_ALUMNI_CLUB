@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { search } = require('../routes/users.routes');
+const { search, use } = require('../routes/users.routes');
 
 const API_BASE_URL = 'http://127.0.0.1:3000'
 let JWT_TOKEN = ''
@@ -152,6 +152,7 @@ test('Obtenção de um utilizador através da lista de utilizadores', async () =
     })
     console.log(response.data.data);
     expect(response.status).toBe(200)
+    expect(response.data.data.some(user => user.username == 'j0hnDo3')).toBeTruthy()
 })
 //! Acrecentar testes de início de sessão
 
