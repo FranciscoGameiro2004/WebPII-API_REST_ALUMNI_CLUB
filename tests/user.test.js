@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const API_BASE_URL = 'http://127.0.0.1:3000'
-const JWT_TOKEN = ''
+let JWT_TOKEN = ''
 
 test('Criar conta com todos os dados preenchidos', async () => {
     const response = await axios({
@@ -72,5 +72,66 @@ test('Criar conta com dados repetidos', async () => {
         expect(error.message).toBe('Request failed with status code 401')
     }
 })
+
+test('Início de sessão', async () => {
+    const response = await axios({
+        method: 'post',
+        url: `${API_BASE_URL}/users/login`,
+        data: {
+            "username": "j0hnDo3",
+            "password": "Not4Pa55"
+        }
+    })
+    JWT_TOKEN = response.data.accessToken
+    expect(response.status).toBe(200)
+})
+
+test('Início de sessão sem username fornecido', async () => {
+    try {
+        const response = await axios({
+            method: 'post',
+            url: `${API_BASE_URL}/users/login`,
+            data: {
+                "password": "Not4Pa55"
+            }
+        })
+        JWT_TOKEN = response.data.accessToken
+    } catch (error) {
+        expect(error.message).toBe('Request failed with status code 400')
+    }
+})
+
+test('Início de sessão sem password fornecida', async () => {
+    try {
+        const response = await axios({
+            method: 'post',
+            url: `${API_BASE_URL}/users/login`,
+            data: {
+                "username": "j0hnDo3",
+            }
+        })
+        JWT_TOKEN = response.data.accessToken
+    } catch (error) {
+        expect(error.message).toBe('Request failed with status code 400')
+    }
+})
+
+test('Início de sessão com credenciais erradas', async () => {
+    try {
+        const response = await axios({
+            method: 'post',
+            url: `${API_BASE_URL}/users/login`,
+            data: {
+                "username": "j0hnDo3",
+                "password": "Wr0ngP4ss"
+            }
+        })
+        JWT_TOKEN = response.data.accessToken
+    } catch (error) {
+        expect(error.message).toBe('Request failed with status code 401')
+    }
+})
+
+
 
 //? CONTINUAR
