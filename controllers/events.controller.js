@@ -8,8 +8,7 @@ let events = db.events;
 
 const { Op, ValidationError, where, JSON } = require("sequelize");
 
-exports.findAll = (req, res) => {
-  console.log("findAll");//console.table(events)
+  /* querry filtro
   const currentPage = req.query.page >= 0 ? req.query.page : 0;
   const limit = +req.query.limit;
 
@@ -19,7 +18,12 @@ exports.findAll = (req, res) => {
       "Limit must be a positive integer, greater than 5"
     );
   }
-  //res.json(events);
+  */
+
+exports.findAll = async (req, res) => {
+  console.log("findAll");console.table(events)
+  let allEvents = await events.findAll()
+  res.json(allEvents);
 };
 
 exports.findOne = async (req, res) => {
