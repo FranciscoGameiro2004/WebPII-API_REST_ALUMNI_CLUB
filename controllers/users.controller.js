@@ -15,6 +15,7 @@ let alumniJob = db.alumniJob;
 let alumniDegree = db.alumniDegree;
 let degrees = db.degrees
 let institutions = db.institutions
+let notifications = db.notifications
 
 const { Op, ValidationError, where, JSON } = require("sequelize");
 const { raw } = require("mysql2");
@@ -521,7 +522,12 @@ exports.followUser = async (req, res, next) => {
     })
 
     //! Perceber o que se passa com esta função
-    notificationsController.createNotification(req.params.id, `${follower.name} just followed you`, 'user_following')
+    //// notificationsController.createNotification(req.params.id, `${follower.name} just followed you`, 'user_following')
+    await notifications.create({
+      UserId: req.params.id,
+      message: `${follower.name} just followed you`,
+      type: 'user_following',
+    });
 
     res.status(200).json({message: 'You are now following a user!'})
   } catch (err) {

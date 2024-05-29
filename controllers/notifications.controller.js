@@ -62,7 +62,7 @@ exports.checkNotificationAsRead = async (req, res, next) => {
 exports.createNotification = async (userId, message, type) => {
   console.log('--------------CREATING NOTIFICATION--------------');
   let notification = await notifications.create({
-    id: userId,
+    UserId: userId,
     message: message,
     type: type,
   });
