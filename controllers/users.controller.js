@@ -191,6 +191,34 @@ exports.findUserId = async (req, res, next) => {
       }
     }
 
+    let following = []
+    let followers = []
+
+    const followersFound = await userFollowing.findAll({
+      attributes: ['followingUser', 'UserId'],
+      where: {
+        followingUser: foundUser.id
+      },
+      raw:true
+    })
+    const followingFound = await userFollowing.findAll({
+      attributes: ['UserId', 'followingUser'],
+      where: {
+        UserId: foundUser.id
+      },
+      raw:true
+    })
+    clear()
+    console.log(followersFound);
+    for (const user of followingFound){
+      following.push({userId: user.followingUser})
+    }
+    for (const user of followersFound){
+      followers.push({userId: user.UserId})
+    }
+    console.log(followers);
+    userInfo.following = following
+    userInfo.followers = followers
     res.status(200).json(userInfo);
   } catch (err) {
     next(err);
@@ -505,7 +533,8 @@ exports.followUser = async (req, res, next) => {
     }
     const following = await userFollowing.findOne({
       where: {
-        followingUser: req.params.id
+        followingUser: req.params.id,
+        UserId: req.loggedUserId
       }
     })
     const follower = await users.findOne({
@@ -521,7 +550,7 @@ exports.followUser = async (req, res, next) => {
       followingUser: req.params.id
     })
 
-    //! Perceber o que se passa com esta função
+    ////! Perceber o que se passa com esta função
     //// notificationsController.createNotification(req.params.id, `${follower.name} just followed you`, 'user_following')
     await notifications.create({
       UserId: req.params.id,
