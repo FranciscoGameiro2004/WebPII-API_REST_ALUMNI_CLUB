@@ -153,5 +153,6 @@ test('Obtenção de um utilizador através da lista de utilizadores', async () =
     console.log(response.data.data);
     expect(response.status).toBe(200)
 })
+//! Acrecentar testes de início de sessão
 
 //? CONTINUAR
