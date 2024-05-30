@@ -15,6 +15,7 @@ let alumniJob = db.alumniJob;
 let alumniDegree = db.alumniDegree;
 let degrees = db.degrees
 let institutions = db.institutions
+let notifications = db.notifications
 
 const { Op, ValidationError, where, JSON } = require("sequelize");
 const { raw } = require("mysql2");
@@ -48,17 +49,18 @@ exports.findAll = async (req, res, next) => {
       limit: limit,
       offset: currentPage ? currentPage * limit : 0,
       where: {
-        [Op.or]: [
-          { name: { [Op.like]: `%${req.query.search}%` } },
-          { username: { [Op.like]: `%${req.query.search}%` } },
+        [Op.or]: 
+        [
+          { name: { [Op.like]: `%${req.query.search != undefined ? req.query.search : ''}%` } },
+          { username: { [Op.like]: `%${req.query.search != undefined ? req.query.search : ''}%` } },
         ],
-        nationality: { [Op.like]: `%${req.query.nationality}%` },
+        nationality: { [Op.like]: `%${req.query.nationality != undefined ? req.query.nationality : ''}%` },
       },
     });
 
     userList.rows.forEach((user, index) => {
       userList.rows[index].links = [
-        { rel: "self", href: `/alumni/${user.id}`, method: "GET" },
+        { rel: "self", href: `/users/${user.id}`, method: "GET" },
       ];
     });
 
@@ -73,14 +75,14 @@ exports.findAll = async (req, res, next) => {
     if (currentPage > 0) {
       links.push({
         rel: "next-page",
-        href: `/alumni?limit=${limit}&page=${currentPage - 1}`,
+        href: `/users?limit=${limit}&page=${currentPage - 1}`,
         method: "GET",
       });
     }
     if (currentPage < limit) {
       links.push({
         rel: "next-page",
-        href: `/alumni?limit=${limit}&page=${currentPage + 1}`,
+        href: `/users?limit=${limit}&page=${currentPage + 1}`,
         method: "GET",
       });
     }
@@ -190,6 +192,34 @@ exports.findUserId = async (req, res, next) => {
       }
     }
 
+    let following = []
+    let followers = []
+
+    const followersFound = await userFollowing.findAll({
+      attributes: ['followingUser', 'UserId'],
+      where: {
+        followingUser: foundUser.id
+      },
+      raw:true
+    })
+    const followingFound = await userFollowing.findAll({
+      attributes: ['UserId', 'followingUser'],
+      where: {
+        UserId: foundUser.id
+      },
+      raw:true
+    })
+    clear()
+    console.log(followersFound);
+    for (const user of followingFound){
+      following.push({userId: user.followingUser})
+    }
+    for (const user of followersFound){
+      followers.push({userId: user.UserId})
+    }
+    console.log(followers);
+    userInfo.following = following
+    userInfo.followers = followers
     res.status(200).json(userInfo);
   } catch (err) {
     next(err);
@@ -504,7 +534,8 @@ exports.followUser = async (req, res, next) => {
     }
     const following = await userFollowing.findOne({
       where: {
-        followingUser: req.params.id
+        followingUser: req.params.id,
+        UserId: req.loggedUserId
       }
     })
     const follower = await users.findOne({
@@ -520,8 +551,13 @@ exports.followUser = async (req, res, next) => {
       followingUser: req.params.id
     })
 
-    //! Perceber o que se passa com esta função
-    notificationsController.createNotification(req.params.id, `${follower.name} just followed you`, 'user_following')
+    ////! Perceber o que se passa com esta função
+    //// notificationsController.createNotification(req.params.id, `${follower.name} just followed you`, 'user_following')
+    await notifications.create({
+      UserId: req.params.id,
+      message: `${follower.name} just followed you`,
+      type: 'user_following',
+    });
 
     res.status(200).json({message: 'You are now following a user!'})
   } catch (err) {
@@ -567,22 +603,3 @@ exports.bodyValidator = (req, res, next) => {
   } */
   next();
 };
-
-function isRegistered(req) {
-  setDefaultValues(req);
-  let check = users.some((user) => user.email === req.body.email);
-  console.log(check);
-  return check;
-}
-
-function checkLastId() {
-  //console.log("checkLastId")
-  return users[users.length - 1].id + 1;
-}
-
-function setDefaultValues(req) {
-  if (!req.body.name) req.body.name = "User";
-  if (!req.body.email) req.body.email = "user@gmail.com";
-  if (!req.body.password) req.body.password = "password";
-  if (!req.body.nationality) req.body.nationality = "defaultNationality";
-}
