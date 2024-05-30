@@ -9,6 +9,7 @@ const eventsController = require("../controllers/events.controller");
 // Rota ('/'))
 router.route('/')
 .get(eventsController.findAll)
+.post(eventsController.createEvent);
 
 // Rota ('/:eventID')
 router.route('/:id')
