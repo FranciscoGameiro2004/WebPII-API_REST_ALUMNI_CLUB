@@ -14,7 +14,7 @@ exports.findAll = async (req, res) => {
     let allInstitutions = await institutions.findAll();
     res.json(allInstitutions)
   } 
-  catch (error) {
+  catch (err) {
     if (err instanceof ValidationError)
       err = new ErrorHandler(
         400,
