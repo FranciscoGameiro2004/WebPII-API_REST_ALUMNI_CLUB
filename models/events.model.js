@@ -1,28 +1,3 @@
-<<<<<<< HEAD
-module.exports = (sequelize, DataTypes) => {
-  const Event = sequelize.define('Events', {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-        unique: true
-      },
-      name: {
-        type: DataTypes.STRING
-      },
-      date: {
-        type: DataTypes.DATEONLY
-      },
-      startTime: {
-        type: DataTypes.TIME
-      },
-      endTime: {
-        type: DataTypes.TIME
-      }
-  }, { timestamps: false });
-  return Event;
-}
-=======
 /*
 // Eventos data
 const events = 
@@ -68,4 +43,3 @@ module.exports = (sequelize, DataTypes) => {
     return Event;
   };
   
->>>>>>> 6493558b564d197c3c608c27ae44eb56ce115fcb

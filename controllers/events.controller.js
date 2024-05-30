@@ -154,4 +154,3 @@ exports.bodyValidator = (req, res, next) => {
     res.json("event already exists")
   }
 }
-*/

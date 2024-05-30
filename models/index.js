@@ -33,11 +33,7 @@ db.users = require("./users.model.js")(sequelize, DataTypes);
 db.degrees = require("./degrees.model.js")(sequelize, DataTypes);
 db.institutions = require("./institutions.model.js")(sequelize, DataTypes);
 db.notifications = require('./notifications.model.js')(sequelize, DataTypes);
-<<<<<<< HEAD
-db.events = require('./events.model.js')(sequelize, DataTypes);
-=======
 db.events = require('./events.model.js')(sequelize,DataTypes);
->>>>>>> 6493558b564d197c3c608c27ae44eb56ce115fcb
 
 db.zipCode = require('./DB/zipCode.table.js')(sequelize, DataTypes);
 db.degreeType = require('./DB/degreeType.table.js')(sequelize, DataTypes);
@@ -84,16 +80,10 @@ db.userFollowing.hasMany(db.users)
 // optionally: SYNC
 //? Perguntar à professora sobre o que quer que tenha ocorrido
 try {
-<<<<<<< HEAD
-  // sequelize.sync({ force: true }); // creates tables, dropping them first if they already existed
-  //sequelize.sync({ alter: true }); // checks the tables in the database (which columns they have, what are their data types, etc.), and then performs the necessary changes to make then match the models
-  // sequelize.sync(); // creates tables if they don't exist (and does nothing if they already exist)
-=======
   clear()
   //sequelize.sync({ force: true }); // creates tables, dropping them first if they already existed
   //sequelize.sync({ alter: true }); // checks the tables in the database (which columns they have, what are their data types, etc.), and then performs the necessary changes to make then match the models
   //sequelize.sync(); // creates tables if they don't exist (and does nothing if they already exist)
->>>>>>> 6493558b564d197c3c608c27ae44eb56ce115fcb
   console.log("DB is successfully synchronized");
 } catch (error) {
   console.log(error);
