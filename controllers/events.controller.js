@@ -42,6 +42,23 @@ exports.findOne = async (req, res) => {
   }
 }
 
+
+exports.findOne = async (req, res) => {
+  try {
+    clear();console.log("Events---findOne")
+    let oneEvent = await events.findOne({ where: {id: req.params.id}});//console.log(oneInstititution);
+    res.json(oneEvent)
+  } 
+  catch (err) {
+    if (err instanceof ValidationError)
+      err = new ErrorHandler(
+        400,
+        err.errors.map((e) => e.message)
+      );
+    next(err);
+  }
+}
+
 exports.createEvent = async (req, res,next) => {
   clear();console.log("events---createEvent")
   //res.json(req.body)
