@@ -11,7 +11,7 @@ const { Op, ValidationError, where, JSON } = require("sequelize");
 exports.findAll = async (req, res) => {
   try {
     clear();console.log("Institutions---findAll")
-    let allInstitutions = await institutions.findAll();
+    let allInstitutions = await institutions.findAll();console.log(allInstitutions);
     res.json(allInstitutions)
   } 
   catch (err) {
@@ -20,7 +20,6 @@ exports.findAll = async (req, res) => {
         400,
         err.errors.map((e) => e.message)
       );
-    next(err);
   }
 
 }
