@@ -84,7 +84,7 @@ try {
   //sequelize.sync({ force: true }); // creates tables, dropping them first if they already existed
   //sequelize.sync({ alter: true }); // checks the tables in the database (which columns they have, what are their data types, etc.), and then performs the necessary changes to make then match the models
   //sequelize.sync(); // creates tables if they don't exist (and does nothing if they already exist)
-  console.log("DB is successfully synchronized");
+  //console.log("DB is successfully synchronized");
 } catch (error) {
   console.log(error);
 }
