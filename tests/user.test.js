@@ -3,6 +3,7 @@ const { search, use } = require('../routes/users.routes');
 
 const API_BASE_URL = 'http://127.0.0.1:3000'
 let JWT_TOKEN = ''
+let userId = 1
 
 test('Criar conta com todos os dados preenchidos', async () => {
     const response = await axios({
@@ -150,10 +151,42 @@ test('Obtenção de um utilizador através da lista de utilizadores', async () =
         url: `${API_BASE_URL}/users/`,
         params: params
     })
-    console.log(response.data.data);
+    userId = response.data.data[0].id
     expect(response.status).toBe(200)
     expect(response.data.data.some(user => user.username == 'j0hnDo3')).toBeTruthy()
 })
-//! Acrecentar testes de início de sessão
+
+test('Obtenção de um utilizador espcífico através do seu ID', async () => {
+    const response = await axios({
+        method: 'get',
+        url: `${API_BASE_URL}/users/${userId}`,
+    })
+    expect(response.status).toBe(200)
+    expect(response.data.userId).toBe(userId)
+})
+
+test('Obtenção de um utilizador não existente', async () => {
+    try {
+        const nonExistantUserId = 9999
+    const response = await axios({
+        method: 'get',
+        url: `${API_BASE_URL}/users/${nonExistantUserId}`,
+    })
+    } catch (error) {
+        expect(error.message).toBe('Request failed with status code 404')
+    }
+})
+
+test('Obtenção de um utilizador com um id inválido', async () => {
+    try {
+        const invalidUserId = 'user'
+    const response = await axios({
+        method: 'get',
+        url: `${API_BASE_URL}/users/${invalidUserId}`,
+    })
+    } catch (error) {
+        expect(error.message).toBe('Request failed with status code 400')
+    }
+})
 
 //? CONTINUAR
