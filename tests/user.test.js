@@ -190,3 +190,23 @@ test('Obtenção de um utilizador com um id inválido', async () => {
 })
 
 //? CONTINUAR
+
+test('Remover conta de um utilizador', async () => {
+    const response = await axios({
+        method: 'delete',
+        url: `${API_BASE_URL}/users/`,
+        headers: { Authorization: `Bearer ${JWT_TOKEN}` }
+    })
+    expect(response.status).toBe(204)
+})
+
+test('Remover conta de um utilizador sem token', async () => {
+    try {
+        const response = await axios({
+            method: 'delete',
+            url: `${API_BASE_URL}/users/`,
+        })
+    } catch (error) {
+        expect(error.message).toBe('Request failed with status code 401')
+    }
+})
