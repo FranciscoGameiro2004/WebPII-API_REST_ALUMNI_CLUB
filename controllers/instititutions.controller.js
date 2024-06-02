@@ -20,7 +20,6 @@ exports.findAll = async (req, res) => {
         400,
         err.errors.map((e) => e.message)
       );
-    next(err);
   }
 
 }

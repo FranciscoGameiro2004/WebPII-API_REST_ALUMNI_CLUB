@@ -21,7 +21,7 @@ const { Op, ValidationError, where, JSON } = require("sequelize");
   */
 
 exports.findAll = async (req, res) => {
-  console.log("findAll");console.table(events)
+  console.log("findAll")
   let allEvents = await events.findAll()
   res.json(allEvents);
 };
@@ -101,10 +101,10 @@ exports.updateEvent = async (req, res) => {
   try {
     clear();console.log("Event---updateEvent")
     let oneEvent = await events.findOne({ where: {id: req.params.id}})
-    oneEvent.name=req.body.name;//console.log(oneEvent.name)
-    oneEvent.date=req.body.date;//console.log(oneEvent.date)
-    oneEvent.startTime=req.body.startTime;//console.log(oneEvent.startTime)
-    oneEvent.endTime=req.body.endTime;//console.log(oneEvent.endTime)
+    oneEvent.name=req.body.name != undefined ? req.body.name : oneEvent.name;//console.log(oneEvent.name)
+    oneEvent.date=req.body.date != undefined ? req.body.date : oneEvent.date;//console.log(oneEvent.date)
+    oneEvent.startTime=req.body.startTime != undefined ? req.body.startTime : oneEvent.startTime;//console.log(oneEvent.startTime)
+    oneEvent.endTime=req.body.endTime != undefined ? req.body.endTime : oneEvent.endTime;//console.log(oneEvent.endTime)
     await oneEvent.save()
   
     return res
