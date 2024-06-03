@@ -39,20 +39,42 @@ exports.findAll = async (req, res) => {
       ];
     });
 
-  
+    
+    if (allInstitutions.rows.length < 1) {
+      throw new ErrorHandler(404, "Page not found");
+    }
 
+    const numPages = Math.ceil(allInstitutions.length / limit);
 
+    links = [];
 
+    if (currentPage > 0) {
+      links.push({
+        rel: "next-page",
+        href: `/users?limit=${limit}&page=${currentPage - 1}`,
+        method: "GET",
+      });
+    }
+    if (currentPage < limit) {
+      links.push({
+        rel: "next-page",
+        href: `/users?limit=${limit}&page=${currentPage + 1}`,
+        method: "GET",
+      });
+    }
 
+    res.status(200).json({
+      pagination: {
+        total: allInstitutions.rows.length,
+        pages: numPages,
+        current: currentPage,
+        limit: limit,
+      },
+      data: allInstitutions.rows,
+      links: links,
+    });
 
-
-
-
-
-
-
-
-    res.json(allInstitutions)
+    //res.json(allInstitutions)
   } 
   catch (err) {
     if (err instanceof ValidationError)
