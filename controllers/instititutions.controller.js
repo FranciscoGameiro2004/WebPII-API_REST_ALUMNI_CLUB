@@ -7,11 +7,51 @@ const db = require("../models/index.js");
 let institutions = db.institutions;
 
 const { Op, ValidationError, where, JSON } = require("sequelize");
+const { raw } = require('mysql2');
 
 exports.findAll = async (req, res) => {
   try {
     clear();console.log("Institutions---findAll")
-    let allInstitutions = await institutions.findAll();
+
+    const currentPage = req.query.page >= 0 ? req.query.page : 0;
+    const limit = +req.query.limit;
+
+    if (limit < 5 || !Number.isInteger(limit)) {
+      throw new ErrorHandler(
+        400,
+        "Limit must be a positive integer, greater than 5"
+      );
+    }
+
+    let allInstitutions = await institutions.findAndCountAll({
+      attributes: [ 'designation', 'address', 'logoUrl', 'url', 'email', 'phoneNumber'],
+      raw: true,
+      limit: limit,
+      offset: currentPage? currentPage * limit : 0,
+      where: {
+        designation: { [Op.like]: `%${req.query.search != undefined ? req.query.search : ''}%`}
+      }
+    })
+
+    allInstitutions.row.forEach((institution, index) => {
+      allInstitutions.rows[index].links = [
+        { rel: "self", href: `/institutions/${institution.id}`, method: "GET" },
+      ];
+    });
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
     res.json(allInstitutions)
   } 
   catch (err) {
