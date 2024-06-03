@@ -51,14 +51,14 @@ exports.findAll = async (req, res) => {
     if (currentPage > 0) {
       links.push({
         rel: "next-page",
-        href: `/users?limit=${limit}&page=${currentPage - 1}`,
+        href: `/institution?limit=${limit}&page=${currentPage - 1}`,
         method: "GET",
       });
     }
     if (currentPage < limit) {
       links.push({
         rel: "next-page",
-        href: `/users?limit=${limit}&page=${currentPage + 1}`,
+        href: `/institution?limit=${limit}&page=${currentPage + 1}`,
         method: "GET",
       });
     }
