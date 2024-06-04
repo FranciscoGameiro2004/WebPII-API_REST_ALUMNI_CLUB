@@ -1,71 +1,64 @@
 // import institutions data
 const clear = require('clear');
 const { ErrorHandler } = require("../utils/error.js");
-//let institutions = require("../models/institutions.model");
-
 const db = require("../models/index.js");
 let institutions = db.institutions;
-
-const { Op, ValidationError, where, JSON } = require("sequelize");
-const { raw } = require('mysql2');
+const { Op, ValidationError } = require("sequelize");
 
 exports.findAll = async (req, res) => {
   try {
-    clear();console.log("Institutions---findAll")
+    clear();
+    console.log("Institutions---findAll");
 
-    const currentPage = req.query.page >= 0 ? req.query.page : 0;
-    const limit = +req.query.limit;
+    const currentPage = req.query.page >= 0 ? parseInt(req.query.page) : 0;
+    const limit = parseInt(req.query.limit);
 
     if (limit < 5 || !Number.isInteger(limit)) {
-      throw new ErrorHandler(
-        400,
-        "Limit must be a positive integer, greater than 5"
-      );
+      throw new ErrorHandler(400, "Limit must be a positive integer, greater than or equal to 5");
     }
 
     let allInstitutions = await institutions.findAndCountAll({
-      attributes: [ 'designation', 'address', 'logoUrl', 'url', 'email', 'phoneNumber'],
+      attributes: ['id', 'designation', 'address', 'logoUrl', 'url', 'email', 'phoneNumber'],
       raw: true,
       limit: limit,
-      offset: currentPage? currentPage * limit : 0,
+      offset: currentPage * limit,
       where: {
-        designation: { [Op.like]: `%${req.query.search != undefined ? req.query.search : ''}%`}
+        designation: { [Op.like]: `%${req.query.search != undefined ? req.query.search : ''}%` }
       }
-    })
+    });
 
-    allInstitutions.row.forEach((institution, index) => {
+    if (allInstitutions.rows.length < 1) {
+      throw new ErrorHandler(404, "Page not found");
+    }
+
+    allInstitutions.rows.forEach((institution, index) => {
       allInstitutions.rows[index].links = [
         { rel: "self", href: `/institutions/${institution.id}`, method: "GET" },
       ];
     });
 
-    
-    if (allInstitutions.rows.length < 1) {
-      throw new ErrorHandler(404, "Page not found");
-    }
+    const numPages = Math.ceil(allInstitutions.count / limit);
 
-    const numPages = Math.ceil(allInstitutions.length / limit);
-
-    links = [];
+    let links = [];
 
     if (currentPage > 0) {
       links.push({
-        rel: "next-page",
-        href: `/institution?limit=${limit}&page=${currentPage - 1}`,
+        rel: "prev-page",
+        href: `/institutions?limit=${limit}&page=${currentPage - 1}`,
         method: "GET",
       });
     }
-    if (currentPage < limit) {
+    if (currentPage < numPages - 1) {
       links.push({
         rel: "next-page",
-        href: `/institution?limit=${limit}&page=${currentPage + 1}`,
+        href: `/institutions?limit=${limit}&page=${currentPage + 1}`,
         method: "GET",
       });
     }
 
     res.status(200).json({
       pagination: {
-        total: allInstitutions.rows.length,
+        total: allInstitutions.count,
         pages: numPages,
         current: currentPage,
         limit: limit,
@@ -73,18 +66,16 @@ exports.findAll = async (req, res) => {
       data: allInstitutions.rows,
       links: links,
     });
-
-    //res.json(allInstitutions)
   } 
   catch (err) {
-    if (err instanceof ValidationError)
-      err = new ErrorHandler(
-        400,
-        err.errors.map((e) => e.message)
-      );
+    if (err instanceof ValidationError) {
+      err = new ErrorHandler(400, err.errors.map((e) => e.message));
+    }
+    res.status(err.statusCode || 500).json({ error: err.message || "An unexpected error occurred" });
   }
+};
 
-}
+
 
 exports.findOne = async (req, res) => {
   try {
