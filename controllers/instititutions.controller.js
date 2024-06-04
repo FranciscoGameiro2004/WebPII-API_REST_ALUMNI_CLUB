@@ -9,7 +9,7 @@ let institutions = db.institutions;
 const { Op, ValidationError, where, JSON } = require("sequelize");
 const { raw } = require('mysql2');
 
-exports.findAll = async (req, res) => {
+exports.findAll = async (req, res, next) => {
   try {
     clear();console.log("Institutions---findAll")
 
@@ -24,16 +24,21 @@ exports.findAll = async (req, res) => {
     }
 
     let allInstitutions = await institutions.findAndCountAll({
-      attributes: [ 'designation', 'address', 'logoUrl', 'url', 'email', 'phoneNumber'],
+      attributes: ['id', 'designation', 'address', 'logoUrl', 'url', 'email', 'phoneNumber'],
       raw: true,
       limit: limit,
       offset: currentPage? currentPage * limit : 0,
       where: {
-        designation: { [Op.like]: `%${req.query.search != undefined ? req.query.search : ''}%`}
+        designation: { 
+          [Op.like]: 
+          `%${req.query.search != undefined ? req.query.search : ''}%`
+        }
       }
     })
+    console.log(allInstitutions)
 
-    allInstitutions.row.forEach((institution, index) => {
+
+    allInstitutions.rows.forEach((institution, index) => {
       allInstitutions.rows[index].links = [
         { rel: "self", href: `/institutions/${institution.id}`, method: "GET" },
       ];
@@ -77,11 +82,7 @@ exports.findAll = async (req, res) => {
     //res.json(allInstitutions)
   } 
   catch (err) {
-    if (err instanceof ValidationError)
-      err = new ErrorHandler(
-        400,
-        err.errors.map((e) => e.message)
-      );
+    next(err)
   }
 
 }
