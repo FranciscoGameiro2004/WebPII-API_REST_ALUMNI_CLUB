@@ -5,6 +5,9 @@ const { ErrorHandler } = require("../utils/error.js");
 
 const db = require("../models/index.js");
 let events = db.events;
+let eventsDate = db.eventDate;
+let eventsFollowing = db.eventFollowing
+let eventsParticipant = db.eventParticipant
 
 const { Op, ValidationError, where, JSON } = require("sequelize");
 
@@ -74,10 +77,22 @@ exports.createEvent = async (req, res,next) => {
       console.log("Events---condição concluida")
       let event = await events.create({
         name: req.body.name,
-        date: req.body.date,
+        description: req.body.description,
+        /* date: req.body.date,
         startTime: req.body.startTime,
-        endTime: req.body.endTime,
+        endTime: req.body.endTime, */
       });
+      console.log(`New event id: ${event.id}`);
+      const dates = req.body.dates
+
+      for (day of dates){
+        await eventsDate.create({
+          EventId: event.id,
+          date: day.date,
+          startTime: day.startTime,
+          endTime: day.endTime
+        })
+      }
     } else {
       clear();console.log("401, An event is already registered.");
       throw new ErrorHandler(401, "An event is already registered.");
@@ -102,9 +117,10 @@ exports.updateEvent = async (req, res) => {
     clear();console.log("Event---updateEvent")
     let oneEvent = await events.findOne({ where: {id: req.params.id}})
     oneEvent.name=req.body.name != undefined ? req.body.name : oneEvent.name;//console.log(oneEvent.name)
-    oneEvent.date=req.body.date != undefined ? req.body.date : oneEvent.date;//console.log(oneEvent.date)
+    oneEvent.name=req.body.description != undefined ? req.body.description : oneEvent.description;//console.log(oneEvent.description)
+    /* oneEvent.date=req.body.date != undefined ? req.body.date : oneEvent.date;//console.log(oneEvent.date)
     oneEvent.startTime=req.body.startTime != undefined ? req.body.startTime : oneEvent.startTime;//console.log(oneEvent.startTime)
-    oneEvent.endTime=req.body.endTime != undefined ? req.body.endTime : oneEvent.endTime;//console.log(oneEvent.endTime)
+    oneEvent.endTime=req.body.endTime != undefined ? req.body.endTime : oneEvent.endTime;//console.log(oneEvent.endTime) */
     await oneEvent.save()
   
     return res

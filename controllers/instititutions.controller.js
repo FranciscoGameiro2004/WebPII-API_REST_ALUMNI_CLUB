@@ -3,9 +3,11 @@ const clear = require('clear');
 const { ErrorHandler } = require("../utils/error.js");
 const db = require("../models/index.js");
 let institutions = db.institutions;
-const { Op, ValidationError } = require("sequelize");
 
-exports.findAll = async (req, res) => {
+const { Op, ValidationError, where, JSON } = require("sequelize");
+const { raw } = require('mysql2');
+
+exports.findAll = async (req, res, next) => {
   try {
     clear();
     console.log("Institutions---findAll");
@@ -23,13 +25,14 @@ exports.findAll = async (req, res) => {
       limit: limit,
       offset: currentPage * limit,
       where: {
-        designation: { [Op.like]: `%${req.query.search != undefined ? req.query.search : ''}%` }
+        designation: { 
+          [Op.like]: 
+          `%${req.query.search != undefined ? req.query.search : ''}%`
+        }
       }
-    });
+    })
+    console.log(allInstitutions)
 
-    if (allInstitutions.rows.length < 1) {
-      throw new ErrorHandler(404, "Page not found");
-    }
 
     allInstitutions.rows.forEach((institution, index) => {
       allInstitutions.rows[index].links = [
@@ -68,10 +71,7 @@ exports.findAll = async (req, res) => {
     });
   } 
   catch (err) {
-    if (err instanceof ValidationError) {
-      err = new ErrorHandler(400, err.errors.map((e) => e.message));
-    }
-    res.status(err.statusCode || 500).json({ error: err.message || "An unexpected error occurred" });
+    next(err)
   }
 };
 

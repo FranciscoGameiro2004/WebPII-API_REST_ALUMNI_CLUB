@@ -41,6 +41,9 @@ db.alumniDegree = require('./DB/alumniDegree.table.js')(sequelize, DataTypes);
 db.alumniJob = require('./DB/alumniJob.table.js')(sequelize, DataTypes);
 db.company = require('./DB/company.table.js')(sequelize, DataTypes);
 db.userFollowing = require('./DB/userFollowing.table.js')(sequelize, DataTypes);
+db.eventDate = require('./DB/eventDate.table.js')(sequelize, DataTypes);
+db.eventFollowing = require('./DB/eventFollowing.table.js')(sequelize, DataTypes);
+db.eventParticipant = require('./DB/eventParticipant.table.js')(sequelize, DataTypes);
 
 
 db.institutions.hasMany(db.degrees)
@@ -77,12 +80,26 @@ db.notifications.belongsTo(db.users)
 db.users.hasMany(db.userFollowing)
 db.userFollowing.hasMany(db.users)
 
+db.events.hasMany(db.eventDate)
+db.eventDate.belongsTo(db.events)
+
+db.events.hasMany(db.eventFollowing)
+db.eventFollowing.belongsTo(db.events)
+
+db.users.hasMany(db.eventFollowing)
+db.eventFollowing.belongsTo(db.users)
+
+db.users.hasMany(db.eventParticipant)
+db.eventParticipant.belongsTo(db.users)
+
+db.events.hasMany(db.eventParticipant)
+db.eventParticipant.belongsTo(db.events)
 // optionally: SYNC
 //? Perguntar à professora sobre o que quer que tenha ocorrido
 try {
   clear()
   //sequelize.sync({ force: true }); // creates tables, dropping them first if they already existed
-  //sequelize.sync({ alter: true }); // checks the tables in the database (which columns they have, what are their data types, etc.), and then performs the necessary changes to make then match the models
+  sequelize.sync({ alter: true }); // checks the tables in the database (which columns they have, what are their data types, etc.), and then performs the necessary changes to make then match the models
   //sequelize.sync(); // creates tables if they don't exist (and does nothing if they already exist)
   //console.log("DB is successfully synchronized");
 } catch (error) {

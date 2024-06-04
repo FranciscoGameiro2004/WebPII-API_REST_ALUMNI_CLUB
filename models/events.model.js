@@ -25,7 +25,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        date: {
+        description: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        /* date: {
             type: DataTypes.DATEONLY, // Date only, no time
             allowNull: false
         },
@@ -36,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
         endTime: {
             type: DataTypes.TIME, // Time only, no date
             allowNull: false
-        }
+        } */
     }, { 
         timestamps: false 
     });
