@@ -44,7 +44,7 @@ exports.findAll = async (req, res, next) => {
     }
 
     let userList = await users.findAndCountAll({
-      attributes: ["username", "name", "id", "profilePicLink"],
+      attributes: ["id", "username", "name", "profilePicLink", "type"],
       raw: true,
       limit: limit,
       offset: currentPage ? currentPage * limit : 0,
