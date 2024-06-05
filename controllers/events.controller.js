@@ -138,7 +138,7 @@ exports.updateEvent = async (req, res, next) => {
       throw new ErrorHandler(404, `Event with ID ${req.params.id} was not found`)
     }
     oneEvent.name=req.body.name != undefined ? req.body.name : oneEvent.name;//console.log(oneEvent.name)
-    oneEvent.name=req.body.description != undefined ? req.body.description : oneEvent.description;//console.log(oneEvent.description)
+    oneEvent.description=req.body.description != undefined ? req.body.description : oneEvent.description;//console.log(oneEvent.description)
     /* oneEvent.date=req.body.date != undefined ? req.body.date : oneEvent.date;//console.log(oneEvent.date)
     oneEvent.startTime=req.body.startTime != undefined ? req.body.startTime : oneEvent.startTime;//console.log(oneEvent.startTime)
     oneEvent.endTime=req.body.endTime != undefined ? req.body.endTime : oneEvent.endTime;//console.log(oneEvent.endTime) */
@@ -166,7 +166,33 @@ exports.updateEvent = async (req, res, next) => {
     }
 
     //! ATUALIZAR UTILIZADORES PARTICIPANTES!
+    if (req.body.removeParticipants.length > 0) {
+      removeAttributes.participants = req.body.removeParticipants;
+      removeAttributes.participants.forEach(async (participant) => {
+        await eventsParticipant.destroy({
+          where: {EventId: req.params.id, UserId: participant.userId, },
+        });
+      });
+    }
 
+    if (req.body.addParticipants.length > 0) {
+      console.log('OK');
+      addedAttributes.participants = req.body.addParticipants
+      addedAttributes.participants.forEach(async (participant) => {
+        let userTarget = await db.users.findOne({
+          where: {id: participant.userId}
+        })
+        console.log(userTarget);
+        if (userTarget != null){
+          await eventsParticipant.create({
+            EventId: req.params.id,
+            UserId: participant.userId,
+            role: participant.role
+          })
+        }
+        
+      });
+    }
   
     return res
     .status(201)
