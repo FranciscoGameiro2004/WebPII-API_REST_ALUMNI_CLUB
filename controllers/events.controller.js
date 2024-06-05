@@ -112,8 +112,26 @@ exports.createEvent = async (req, res,next) => {
   }
 }
 
-exports.updateEvent = async (req, res) => {
+exports.updateEvent = async (req, res, next) => {
   try {
+    if (!req.params.id){
+      throw new ErrorHandler(400, 'You need to leave every required part filled.')
+    }
+
+    let addedAttributes = { dates: [], participants: [] };
+    let removeAttributes = { dates: [], participants: [] };
+
+    if (
+      !req.body.name &&
+      !req.body.description &&
+      !req.body.addDates &&
+      !req.body.removeDates &&
+      !req.body.addParticipants &&
+      !req.body.removeParticipants
+    ) {
+      throw new ErrorHandler(400, "Please provide any change needed");
+    }
+
     clear();console.log("Event---updateEvent")
     let oneEvent = await events.findOne({ where: {id: req.params.id}})
     oneEvent.name=req.body.name != undefined ? req.body.name : oneEvent.name;//console.log(oneEvent.name)
@@ -122,18 +140,37 @@ exports.updateEvent = async (req, res) => {
     oneEvent.startTime=req.body.startTime != undefined ? req.body.startTime : oneEvent.startTime;//console.log(oneEvent.startTime)
     oneEvent.endTime=req.body.endTime != undefined ? req.body.endTime : oneEvent.endTime;//console.log(oneEvent.endTime) */
     await oneEvent.save()
+
+    if (req.body.removeDates.length > 0) {
+      removeAttributes.dates = req.body.removeDates;
+      removeAttributes.dates.forEach(async (day) => {
+        await eventsDate.destroy({
+          where: {EventId: req.params.id, date: day.date, startTime: day.startTime, endTime: day.endTime },
+        });
+      });
+    }
+
+    if (req.body.addDates.length > 0) {
+      addedAttributes.dates = req.body.addDates
+      addedAttributes.dates.forEach(async (day) => {
+        await eventsDate.create({
+          EventId: req.params.id,
+          date: day.date,
+          startTime: day.startTime,
+          endTime: day.endTime
+        })
+      });
+    }
+
+    //! ATUALIZAR UTILIZADORES PARTICIPANTES!
+
   
     return res
     .status(201)
     .json({ success: true, msg: "Event was updated successfully!" });
   } 
   catch (err) {
-    if (err instanceof ValidationError) {
-      err = new ErrorHandler(
-        400,
-        err.errors.map((e) => e.message)
-      );
-    }
+    next(err)
   }
 }
 
