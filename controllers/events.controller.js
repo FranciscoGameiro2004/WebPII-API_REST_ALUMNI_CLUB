@@ -134,6 +134,9 @@ exports.updateEvent = async (req, res, next) => {
 
     clear();console.log("Event---updateEvent")
     let oneEvent = await events.findOne({ where: {id: req.params.id}})
+    if (oneEvent == null) {
+      throw new ErrorHandler(404, `Event with ID ${req.params.id} was not found`)
+    }
     oneEvent.name=req.body.name != undefined ? req.body.name : oneEvent.name;//console.log(oneEvent.name)
     oneEvent.name=req.body.description != undefined ? req.body.description : oneEvent.description;//console.log(oneEvent.description)
     /* oneEvent.date=req.body.date != undefined ? req.body.date : oneEvent.date;//console.log(oneEvent.date)
