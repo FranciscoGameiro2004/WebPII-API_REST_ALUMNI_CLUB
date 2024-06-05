@@ -19,7 +19,7 @@ router.route('/:id')
 
 // Rota ('/:eventID')
 router.route('/:id/participants')
-//.get(eventsController.findEventsParticipants)
+.get(eventsController.findEventsParticipants)
 
 router.all('*', (req, res) => {
 res.status(404).json({ message: 'Error' }); //Mensagem genérica

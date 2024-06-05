@@ -10,6 +10,7 @@ let eventsFollowing = db.eventFollowing
 let eventsParticipant = db.eventParticipant
 
 const { Op, ValidationError, where, JSON } = require("sequelize");
+const { raw } = require('mysql2');
 
   /* querry filtro
   const currentPage = req.query.page >= 0 ? req.query.page : 0;
@@ -59,6 +60,42 @@ exports.findOne = async (req, res) => {
         err.errors.map((e) => e.message)
       );
     next(err);
+  }
+}
+
+exports.findEventsParticipants = async (req, res, next) => {
+  try {
+    let event = await events.findOne({ where: {id: req.params.id}, raw:true});//console.log(oneInstititution);
+    console.log(event);
+    if (event == null) {
+      throw new ErrorHandler(404, `Event with ID ${req.params.id} was not found`)
+    }
+    const eventInfo = {eventId: req.params.id, name: event.name}
+
+    let participants = await eventsParticipant.findAll({
+      attributes: ['role', 'UserID'],
+      where: {EventId: req.params.id},
+      raw: true
+    })
+
+    let participantsInfo = []
+    //! Não consigo obter Username por alguma razão
+    await participants.forEach(async (participant, index) => {
+      let targetUser = await db.users.findOne({
+        attributes: ['username'],
+        where: {id: participant.UserID},
+        raw: true
+      })
+      console.log(targetUser.username);
+      console.log(participants[index]);
+      participants[index].user = targetUser.username
+      console.log(participants[index]);
+      participantsInfo.push({user: targetUser.username})
+    });
+
+    res.status(200).json({eventInfo: eventInfo, participants: participants})
+  } catch (err) {
+    next(err)
   }
 }
 
