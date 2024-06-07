@@ -15,7 +15,7 @@ exports.findAll = async (req, res, next) => {
     const currentPage = req.query.page >= 0 ? parseInt(req.query.page) : 0;
     const limit = parseInt(req.query.limit);
 
-    if (limit < 0 || !Number.isInteger(limit)) {
+    if (limit < 1 || !Number.isInteger(limit)) {
       throw new ErrorHandler(400, "Limit must be a positive integer, greater than or equal to 5");
     }
 
