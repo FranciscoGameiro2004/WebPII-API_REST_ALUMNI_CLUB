@@ -97,6 +97,19 @@ exports.createInstitution = async (req, res,next) => {
   clear();console.log("Institutions---createInstitution")
   //res.json(req.body)
   try {
+
+    if (
+      !req.body.designation ||
+      !req.body.address ||
+      !req.body.zipCode ||
+      !req.body.url ||
+      !req.body.email ||
+      !req.body.phone ||
+      !req.body.logoUrl
+    ) {
+      throw new ErrorHandler(400, "There is a lack of required information to register an HEI.");
+    }
+
     let institutionList = await institutions.findAll({
       where: {
         designation: req.body.designation
@@ -132,11 +145,6 @@ exports.createInstitution = async (req, res,next) => {
       .json({ success: true, msg: "Institution was registered successfully!" });
   } 
   catch (err) {
-    if (err instanceof ValidationError)
-      err = new ErrorHandler(
-        400,
-        err.errors.map((e) => e.message)
-      );
     next(err);
   }
 }

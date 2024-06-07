@@ -7,9 +7,7 @@ const authenticationController = require("../controllers/auth.controller");
 // Rota ('/'))
 router.route('/')
 .get(institutionsController.findAll)
-//.post(authenticationController.verifyToken,authenticationController.isAdmin,institutionsController.createInstitution)
-
-.post(institutionsController.createInstitution)
+.post(authenticationController.verifyToken,authenticationController.isAdmin,institutionsController.createInstitution)
 
 // Rota(/:id)
 router.route('/:id')
