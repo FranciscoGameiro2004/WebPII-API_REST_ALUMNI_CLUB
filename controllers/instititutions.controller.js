@@ -70,11 +70,6 @@ exports.findAll = async (req, res, next) => {
   }
 };
 
-
-
-
-
-
 exports.findOne = async (req, res) => {
   try {
     clear();console.log("Institutions---findOne")
