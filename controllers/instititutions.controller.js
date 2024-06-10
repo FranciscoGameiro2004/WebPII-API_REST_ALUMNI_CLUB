@@ -15,7 +15,7 @@ exports.findAll = async (req, res, next) => {
     const currentPage = req.query.page >= 0 ? parseInt(req.query.page) : 0;
     const limit = parseInt(req.query.limit);
 
-    if (limit < 5 || !Number.isInteger(limit)) {
+    if (limit < 1 || !Number.isInteger(limit)) {
       throw new ErrorHandler(400, "Limit must be a positive integer, greater than or equal to 5");
     }
 
@@ -25,14 +25,11 @@ exports.findAll = async (req, res, next) => {
       limit: limit,
       offset: currentPage * limit,
       where: {
-        designation: { 
-          [Op.like]: 
-          `%${req.query.search != undefined ? req.query.search : ''}%`
+        designation: {
+          [Op.like]: `%${req.query.search || ''}%`
         }
       }
-    })
-    console.log(allInstitutions)
-
+    });
 
     allInstitutions.rows.forEach((institution, index) => {
       allInstitutions.rows[index].links = [
@@ -43,7 +40,6 @@ exports.findAll = async (req, res, next) => {
     const numPages = Math.ceil(allInstitutions.count / limit);
 
     let links = [];
-
     if (currentPage > 0) {
       links.push({
         rel: "prev-page",
@@ -69,13 +65,10 @@ exports.findAll = async (req, res, next) => {
       data: allInstitutions.rows,
       links: links,
     });
-  } 
-  catch (err) {
-    next(err)
+  } catch (err) {
+    next(err);
   }
 };
-
-
 
 exports.findOne = async (req, res) => {
   try {
@@ -97,6 +90,19 @@ exports.createInstitution = async (req, res,next) => {
   clear();console.log("Institutions---createInstitution")
   //res.json(req.body)
   try {
+
+    if (
+      !req.body.designation ||
+      !req.body.address ||
+      !req.body.zipCode ||
+      !req.body.url ||
+      !req.body.email ||
+      !req.body.phone ||
+      !req.body.logoUrl
+    ) {
+      throw new ErrorHandler(400, "There is a lack of required information to register an HEI.");
+    }
+
     let institutionList = await institutions.findAll({
       where: {
         designation: req.body.designation
@@ -132,11 +138,6 @@ exports.createInstitution = async (req, res,next) => {
       .json({ success: true, msg: "Institution was registered successfully!" });
   } 
   catch (err) {
-    if (err instanceof ValidationError)
-      err = new ErrorHandler(
-        400,
-        err.errors.map((e) => e.message)
-      );
     next(err);
   }
 }

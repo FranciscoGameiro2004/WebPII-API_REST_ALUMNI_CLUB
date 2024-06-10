@@ -1,8 +1,8 @@
 const axios = require('axios');
-const { search, use } = require('../routes/users.routes');
 
 const API_BASE_URL = 'http://127.0.0.1:3000'
-let JWT_TOKEN = ''
+let JWT_TOKEN_1 = ''
+let JWT_TOKEN_2 = ''
 let userId = 1
 
 test('Criar conta com todos os dados preenchidos', async () => {
@@ -18,7 +18,6 @@ test('Criar conta com todos os dados preenchidos', async () => {
             "nationality": "EN"
         }
       });
-    console.log(response);
     expect(response.status).toBe(201)
 })
 
@@ -33,7 +32,6 @@ test('Criar conta com dados não requiridos por preencher', async () => {
             "password": "Not4Pa55",
         }
       });
-    console.log(response);
     expect(response.status).toBe(201)
 })
 
@@ -48,7 +46,6 @@ test('Criar conta com dados requiridos por preencher', async () => {
                 "password": "Not4Pa55",
             }
           });
-        console.log(response);
     } catch (error) {
         expect(error.message).toBe('Request failed with status code 400')
     }
@@ -69,14 +66,13 @@ test('Criar conta com dados repetidos', async () => {
                 "nationality": "EN"
             }
           });
-        console.log(response);
     } catch (error) {
         expect(error.message).toBe('Request failed with status code 401')
     }
 })
 
 test('Início de sessão', async () => {
-    const response = await axios({
+    const response1 = await axios({
         method: 'post',
         url: `${API_BASE_URL}/users/login`,
         data: {
@@ -84,8 +80,20 @@ test('Início de sessão', async () => {
             "password": "Not4Pa55"
         }
     })
-    JWT_TOKEN = response.data.accessToken
-    expect(response.status).toBe(200)
+    JWT_TOKEN_1 = response1.data.accessToken
+    
+
+    const response2 = await axios({
+        method: 'post',
+        url: `${API_BASE_URL}/users/login`,
+        data: {
+            "username": "j4neDo3",
+            "password": "Not4Pa55"
+        }
+    })
+    JWT_TOKEN_2 = response2.data.accessToken
+    expect(response1.status).toBe(200)
+    expect(response2.status).toBe(200)
 })
 
 test('Início de sessão sem username fornecido', async () => {
@@ -97,7 +105,7 @@ test('Início de sessão sem username fornecido', async () => {
                 "password": "Not4Pa55"
             }
         })
-        JWT_TOKEN = response.data.accessToken
+        JWT_TOKEN_1 = response.data.accessToken
     } catch (error) {
         expect(error.message).toBe('Request failed with status code 400')
     }
@@ -112,7 +120,7 @@ test('Início de sessão sem password fornecida', async () => {
                 "username": "j0hnDo3",
             }
         })
-        JWT_TOKEN = response.data.accessToken
+        JWT_TOKEN_1 = response.data.accessToken
     } catch (error) {
         expect(error.message).toBe('Request failed with status code 400')
     }
@@ -128,7 +136,7 @@ test('Início de sessão com credenciais erradas', async () => {
                 "password": "Wr0ngP4ss"
             }
         })
-        JWT_TOKEN = response.data.accessToken
+        JWT_TOKEN_1 = response.data.accessToken
     } catch (error) {
         expect(error.message).toBe('Request failed with status code 401')
     }
@@ -192,12 +200,18 @@ test('Obtenção de um utilizador com um id inválido', async () => {
 //? CONTINUAR
 
 test('Remover conta de um utilizador', async () => {
-    const response = await axios({
+    const response1 = await axios({
         method: 'delete',
         url: `${API_BASE_URL}/users/`,
-        headers: { Authorization: `Bearer ${JWT_TOKEN}` }
+        headers: { Authorization: `Bearer ${JWT_TOKEN_1}` }
     })
-    expect(response.status).toBe(204)
+    expect(response1.status).toBe(204)
+    const response2 = await axios({
+        method: 'delete',
+        url: `${API_BASE_URL}/users/`,
+        headers: { Authorization: `Bearer ${JWT_TOKEN_2}` }
+    })
+    expect(response2.status).toBe(204)
 })
 
 test('Remover conta de um utilizador sem token', async () => {
