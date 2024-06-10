@@ -21,6 +21,9 @@ router.route('/:id')
 router.route('/:id/participants')
 .get(eventsController.findEventsParticipants)
 
+router.route('/:id/follow')
+.post
+
 router.all('*', (req, res) => {
 res.status(404).json({ message: 'Error' }); //Mensagem genérica
 })

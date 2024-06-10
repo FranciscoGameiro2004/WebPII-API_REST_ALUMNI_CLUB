@@ -240,6 +240,46 @@ exports.updateEvent = async (req, res, next) => {
   }
 }
 
+exports.followEvent = async (req, res, next) => {
+  try {
+      const eventToFollow = await events.findOne({
+        where:{
+          id:req.params.id
+        },
+        raw:true,
+      })
+      clear()
+      console.log(eventToFollow);
+      
+      if (!eventToFollow) {
+        throw new ErrorHandler(404,`Event with ID ${req.params.id} was not found`)
+      }
+
+      const following = await eventsFollowing.findOne({
+        where: {
+          followEvent:req.params.id
+        }
+      })
+      
+
+      const existingFollow = await eventsFollowing.findOne({
+          where: { UserId: userId, EventId: eventId }
+      });
+
+      if (existingFollow) {
+          throw new ErrorHandler(400,'You are already following this event')
+      }
+
+      return res
+      .status(201)
+      .json({ success: true, msg: "You are now following this event" });
+  } catch (err) {
+      next(err);
+  }
+};
+
+
+
 exports.deleteEvent = async (req, res) => {
   try {
     clear();console.log("Event---deleteEvent")

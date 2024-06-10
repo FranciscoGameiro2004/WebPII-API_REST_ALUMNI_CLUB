@@ -528,6 +528,7 @@ exports.followUser = async (req, res, next) => {
       raw: true,
     })
     clear()
+    
     console.log(userToFollow);
     if (!userToFollow){
       throw new ErrorHandler(404, `User with ID ${req.params.id} was not found`)
