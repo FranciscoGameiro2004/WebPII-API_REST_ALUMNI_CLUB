@@ -220,8 +220,6 @@ test("Obtenção de um utilizador com um id inválido", async () => {
   }
 });
 
-//? CONTINUAR
-
 test("Atualizar dados de um utilizador", async () => {
   const response1 = await axios({
     method: "patch",
@@ -285,11 +283,12 @@ test("Atualizar dados de um utilizador através de um token de um administrador"
     headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
     data: {
       name: "John Template Doe",
-      consentJobs: true,
     },
   });
   expect(response1.status).toBe(200);
 });
+
+//? CONTINUAR
 
 test("Remover conta de um utilizador", async () => {
   const response1 = await axios({
