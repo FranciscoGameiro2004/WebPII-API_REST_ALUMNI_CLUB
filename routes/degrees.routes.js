@@ -14,7 +14,7 @@ router.route('/')
 
 // Rota ('/:usersID')
 router.route('/:id')
-.delete(authController.isAdmin, degreesController.deleteDegrees)
+.delete(authController.verifyToken, authController.isAdmin, degreesController.deleteDegrees)
 .patch(authController.verifyToken, authController.isAdmin, degreesController.bodyValidator, degreesController.updateDegrees)
 
 /*----------------Events---------------*/

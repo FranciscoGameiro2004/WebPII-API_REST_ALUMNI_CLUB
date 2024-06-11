@@ -131,9 +131,23 @@ try {
   consentDegrees: true,
 }); */
 
-/* let ok = db.degreeType.create({
+
+/* await db.degreeType.create({
+  designation: "Curso Técnico Superior"
+}); 
+await db.degreeType.create({
+  designation: "Licenciatura"
+}); 
+await db.degreeType.create({
+  designation: "Pós-Gradugação"
+});  
+await db.degreeType.create({
+  designation: "Mestrado"
+});
+await db.degreeType.create({
   designation: "Doutoramento"
-}); */
+});  */
+
 
 
 /* let notification = db.notifications.create({

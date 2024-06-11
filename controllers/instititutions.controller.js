@@ -70,7 +70,7 @@ exports.findAll = async (req, res, next) => {
   }
 };
 
-exports.findOne = async (req, res) => {
+exports.findOne = async (req, res, next) => {
   try {
     clear();console.log("Institutions---findOne")
     let oneInstititution = await institutions.findOne({ where: {id: req.params.id}});//console.log(oneInstititution);
@@ -142,7 +142,7 @@ exports.createInstitution = async (req, res,next) => {
   }
 }
 
-exports.updateInstitution = async (req, res) => {
+exports.updateInstitution = async (req, res, next) => {
   try {
     clear();console.log("Institution---updateInstitution")
     let oneInstititution = await institutions.findOne({ where: {id: req.params.id}})
@@ -163,7 +163,7 @@ exports.updateInstitution = async (req, res) => {
   }
 }
 
-exports.deleteInstitution = async (req, res) => {
+exports.deleteInstitution = async (req, res, next) => {
   try {
     clear();console.log("Institution---deleteInstitution")
     let oneInstititution = await institutions.findOne({ where: {id: req.params.id}})
