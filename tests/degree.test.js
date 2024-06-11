@@ -64,7 +64,13 @@ beforeAll(async () => {
   })();
 });
 
-
+afterAll(async ()=>{
+  const response1 = await axios({
+    method: 'delete',
+    url: `${API_BASE_URL}/institutions/${institutionId}`,
+    headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` }
+})
+})
 
 test("Inserir Curso", async () => {
   const response = await axios({
