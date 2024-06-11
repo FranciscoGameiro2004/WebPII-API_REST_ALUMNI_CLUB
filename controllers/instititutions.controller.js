@@ -177,8 +177,7 @@ exports.deleteInstitution = async (req, res) => {
     oneInstititution.destroy();
   
     return res
-    .status(201)
-    .json({ success: true, msg: "Institution was deleted successfully!" });
+    .status(204).json('')
   }
   catch (err) {
     if (err instanceof ValidationError)

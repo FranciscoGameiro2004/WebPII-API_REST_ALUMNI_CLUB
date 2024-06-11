@@ -4,6 +4,8 @@ const API_BASE_URL = "http://127.0.0.1:3000";
 let JWT_TOKEN_ADMIN = "";
 let JWT_TOKEN_NORMAL = "";
 
+let institutionId = 0
+
 beforeAll(async () => {
   return (async () => {
     const response_admin = await axios({
@@ -91,3 +93,104 @@ test("Inserir Instituição através de um utilizador comum", async () => {
     expect(error.message).toBe('Request failed with status code 403')
   }
 });
+
+test("Obter instituições", async () => {
+  const params = new URLSearchParams([['limit', 5], ['page', 0]])
+  const response = await axios({
+    method: "get",
+    url: `${API_BASE_URL}/institutions`,
+    params: params
+  });
+  expect(response.status).toBe(200);
+});
+
+test("Obter instituição através da pesquisa de uma lista", async () => {
+  const params = new URLSearchParams([['limit', 5], ['page', 0], ['search', 'Roblox']])
+  const response = await axios({
+    method: "get",
+    url: `${API_BASE_URL}/institutions`,
+    params: params
+  });
+  institutionId = response.data.data[0].id
+  expect(response.status).toBe(200);
+  expect(response.data.data.some(institution => institution.designation == 'Roblox Institute of Virtual Technology')).toBeTruthy()
+});
+
+test("Obter instituição não existente", async () => {
+  try {
+    const params = new URLSearchParams([['limit', 5], ['page', 0], ['search', 'Redstone']])
+  const response = await axios({
+    method: "get",
+    url: `${API_BASE_URL}/institutions`,
+    params: params
+  });
+  //institutionId = response.data.data[0].id
+  } catch (error) {
+    expect(error.message).toBe('Request failed with status code 404')
+  }
+});
+
+test('Obtenção de uma instituição espcífica através do seu ID', async () => {
+  const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/institutions/${institutionId}`,
+  })
+  expect(response.status).toBe(200)
+  expect(response.data.id).toBe(institutionId)
+})
+
+test('Obtenção de uma instituição não existente', async () => {
+  try {
+      const nonExistantInstitutionId = 9999
+  const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/institutions/${nonExistantInstitutionId}`,
+  })
+  } catch (error) {
+      expect(error.message).toBe('Request failed with status code 404')
+  }
+})
+
+test('Obtenção de uma instituição com um id inválido', async () => {
+  try {
+      const invalidInstitutionId = 'institution'
+  const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/institutions/${invalidInstitutionId}`,
+  })
+  } catch (error) {
+      expect(error.message).toBe('Request failed with status code 400')
+  }
+})
+
+test('Remover instituição sem token', async () => {
+  try {
+    const response1 = await axios({
+      method: 'delete',
+      url: `${API_BASE_URL}/institutions/${institutionId}`,
+  })
+  } catch (error) {
+    expect(error.message).toBe('Request failed with status code 401')
+  }
+})
+
+test('Remover instituição através de um utilizador comum', async () => {
+  try {
+    const response1 = await axios({
+      method: 'delete',
+      url: `${API_BASE_URL}/institutions/${institutionId}`,
+      headers: { Authorization: `Bearer ${JWT_TOKEN_NORMAL}` }
+  })
+  } catch (error) {
+    expect(error.message).toBe('Request failed with status code 403')
+  }
+})
+
+test('Remover instituição', async () => {
+  const response1 = await axios({
+      method: 'delete',
+      url: `${API_BASE_URL}/institutions/${institutionId}`,
+      headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` }
+  })
+  expect(response1.status).toBe(204)
+})
