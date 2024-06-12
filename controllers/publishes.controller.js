@@ -144,7 +144,6 @@ exports.createPublication = async (req, res, next) => {
   }
 }
 
-
 exports.deletePublication = async (req, res, next) => {
   try {
     if(!req.params.id){
@@ -172,6 +171,78 @@ exports.deletePublication = async (req, res, next) => {
     publication.destroy()
     return res.status(200).send({message: 'Publication successfully deleted'})
     
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.addComment = async (req, res, next) => {
+  try {
+    if (!req.params.id){
+      throw new ErrorHandler(400, 'The publication ID was not submitted')
+    }
+    if (!req.body.comment){
+      throw new ErrorHandler(400, 'This post does not have any content.')
+    }
+
+    let publication = await publications.findOne({
+      attributes: ['title', 'body', 'UserId', 'dateTime' ,'id'],
+      where: {
+        id: req.params.id
+      },
+      raw:true,
+      include: [{model: db.users, attributes: ['username', 'name']}]
+    })
+
+    if (publication == null){
+      throw new ErrorHandler(404, 'Publication not found')
+    }
+
+    let newComment = await comment.create({
+      UserId: req.loggedUserId,
+      PublicationId: req.params.id,
+      body: req.body.comment
+    })
+
+    res.status(200).json({message: 'The comment was succesfully posted!'})
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.removeComment = async (req, res, next) => {
+  try {
+    if(!req.params.id){
+      throw new ErrorHandler(400, 'The publication id was not submitted')
+    }
+    if(!req.params.commentId){
+      throw new ErrorHandler(400, 'The comment id was not submitted')
+    }
+    if (isNaN(req.params.id) || Number.isInteger(req.params.id)) {
+      throw new ErrorHandler(400, 'The publication id is not a lavid type')
+    }
+    if (isNaN(req.params.commentId) || Number.isInteger(req.params.commentId)) {
+      throw new ErrorHandler(400, 'The comment id is not a lavid type')
+    }
+  
+    let targetComment = await comment.findOne({
+      attributes: ['id', 'UserId', 'PublicationId'],
+      where: {
+        id: req.params.commentId,
+        PublicationId: req.params.id
+      }
+    })
+  
+    if (targetComment == null){
+      throw new ErrorHandler(404, 'Comment not found')
+    }
+  
+    if (!(targetComment.UserId == req.loggedUserId) && req.loggedUserType != 'admin'){
+      throw new ErrorHandler(403, 'You must had published the comment or being an admin to delete it.')
+    };
+  
+    targetComment.destroy()
+    return res.status(200).send({message: 'Comment successfully deleted'})
   } catch (error) {
     next(error)
   }

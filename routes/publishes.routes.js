@@ -16,12 +16,12 @@ router.route('/')
 .get(publishesController.findOne)
 .delete(authController.verifyToken, publishesController.deletePublication)
 
-/* router.route('/:id/comments')
-.get(publishesController.getComments)
-.post(authController.verifyToken, publishesController.addComment) */
+router.route('/:id/comments')
+//.get(publishesController.getComments)
+.post(authController.verifyToken, publishesController.addComment)
 
-/* router.route('/:id/comments/:commentId')
-.delete(authController.verifyToken, publishesController.deleteComment) */
+router.route('/:id/comments/:commentId')
+.delete(authController.verifyToken, publishesController.removeComment)
 
 router.all('*', (req, res) => {
 res.status(404).json({ message: 'Error' }); //Mensagem genérica
