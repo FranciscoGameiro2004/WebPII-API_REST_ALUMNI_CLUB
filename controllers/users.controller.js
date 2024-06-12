@@ -522,6 +522,9 @@ exports.followUser = async (req, res, next) => {
     if (req.params.id == req.loggedUserId){
       throw new ErrorHandler(405, 'You cannot follow yourself')
     }
+    if (isNaN(req.params.id) || Number.isInteger(req.params.id)) {
+      throw new ErrorHandler(400, 'The user id is not a valid type')
+    }
     const userToFollow = await users.findOne({
       where: {
         id: req.params.id
@@ -561,7 +564,7 @@ exports.followUser = async (req, res, next) => {
       type: 'user_following',
     });
 
-    res.status(200).json({message: 'You are now following a user!'})
+    res.status(202).json({message: 'You are now following a user!'})
   } catch (err) {
     next(err)
   }
@@ -571,6 +574,19 @@ exports.unfollowUser = async (req, res, next) => {
   try {
     if (req.params.id == req.loggedUserId){
       throw new ErrorHandler(405, 'You cannot unfollow yourself')
+    }
+    if (isNaN(req.params.id) || Number.isInteger(req.params.id)) {
+      throw new ErrorHandler(400, 'The user id is not a valid type')
+    }
+
+    const userToUnfollow = await users.findOne({
+      where: {
+        id: req.params.id
+      },
+      raw: true,
+    })
+    if (!userToUnfollow){
+      throw new ErrorHandler(404, `User with ID ${req.params.id} was not found`)
     }
 
     const following = await userFollowing.findOne({
@@ -589,7 +605,7 @@ exports.unfollowUser = async (req, res, next) => {
       }
     })
 
-    res.status(200).json({message: 'You just unfollowed a user!'})
+    res.status(202).json({message: 'You just unfollowed a user!'})
   } catch (err) {
     next(err)
   }

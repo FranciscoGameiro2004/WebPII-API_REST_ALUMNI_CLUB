@@ -1,10 +1,12 @@
 const axios = require("axios");
+const { response } = require("express");
 
 const API_BASE_URL = "http://127.0.0.1:3000";
 let JWT_TOKEN_1 = "";
 let JWT_TOKEN_2 = "";
 let JWT_TOKEN_ADMIN = "";
-let userId = 1;
+let userId1 = 1;
+let userId2 = 1;
 
 beforeAll(async () => {
   return (async () => {
@@ -170,38 +172,55 @@ test("Obtenção de uma lista de utilizadores", async () => {
 });
 
 test("Obtenção de um utilizador através da lista de utilizadores", async () => {
-  const params = new URLSearchParams([
+  const params1 = new URLSearchParams([
     ["limit", 5],
     ["page", 0],
     ["search", "j0hnDo3"],
   ]);
-  const response = await axios({
+  const response1 = await axios({
     method: "get",
     url: `${API_BASE_URL}/users/`,
-    params: params,
+    params: params1,
   });
-  userId = response.data.data[0].id;
-  expect(response.status).toBe(200);
+  userId1 = response1.data.data[0].id;
+  const params2 = new URLSearchParams([
+    ["limit", 5],
+    ["page", 0],
+    ["search", "j0hnDo3"],
+  ]);
+  const response2 = await axios({
+    method: "get",
+    url: `${API_BASE_URL}/users/`,
+    params: params2,
+  });
+  userId2 = response2.data.data[0].id;
+  expect(response1.status).toBe(200);
   expect(
-    response.data.data.some((user) => user.username == "j0hnDo3")
+    response1.data.data.some((user) => user.username == "j0hnDo3")
+  ).toBeTruthy();
+  expect(response2.status).toBe(200);
+  expect(
+    response2.data.data.some((user) => user.username == "j0hnDo3")
   ).toBeTruthy();
 });
 
 test("Obtenção de um utilizador espcífico através do seu ID", async () => {
   const response = await axios({
     method: "get",
-    url: `${API_BASE_URL}/users/${userId}`,
+    url: `${API_BASE_URL}/users/${userId1}`,
   });
+  console.log(`Status code: ${response.status}`);
+  console.log(response.data);
   expect(response.status).toBe(200);
-  expect(response.data.userId).toBe(userId);
+  expect(response.data.userId).toBe(userId1);
 });
 
 test("Obtenção de um utilizador não existente", async () => {
   try {
-    const nonExistantUserId = 9999;
+    const nonExistantuserId1 = 9999;
     const response = await axios({
       method: "get",
-      url: `${API_BASE_URL}/users/${nonExistantUserId}`,
+      url: `${API_BASE_URL}/users/${nonExistantuserId1}`,
     });
   } catch (error) {
     expect(error.message).toBe("Request failed with status code 404");
@@ -210,10 +229,10 @@ test("Obtenção de um utilizador não existente", async () => {
 
 test("Obtenção de um utilizador com um id inválido", async () => {
   try {
-    const invalidUserId = "user";
+    const invaliduserId1 = "user";
     const response = await axios({
       method: "get",
-      url: `${API_BASE_URL}/users/${invalidUserId}`,
+      url: `${API_BASE_URL}/users/${invaliduserId1}`,
     });
   } catch (error) {
     expect(error.message).toBe("Request failed with status code 400");
@@ -223,7 +242,7 @@ test("Obtenção de um utilizador com um id inválido", async () => {
 test("Atualizar dados de um utilizador", async () => {
   const response1 = await axios({
     method: "patch",
-    url: `${API_BASE_URL}/users/${userId}`,
+    url: `${API_BASE_URL}/users/${userId1}`,
     headers: { Authorization: `Bearer ${JWT_TOKEN_1}` },
     data: {
       name: "John Placeholder Doe",
@@ -237,7 +256,7 @@ test("Atualizar dados de um utilizador sem dados fornecidos", async () => {
   try {
     const response1 = await axios({
       method: "patch",
-      url: `${API_BASE_URL}/users/${userId}`,
+      url: `${API_BASE_URL}/users/${userId1}`,
       headers: { Authorization: `Bearer ${JWT_TOKEN_1}` },
     });
   } catch (error) {
@@ -264,7 +283,7 @@ test("Atualizar dados de um utilizador através de um token de um outro utilizad
   try {
     const response1 = await axios({
       method: "patch",
-      url: `${API_BASE_URL}/users/${userId}`,
+      url: `${API_BASE_URL}/users/${userId1}`,
       headers: { Authorization: `Bearer ${JWT_TOKEN_2}` },
       data: {
         name: "John Template Doe",
@@ -279,7 +298,7 @@ test("Atualizar dados de um utilizador através de um token de um outro utilizad
 test("Atualizar dados de um utilizador através de um token de um administrador", async () => {
   const response1 = await axios({
     method: "patch",
-    url: `${API_BASE_URL}/users/${userId}`,
+    url: `${API_BASE_URL}/users/${userId1}`,
     headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
     data: {
       name: "John Template Doe",
@@ -289,6 +308,142 @@ test("Atualizar dados de um utilizador através de um token de um administrador"
 });
 
 //? CONTINUAR
+
+test('Seguir um utilizador', async () => { 
+  const response = await axios({
+    method: 'post',
+    url: `${API_BASE_URL}/users/${userId2}/followers`,
+    headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
+  })
+  expect(response.status).toBe(202);
+})
+
+test('Seguir um utilizador que já o seguia', async () => { 
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${API_BASE_URL}/users/${userId2}/followers`,
+      headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
+    })
+  } catch (error) {
+    expect(error.message).toBe("Request failed with status code 405");
+  }
+})
+
+test('Seguir um utilizador sem token', async () => { 
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${API_BASE_URL}/users/${userId2}/followers`,
+    })
+  } catch (error) {
+    expect(error.message).toBe("Request failed with status code 401");
+  }
+})
+
+test('Seguir um utilizador que não existe', async () => { 
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${API_BASE_URL}/users/${9999999}/followers`,
+      headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
+    })
+  } catch (error) {
+    expect(error.message).toBe("Request failed with status code 404");
+  }
+})
+
+test('Seguir um utilizador com id inválido', async () => { 
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${API_BASE_URL}/users/${'user'}/followers`,
+      headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
+    })
+  } catch (error) {
+    expect(error.message).toBe("Request failed with status code 400");
+  }
+})
+
+test('Seguir o próprio utilizador', async () => { 
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${API_BASE_URL}/users/${userId1}/followers`,
+      headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
+    })
+  } catch (error) {
+    expect(error.message).toBe("Request failed with status code 405");
+  }
+})
+
+test('Deixar de seguir um utilizador', async () => { 
+  const response = await axios({
+    method: 'delete',
+    url: `${API_BASE_URL}/users/${userId2}/followers`,
+    headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
+  })
+  expect(response.status).toBe(202);
+})
+
+test('Deixar de seguir um utilizador que já o seguia', async () => { 
+  try {
+    const response = await axios({
+      method: 'delete',
+      url: `${API_BASE_URL}/users/${userId2}/followers`,
+      headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
+    })
+  } catch (error) {
+    expect(error.message).toBe("Request failed with status code 405");
+  }
+})
+
+test('Deixar de seguir um utilizador sem token', async () => { 
+  try {
+    const response = await axios({
+      method: 'delete',
+      url: `${API_BASE_URL}/users/${userId2}/followers`,
+    })
+  } catch (error) {
+    expect(error.message).toBe("Request failed with status code 401");
+  }
+})
+
+test('Deixar de seguir um utilizador que não existe', async () => { 
+  try {
+    const response = await axios({
+      method: 'delete',
+      url: `${API_BASE_URL}/users/${9999999}/followers`,
+      headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
+    })
+  } catch (error) {
+    expect(error.message).toBe("Request failed with status code 404");
+  }
+})
+
+test('Deixar de seguir um utilizador com id inválido', async () => { 
+  try {
+    const response = await axios({
+      method: 'delete',
+      url: `${API_BASE_URL}/users/${'user'}/followers`,
+      headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
+    })
+  } catch (error) {
+    expect(error.message).toBe("Request failed with status code 400");
+  }
+})
+
+test('Deixar de seguir o próprio utilizador', async () => { 
+  try {
+    const response = await axios({
+      method: 'delete',
+      url: `${API_BASE_URL}/users/${userId1}/followers`,
+      headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
+    })
+  } catch (error) {
+    expect(error.message).toBe("Request failed with status code 405");
+  }
+})
 
 test("Remover conta de um utilizador", async () => {
   const response1 = await axios({
