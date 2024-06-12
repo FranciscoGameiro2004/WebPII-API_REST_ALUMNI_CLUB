@@ -93,6 +93,39 @@ exports.findAll = async (req, res, next) => {
   }
 };
 
+exports.findOne = async (req, res, next) => {
+  try {
+    if(!req.params.id){
+      throw new ErrorHandler(400, 'The id was not submitted')
+    }
+    if (isNaN(req.params.id) || Number.isInteger(req.params.id)) {
+      throw new ErrorHandler(400, 'The id is not a lavid type')
+    }
+
+    let publication = await publications.findOne({
+      attributes: ['title', 'body', 'UserId', 'dateTime' ,'id'],
+      where: {
+        id: req.params.id
+      },
+      raw:true,
+      include: [{model: db.users, attributes: ['username', 'name']}]
+    })
+
+    if (publication == null){
+      throw new ErrorHandler(404, 'Publication not found')
+    }
+
+    publication.user = publication["User.username"]
+    publication.name = publication["User.name"]
+    delete publication.user
+    delete publication.name
+
+    res.status(200).json(publication)
+  } catch (error) {
+    next(error)
+  }
+}
+
 exports.createPublication = async (req, res, next) => {
   try {
     if (!req.body.title || !req.body.body){

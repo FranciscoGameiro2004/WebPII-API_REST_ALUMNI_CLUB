@@ -13,7 +13,7 @@ router.route('/')
 .post(authController.verifyToken, publishesController.createPublication)
 
  router.route('/:id')
-//.get(publishesController.findOne)
+.get(publishesController.findOne)
 .delete(authController.verifyToken, publishesController.deletePublication)
 
 /* router.route('/:id/comments')
