@@ -1,5 +1,5 @@
 // Publicações data
-const publishes = 
+/* const publishes = 
 [
   {id: 1, title: "10 Dicas para Melhorar sua Produtividade", author: "Carlos", content: "1. Faça uma lista de tarefas diárias.\n2. Estabeleça metas claras e alcançáveis.\n3. Utilize técnicas de Pomodoro para gerenciar o tempo.", date: "2024-05-10"},
   {id: 2, title: "Receita de Pão Francês", author: "Sophie", content: "Ingredientes:\n- 500g de farinha de trigo\n- 10g de fermento biológico\n- 10g de sal\n- 300ml de água morna\nModo de preparo:...\n", date: "2024-05-12"},
@@ -9,4 +9,26 @@ const publishes =
 ]
 
 // Data will go here
-module.exports = publishes; 
+module.exports = publishes;  */
+
+module.exports = (sequelize, DataTypes) => {
+  const Publication = sequelize.define('Publication', {
+      id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true,
+          unique: true
+      },
+      title: {
+          type: DataTypes.STRING
+      },
+      body: {
+          type: DataTypes.STRING
+      },
+      dateTime: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    }
+  }, {timestamps: false});
+  return Publication
+}

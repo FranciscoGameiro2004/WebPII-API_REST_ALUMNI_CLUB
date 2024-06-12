@@ -34,6 +34,7 @@ db.degrees = require("./degrees.model.js")(sequelize, DataTypes);
 db.institutions = require("./institutions.model.js")(sequelize, DataTypes);
 db.notifications = require('./notifications.model.js')(sequelize, DataTypes);
 db.events = require('./events.model.js')(sequelize,DataTypes);
+db.publications = require('./publishes.model.js')(sequelize, DataTypes)
 
 db.zipCode = require('./DB/zipCode.table.js')(sequelize, DataTypes);
 db.degreeType = require('./DB/degreeType.table.js')(sequelize, DataTypes);
@@ -44,6 +45,7 @@ db.userFollowing = require('./DB/userFollowing.table.js')(sequelize, DataTypes);
 db.eventDate = require('./DB/eventDate.table.js')(sequelize, DataTypes);
 db.eventFollowing = require('./DB/eventFollowing.table.js')(sequelize, DataTypes);
 db.eventParticipant = require('./DB/eventParticipant.table.js')(sequelize, DataTypes);
+db.comment = require('./DB/comment.table.js')(sequelize, DataTypes);
 
 
 db.institutions.hasMany(db.degrees)
@@ -94,6 +96,15 @@ db.eventParticipant.belongsTo(db.users)
 
 db.events.hasMany(db.eventParticipant)
 db.eventParticipant.belongsTo(db.events)
+
+db.users.hasMany(db.publications)
+db.publications.belongsTo(db.users)
+
+db.users.hasMany(db.comment)
+db.comment.belongsTo(db.users)
+
+db.publications.hasMany(db.comment)
+db.comment.belongsTo(db.publications)
 // optionally: SYNC
 //? Perguntar à professora sobre o que quer que tenha ocorrido
 try {
