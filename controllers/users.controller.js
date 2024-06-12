@@ -117,7 +117,7 @@ exports.findUserId = async (req, res, next) => {
 
     //! Colocar mais atributos!
     foundUser = await users.findOne({
-      attributes: ["username", "name", "id", "profilePicLink", "type", "consentJobs", "consentDegrees"],
+      attributes: ["id", "username", "name", "profilePicLink", "type", "consentJobs", "consentDegrees"],
       raw: true,
       where: {
         id: req.params.id,
