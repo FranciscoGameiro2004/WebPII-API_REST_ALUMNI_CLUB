@@ -17,7 +17,7 @@ router.route('/')
 .delete(authController.verifyToken, publishesController.deletePublication)
 
 router.route('/:id/comments')
-//.get(publishesController.getComments)
+.get(publishesController.getComments)
 .post(authController.verifyToken, publishesController.addComment)
 
 router.route('/:id/comments/:commentId')

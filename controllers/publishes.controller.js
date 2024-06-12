@@ -248,6 +248,43 @@ exports.removeComment = async (req, res, next) => {
   }
 }
 
+exports.getComments = async (req, res, next) => {
+  try {
+    if(!req.params.id){
+      throw new ErrorHandler(400, 'The publication id was not submitted')
+    }
+    if (isNaN(req.params.id) || Number.isInteger(req.params.id)) {
+      throw new ErrorHandler(400, 'The publication id is not a lavid type')
+    }
+
+
+    let publication = await publications.findOne({
+      attributes: ['title', 'body', 'UserId', 'dateTime' ,'id'],
+      where: {
+        id: req.params.id
+      },
+      raw:true,
+      include: [{model: db.users, attributes: ['username', 'name']}]
+    })
+
+    if (publication == null){
+      throw new ErrorHandler(404, 'Publication not found')
+    }
+
+    console.log(req.params);
+
+    let commentsList = await comment.findAll({
+      where: {
+        PublicationId: req.params.id,
+      },
+      include: [{model: db.users, attributes: ['username', 'name']}]
+    })
+    res.status(200).json(commentsList)
+  } catch (error) {
+    next(error)
+  }
+}
+
 //Funções de apoio
 exports.bodyValidator = async (req, res, next) => {
   if(!isRegistered(req) && req.method=='POST') {
