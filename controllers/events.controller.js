@@ -103,6 +103,10 @@ exports.createEvent = async (req, res,next) => {
   clear();console.log("events---createEvent")
   //res.json(req.body)
   try {
+    if (!req.body.name || !req.body.description) {
+      throw new ErrorHandler(400, "Don't forget to fill every required  parts.")
+    }
+
     let eventList = await events.findAll({
       where: {
         name: req.body.name
@@ -140,11 +144,6 @@ exports.createEvent = async (req, res,next) => {
       .json({ success: true, msg: "event was registered successfully!" });
   } 
   catch (err) {
-    if (err instanceof ValidationError)
-      err = new ErrorHandler(
-        400,
-        err.errors.map((e) => e.message)
-      );
     next(err);
   }
 }
