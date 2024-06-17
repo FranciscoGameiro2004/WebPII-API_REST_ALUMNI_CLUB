@@ -260,8 +260,6 @@ exports.followEvent = async (req, res, next) => {
   }
 };
 
-
-
 exports.deleteEvent = async (req, res) => {
   try {
     clear();console.log("Event---deleteEvent")
@@ -281,9 +279,6 @@ exports.deleteEvent = async (req, res) => {
     }
   }
 }
-
-
-
 
 //Funções de apoio
 exports.bodyValidator = (req, res, next) => {
