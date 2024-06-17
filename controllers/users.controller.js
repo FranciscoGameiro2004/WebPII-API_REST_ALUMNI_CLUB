@@ -421,15 +421,19 @@ exports.login = async (req, res, next) => {
 
     //UNSAFE TO STORE EVERYTHING OF USER, including PSSWD
     // sign the given payload (user ID) into a JWT payload – builds JWT token, using secret key
-    const token = jwt.sign(
-      { id: userToLogin.id, type: userToLogin.type },
-      JWTconfig.SECRET,
-      {
-        // expiresIn: '24h' // 24 hours
-        expiresIn: "20m", // 20 minutes
-        // expiresIn: '1s' // 1 second
-      }
-    );
+    if (check) {
+      const token = jwt.sign(
+        { id: userToLogin.id, type: userToLogin.type },
+        JWTconfig.SECRET,
+        {
+          // expiresIn: '24h' // 24 hours
+          expiresIn: "20m", // 20 minutes
+          // expiresIn: '1s' // 1 second
+        }
+      );
+    } else {
+      throw new ErrorHandler(405, 'Not correct credentials')
+    }
 
     console.table(req.headers)
 
@@ -438,11 +442,6 @@ exports.login = async (req, res, next) => {
       accessToken: token,
     });
   } catch (err) {
-    if (err instanceof ValidationError)
-      err = new ErrorHandler(
-        400,
-        err.errors.map((e) => e.message)
-      );
     next(err);
   }
 };
