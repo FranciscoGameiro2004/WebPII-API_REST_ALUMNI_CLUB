@@ -8,6 +8,8 @@ let adminId = 0;
 let JWT_TOKEN_NORMAL = "";
 let normalId = 0;
 
+let eventId = 0;
+
 beforeAll(async () => {
   return (async () => {
     const response_admin = await axios({
@@ -33,12 +35,29 @@ beforeAll(async () => {
 
     JWT_TOKEN_NORMAL = response_normal.data.accessToken;
     normalId = response_normal.data.userToLogin.id;
+
   })();
 });
 
-afterAll(async () => {
-  //! Fazer querie
-});
+afterAll(async ()=>{
+  const params = new URLSearchParams([
+    ["limit", 5],
+    ["page", 0],
+    ["search", "TSIW Event Test 2024 via Test"]
+  ]);
+  const response_event = await axios({
+    method: "get",
+    url: `${API_BASE_URL}/events`,
+    params: params,
+  });
+  if (response_event.data[0].id != undefined) eventId = response_event.data[0].id;
+
+  const response1 = await axios({
+    method: 'delete',
+    url: `${API_BASE_URL}/events/${eventId}`,
+    headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` }
+})
+})
 
 test("Criar evento", async () => {
   const response = await axios({
@@ -46,12 +65,11 @@ test("Criar evento", async () => {
     url: `${API_BASE_URL}/events`,
     headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
     data: {
-      name: "TSIW Event Test 2024",
+      name: "TSIW Event Test 2024 via Test",
       description:
-        "A cool meeting for every student and alumnus from TSIW degree",
+        "A cool meeting via Test",
       dates: [
-        { date: "2024-06-17", startTime: "10:00:00", endTime: "16:00:00" },
-        { date: "2024-06-18", startTime: "10:00:00", endTime: "16:00:00" },
+        { date: "2024-06-17", startTime: "10:00:00", endTime: "16:00:00" }
       ],
     },
   });
