@@ -150,7 +150,7 @@ exports.findUserId = async (req, res, next) => {
         const Company = await institutions.findOne({
           raw: true,
           where: {
-            id: Degree.InstitutionId,
+            id: Degree.CompanyId,
           },
         });
         userInfo.degrees.push({
@@ -170,13 +170,17 @@ exports.findUserId = async (req, res, next) => {
           UserId: req.params.id,
         },
       });
+      console.log('FOUND DEGREEEEEEEEE');
+        console.log(foundDegree);
       for (const degree of foundDegree) {
         const Degree = await degrees.findOne({
           raw: true,
           where: {
-            id: degree.id,
+            id: degree.DegreeId,
           },
         });
+        console.log('DEGREEEEEEEEE');
+        console.log(Degree);
         const Institution = await institutions.findOne({
           raw: true,
           where: {
