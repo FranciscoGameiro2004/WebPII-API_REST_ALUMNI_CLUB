@@ -46,23 +46,6 @@ exports.findOne = async (req, res) => {
   }
 }
 
-
-exports.findOne = async (req, res) => {
-  try {
-    clear();console.log("Events---findOne")
-    let oneEvent = await events.findOne({ where: {id: req.params.id}});//console.log(oneInstititution);
-    res.json(oneEvent)
-  } 
-  catch (err) {
-    if (err instanceof ValidationError)
-      err = new ErrorHandler(
-        400,
-        err.errors.map((e) => e.message)
-      );
-    next(err);
-  }
-}
-
 exports.findEventsParticipants = async (req, res, next) => {
   try {
     let event = await events.findOne({ where: {id: req.params.id}, raw:true});//console.log(oneInstititution);
@@ -116,7 +99,7 @@ exports.createEvent = async (req, res,next) => {
     if (eventList.length == 0) {
       //! Criar e 'encher' o modelo dos zipCodes
       console.log("Events---condição concluida")
-      let event = await events.create({
+      var event = await events.create({
         name: req.body.name,
         description: req.body.description,
         /* date: req.body.date,
@@ -135,13 +118,13 @@ exports.createEvent = async (req, res,next) => {
         })
       }
     } else {
-      clear();console.log("401, An event is already registered.");
+      //clear();
+      console.log(eventList[0])
       throw new ErrorHandler(401, "An event is already registered.");
     }
-
     return res
       .status(201)
-      .json({ success: true, msg: "event was registered successfully!" });
+      .json({ success: true, msg: "event was registered successfully!" })
   } 
   catch (err) {
     next(err);
