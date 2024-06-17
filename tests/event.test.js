@@ -11,6 +11,25 @@ let normalId = 0;
 let eventId = 0;
 
 beforeAll(async () => {
+  const params = new URLSearchParams([
+    ["limit", 5],
+    ["page", 0],
+    ["search", "TSIW Event Test 2024 via Test modified"]
+  ]);
+
+  const response_event = await axios({
+    method: "get",
+    url: `${API_BASE_URL}/events`,
+    params: params,
+  });
+  if (response_event.data[0].id != undefined) eventId = response_event.data[0].id;
+
+  const response1 = await axios({
+    method: 'delete',
+    url: `${API_BASE_URL}/events/${eventId}`,
+    headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` }
+  })
+
   return (async () => {
     const response_admin = await axios({
       method: "post",
@@ -40,6 +59,7 @@ beforeAll(async () => {
 });
 
 afterAll(async ()=>{
+  
   const params = new URLSearchParams([
     ["limit", 5],
     ["page", 0],
@@ -56,9 +76,29 @@ afterAll(async ()=>{
     method: 'delete',
     url: `${API_BASE_URL}/events/${eventId}`,
     headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` }
-})
+  })
+  
 })
 
+/*---------------------------GET-------------------------------------*/
+test("Get events", async () => {
+  const response = await axios({
+    method: "get",
+    url: `${API_BASE_URL}/events`,
+  });//console.log(response);
+  expect(response.status).toBe(200);
+})
+
+test("Get one event", async () => {
+  const response = await axios({
+    method: "get",
+    url: `${API_BASE_URL}/events/${eventId}`,
+  });//console.log(response);
+  expect(response.status).toBe(200);
+})
+/*---------------------------GET-------------------------------------*/
+
+/*---------------------------POST------------------------------------*/
 test("Criar evento", async () => {
   const response = await axios({
     method: "post",
@@ -113,41 +153,77 @@ test("Criar evento sem fornecer descrição", async () => {
     }
   });
 
-  test("Criar evento sem fornecer token", async () => {
-    try {
-      const response = await axios({
-        method: "post",
-        url: `${API_BASE_URL}/events`,
-        data: {
-          name: "Torneio de código 2024",
-          description:
-          "A coding competition where only the best of the best gan participate",
-          dates: [
-            { date: "2024-06-20", startTime: "15:00:00", endTime: "19:00:00" },
-          ],
-        },
-      });
-    } catch (error) {
-      expect(error.message).toBe('Request failed with status code 401')
-    }
-  });
+test("Criar evento sem fornecer token", async () => {
+  try {
+    const response = await axios({
+      method: "post",
+      url: `${API_BASE_URL}/events`,
+      data: {
+        name: "Torneio de código 2024",
+        description:
+        "A coding competition where only the best of the best gan participate",
+        dates: [
+          { date: "2024-06-20", startTime: "15:00:00", endTime: "19:00:00" },
+        ],
+      },
+    });
+  } catch (error) {
+    expect(error.message).toBe('Request failed with status code 401')
+  }
+});
 
-  test("Criar evento com um utilizador normal", async () => {
-    try {
-      const response = await axios({
-        method: "post",
-        url: `${API_BASE_URL}/events`,
-        headers: { Authorization: `Bearer ${JWT_TOKEN_NORMAL}` },
-        data: {
-          name: "Torneio de código 2024",
-          description:
-          "A coding competition where only the best of the best gan participate",
-          dates: [
-            { date: "2024-06-20", startTime: "15:00:00", endTime: "19:00:00" },
-          ],
-        },
-      });
-    } catch (error) {
-      expect(error.message).toBe('Request failed with status code 401')
-    }
+test("Criar evento com um utilizador normal", async () => {
+  try {
+    const response = await axios({
+      method: "post",
+      url: `${API_BASE_URL}/events`,
+      headers: { Authorization: `Bearer ${JWT_TOKEN_NORMAL}` },
+      data: {
+        name: "Torneio de código 2024",
+        description:
+        "A coding competition where only the best of the best gan participate",
+        dates: [
+          { date: "2024-06-20", startTime: "15:00:00", endTime: "19:00:00" },
+        ],
+      },
+    });
+  } catch (error) {
+    expect(error.message).toBe('Request failed with status code 401')
+  }
+});
+/*---------------------------POST-------------------------------------*/
+
+/*---------------------------PUT-------------------------------------*/
+test("Put one event", async () => {
+  const params = new URLSearchParams([
+    ["limit", 5],
+    ["page", 0],
+    ["search", "TSIW Event Test 2024 via Test"]
+  ]);
+
+  const response_event = await axios({
+    method: "get",
+    url: `${API_BASE_URL}/events`,
+    params: params,
+  });console.log(response_event.data);
+
+  if (response_event.data[0].id != undefined) {
+    eventId = response_event.data[0].id
+    console.log(eventId);
+  }
+
+  const response = await axios({
+    method: "put",
+    url: `${API_BASE_URL}/events/${eventId}`,
+    headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
+    data: {
+      name: "TSIW Event Test 2024 via Test modified",
+      description:
+        "A cool meeting via Test modified",
+      dates: [
+        { date: "2024-06-20", startTime: "15:00:00", endTime: "16:00:00" }
+      ],
+    },
   });
+  expect(response.status).toBe(200);
+})
