@@ -10,6 +10,10 @@ exports.getAllUserNotifs = async (req, res, next) => {
   try {
     let conditions = { UserId: req.loggedUserId };
 
+    if (req.query.readState){
+      conditions.readState = req.query.readState
+    }
+
     if (req.query.hasOwnProperty("readState")) {
       conditions.readState = req.query.readState;
     }
