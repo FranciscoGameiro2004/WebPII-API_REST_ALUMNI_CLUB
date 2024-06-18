@@ -190,6 +190,7 @@ exports.findUserId = async (req, res, next) => {
         userInfo.degrees.push({
           degree: Degree.designation,
           degreeId: degree.DegreeId,
+          degreeType: Degree.DegreeTypeId,
           institution: Institution.designation,
           institutionId: Degree.InstitutionId,
           firstYear: degree.firstYear,
