@@ -9,7 +9,7 @@ let JWT_TOKEN_NORMAL = "";
 let normalId = 0;
 
 let eventId = 0;
-let clean = true
+let clean = false
 
 beforeAll(async () => {
   return (async () => {
