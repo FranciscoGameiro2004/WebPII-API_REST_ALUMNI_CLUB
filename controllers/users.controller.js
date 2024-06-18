@@ -189,6 +189,7 @@ exports.findUserId = async (req, res, next) => {
         });
         userInfo.degrees.push({
           degree: Degree.designation,
+          degreeId: degree.DegreeId,
           institution: Institution.designation,
           firstYear: degree.firstYear,
           lastYear: degree.lastYear
