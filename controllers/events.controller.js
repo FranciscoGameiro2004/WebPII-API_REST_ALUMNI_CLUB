@@ -12,23 +12,67 @@ let eventsParticipant = db.eventParticipant
 const { Op, ValidationError, where, JSON } = require("sequelize");
 const { raw } = require('mysql2');
 
-  /* querry filtro
-  const currentPage = req.query.page >= 0 ? req.query.page : 0;
-  const limit = +req.query.limit;
+exports.findAll = async (req, res, next) => {
+  try {
+    clear();
+    console.log("Events---findAll");
 
-  if (limit < 5 || !Number.isInteger(limit)) {
-    throw new ErrorHandler(
-      400,
-      "Limit must be a positive integer, greater than 5"
-    );
+    const currentPage = req.query.page >= 0 ? parseInt(req.query.page) : 0;
+    const limit = parseInt(req.query.limit);
+
+    if (limit < 1 || !Number.isInteger(limit)) {
+      throw new ErrorHandler(400, "Limit must be a positive integer, greater than or equal to 5");
+    }
+
+    let allEvents = await events.findAndCountAll({
+      attributes: ['id', 'name', 'description'],
+      raw: true,
+      limit: limit,
+      offset: currentPage * limit,
+      where: {
+        name: {
+          [Op.like]: `%${req.query.search || ''}%`
+        }
+      }
+    });
+    
+    console.log(allEvents);
+    
+    const numPages = Math.ceil(allEvents.count / limit);
+
+    let links = [];
+
+    if (currentPage > 0) {
+      links.push({
+        rel: "prev-page",
+        href: `/events?limit=${limit}&page=${currentPage - 1}`,
+        method: "GET",
+      });
+    }
+    if (currentPage < numPages - 1) {
+      links.push({
+        rel: "next-page",
+        href: `/events?limit=${limit}&page=${currentPage + 1}`,
+        method: "GET",
+      });
+    }
+
+    res.status(200).json({
+      pagination: {
+        total: allEvents.count,
+        pages: numPages,
+        current: currentPage,
+        limit: limit,
+      },
+      links: links,
+      data: allEvents.rows,
+    });
+
+  } catch (err) {
+    next(err);
   }
-  */
-
-exports.findAll = async (req, res) => {
-  console.log("findAll")
-  let allEvents = await events.findAll()
-  res.json(allEvents);
 };
+
 
 exports.findOne = async (req, res) => {
   try {

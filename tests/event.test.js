@@ -9,6 +9,7 @@ let JWT_TOKEN_NORMAL = "";
 let normalId = 0;
 
 let eventId = 0;
+let clean = false
 
 beforeAll(async () => {
   return (async () => {
@@ -39,33 +40,42 @@ beforeAll(async () => {
   })();
 });
 
+
 afterAll(async ()=>{
   
   const params = new URLSearchParams([
-    ["limit", 5],
+    ["limit", 3],
     ["page", 0],
-    ["search", "TSIW Event Test 2024 via Test"]
+    ["search", ""]
   ]);
   const response_event = await axios({
     method: "get",
     url: `${API_BASE_URL}/events`,
     params: params,
-  });
-  if (response_event.data[0].id != undefined) eventId = response_event.data[0].id;
+  });//console.log(response_event.data);
 
-  const response1 = await axios({
-    method: 'delete',
-    url: `${API_BASE_URL}/events/${eventId}`,
-    headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` }
-  })
-  
+  if(clean == true) {
+    response_event.data.data.forEach( event => {
+      let command = axios({
+        method: "delete",
+        url: `${API_BASE_URL}/events/${event.id}`,
+        params: params,
+      });
+    })
+  }
 })
 
 /*---------------------------GET-------------------------------------*/
 test("Get events", async () => {
+  const params = new URLSearchParams([
+    ["limit", 3],
+    ["page", 0],
+    ["search", ""]
+  ]);
   const response = await axios({
     method: "get",
     url: `${API_BASE_URL}/events`,
+    params: params,
   });//console.log(response);
   expect(response.status).toBe(200);
 })
@@ -175,3 +185,39 @@ test("Criar evento com um utilizador normal", async () => {
 /*---------------------------POST------------------------------------*/
 
 /*---------------------------PUT-------------------------------------*/
+test("Put one event", async () => {
+
+  const params = new URLSearchParams([
+    ["limit", 3],
+    ["page", 0],
+    ["search", ""]
+  ]);
+  let response = await axios({
+    method: "get",
+    url: `${API_BASE_URL}/events`,
+    params: params,
+  });//console.log(response.data.data);
+
+  let eventId = response.data.data[0].id; //console.log(eventId);
+
+  const currentDateTime = new Date();
+  const hours = currentDateTime.getHours();
+  const minutes = currentDateTime.getMinutes();
+  const seconds = currentDateTime.getSeconds();
+
+  response = await axios({
+    method: "put",
+    url: `${API_BASE_URL}/events/${eventId}`,
+    data: {
+      name: `TSIW Event Test 2024 ${hours}:${minutes}:${seconds}`,
+      description:
+        "Teste put via test",
+      addDates: [],
+      removeDates: [], 
+      addParticipants: [], 
+      removeParticipants: [],
+    }
+  });//console.log(response.status)
+
+  expect(response.status).toBe(201);
+})
