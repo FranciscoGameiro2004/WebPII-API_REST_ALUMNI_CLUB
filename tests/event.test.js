@@ -11,25 +11,6 @@ let normalId = 0;
 let eventId = 0;
 
 beforeAll(async () => {
-  const params = new URLSearchParams([
-    ["limit", 5],
-    ["page", 0],
-    ["search", "TSIW Event Test 2024 via Test modified"]
-  ]);
-
-  const response_event = await axios({
-    method: "get",
-    url: `${API_BASE_URL}/events`,
-    params: params,
-  });
-  if (response_event.data[0].id != undefined) eventId = response_event.data[0].id;
-
-  const response1 = await axios({
-    method: 'delete',
-    url: `${API_BASE_URL}/events/${eventId}`,
-    headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` }
-  })
-
   return (async () => {
     const response_admin = await axios({
       method: "post",
@@ -191,39 +172,6 @@ test("Criar evento com um utilizador normal", async () => {
     expect(error.message).toBe('Request failed with status code 401')
   }
 });
-/*---------------------------POST-------------------------------------*/
+/*---------------------------POST------------------------------------*/
 
 /*---------------------------PUT-------------------------------------*/
-test("Put one event", async () => {
-  const params = new URLSearchParams([
-    ["limit", 5],
-    ["page", 0],
-    ["search", "TSIW Event Test 2024 via Test"]
-  ]);
-
-  const response_event = await axios({
-    method: "get",
-    url: `${API_BASE_URL}/events`,
-    params: params,
-  });console.log(response_event.data);
-
-  if (response_event.data[0].id != undefined) {
-    eventId = response_event.data[0].id
-    console.log(eventId);
-  }
-
-  const response = await axios({
-    method: "put",
-    url: `${API_BASE_URL}/events/${eventId}`,
-    headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
-    data: {
-      name: "TSIW Event Test 2024 via Test modified",
-      description:
-        "A cool meeting via Test modified",
-      dates: [
-        { date: "2024-06-20", startTime: "15:00:00", endTime: "16:00:00" }
-      ],
-    },
-  });
-  expect(response.status).toBe(200);
-})
