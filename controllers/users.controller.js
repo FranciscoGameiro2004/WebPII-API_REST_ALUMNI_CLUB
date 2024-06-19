@@ -425,11 +425,11 @@ exports.login = async (req, res, next) => {
     if (!userToLogin) throw new ErrorHandler(404, "User not found.");
 
     const check = bcrypt.compareSync(req.body.password, userToLogin.password); //console.log("check: " + check);
-
+    let token = ''
     //UNSAFE TO STORE EVERYTHING OF USER, including PSSWD
     // sign the given payload (user ID) into a JWT payload – builds JWT token, using secret key
-    /* if (check) { */
-      const token = jwt.sign(
+     if (check) { 
+      token = jwt.sign(
         { id: userToLogin.id, type: userToLogin.type },
         JWTconfig.SECRET,
         {
@@ -438,9 +438,9 @@ exports.login = async (req, res, next) => {
           // expiresIn: '1s' // 1 second
         }
       );
-    /* } else {
+    } else {
       throw new ErrorHandler(405, 'Not correct credentials')
-    } */
+    }
 
     console.table(req.headers)
 
