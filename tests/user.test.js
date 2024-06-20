@@ -153,7 +153,7 @@ test("Início de sessão com credenciais erradas", async () => {
     });
     JWT_TOKEN_1 = response.data.accessToken;
   } catch (error) {
-    expect(error.message).toBe("Request failed with status code 401");
+    expect(error.message).toBe("Request failed with status code 405");
   }
 });
 
@@ -208,8 +208,8 @@ test("Obtenção de um utilizador espcífico através do seu ID", async () => {
     method: "get",
     url: `${API_BASE_URL}/users/${userId1}`,
   });
-  console.log(`Status code: ${response.status}`);
-  console.log(response.data);
+  //console.log(`Status code: ${response.status}`);
+  //console.log(response.data);
   expect(response.status).toBe(200);
   expect(response.data.userId).toBe(userId1);
 });

@@ -233,22 +233,13 @@ exports.findUserId = async (req, res, next) => {
   }
 };
 
-exports.deleteAccount = async (req, res) => {
+exports.deleteAccount = async (req, res, next) => {
   //! Porque é que a resposta não é dada?
   try {
-    await users
-      .destroy({
-        where: { id: req.loggedUserId },
-      })
-      .then(() => {
-        return res.status(204).send();
-      })
-      .catch((err) => {
-        throw new ErrorHandler(
-          500,
-          "Something went wrong. Please try again later"
-        );
-      });
+    users.destroy({ where: { id: req.loggedUserId } })
+
+    return res
+    .status(200).json({ success: true, msg: "User was deleted successfully!" });
   } catch (err) {
     if (err instanceof ValidationError)
       err = new ErrorHandler(
@@ -421,7 +412,8 @@ exports.login = async (req, res, next) => {
 
     let userToLogin = await users.findOne({
       where: { username: req.body.username },
-    }); console.log(userToLogin.dataValues)
+    }); 
+    if (userToLogin) console.log(userToLogin.dataValues)
     if (!userToLogin) throw new ErrorHandler(404, "User not found.");
 
     const check = bcrypt.compareSync(req.body.password, userToLogin.password); //console.log("check: " + check);
@@ -438,16 +430,19 @@ exports.login = async (req, res, next) => {
           // expiresIn: '1s' // 1 second
         }
       );
+      return res.status(200).json({
+        success: true, 
+        msg: "User was logged successfully!",
+        userToLogin,
+        accessToken: token,
+      });
     } else {
       throw new ErrorHandler(405, 'Not correct credentials')
     }
 
     console.table(req.headers)
 
-    return res.status(200).json({
-      userToLogin,
-      accessToken: token,
-    });
+
   } catch (err) {
     next(err);
   }

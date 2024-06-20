@@ -82,11 +82,11 @@ db.notifications.belongsTo(db.users)
 db.users.hasMany(db.userFollowing)
 db.userFollowing.hasMany(db.users)
 
-db.events.hasMany(db.eventDate)
+db.events.hasMany(db.eventDate, { onDelete: 'CASCADE' })
 db.eventDate.belongsTo(db.events)
 
-db.events.hasMany(db.eventFollowing)
-db.eventFollowing.belongsTo(db.events)
+db.events.hasMany(db.eventFollowing, { onDelete: 'CASCADE' })
+db.eventFollowing.belongsTo(db.events, { onDelete: 'CASCADE' })
 
 db.users.hasMany(db.eventFollowing)
 db.eventFollowing.belongsTo(db.users)
@@ -94,8 +94,8 @@ db.eventFollowing.belongsTo(db.users)
 db.users.hasMany(db.eventParticipant)
 db.eventParticipant.belongsTo(db.users)
 
-db.events.hasMany(db.eventParticipant)
-db.eventParticipant.belongsTo(db.events)
+db.events.hasMany(db.eventParticipant, { onDelete: 'CASCADE' })
+db.eventParticipant.belongsTo(db.events, { onDelete: 'CASCADE' })
 
 db.users.hasMany(db.publications)
 db.publications.belongsTo(db.users)
@@ -110,7 +110,7 @@ db.comment.belongsTo(db.publications)
 try {
   clear()
   //sequelize.sync({ force: true }); // creates tables, dropping them first if they already existed
-  //sequelize.sync({ alter: true }); // checks the tables in the database (which columns they have, what are their data types, etc.), and then performs the necessary changes to make then match the models
+  sequelize.sync({ alter: true }); // checks the tables in the database (which columns they have, what are their data types, etc.), and then performs the necessary changes to make then match the models
   //sequelize.sync(); // creates tables if they don't exist (and does nothing if they already exist)
   //console.log("DB is successfully synchronized");
 } catch (error) {

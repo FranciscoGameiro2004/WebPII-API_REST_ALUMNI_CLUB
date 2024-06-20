@@ -2,7 +2,7 @@
     "type": "MySQLNotebook",
     "version": "1.0",
     "caption": "DB Notebook",
-    "content": "SELECT * FROM Events\nDELETE FROM Events\nDELETE FROM EventDates\nDELETE FROM EventParticipants\nDELETE FROM EventFollowings\n",
+    "content": "USE teresaterroso_pw2_g02\nSELECT * FROM Users\nSELECT * FROM Events\nSELECT * FROM EventDates\nSELECT * FROM EventFollowings\nSELECT * FROM EventParticipants\n",
     "options": {
         "tabSize": 4,
         "indentSize": 4,
@@ -15,22 +15,22 @@
             {
                 "inSelectionMode": false,
                 "selectionStart": {
-                    "lineNumber": 6,
-                    "column": 1
+                    "lineNumber": 2,
+                    "column": 20
                 },
                 "position": {
-                    "lineNumber": 6,
-                    "column": 1
+                    "lineNumber": 2,
+                    "column": 20
                 }
             }
         ],
         "viewState": {
             "scrollLeft": 0,
             "firstPosition": {
-                "lineNumber": 1,
+                "lineNumber": 2,
                 "column": 1
             },
-            "firstPositionDeltaTop": 0
+            "firstPositionDeltaTop": 25
         },
         "contributionsState": {
             "editor.contrib.folding": {},
@@ -44,12 +44,232 @@
                 "end": 1,
                 "language": "mysql",
                 "result": {
-                    "type": "resultIds",
-                    "list": [
-                        "8d3171d1-f37b-4a92-dcc8-8c3d6a7e35b1"
+                    "type": "text",
+                    "text": [
+                        {
+                            "type": 4,
+                            "index": 0,
+                            "resultId": "fcae0716-9315-44dd-e9f7-52850276081c",
+                            "content": "OK, 0 records retrieved in 9.081ms"
+                        }
                     ]
                 },
-                "currentHeight": 352,
+                "currentHeight": 28,
+                "statements": [
+                    {
+                        "delimiter": ";",
+                        "span": {
+                            "start": 0,
+                            "length": 25
+                        },
+                        "contentStart": 0,
+                        "state": 3
+                    }
+                ]
+            },
+            "data": []
+        },
+        {
+            "state": {
+                "start": 2,
+                "end": 2,
+                "language": "mysql",
+                "result": {
+                    "type": "resultIds",
+                    "list": [
+                        "7aca1ca9-cece-46b9-acfb-5b74d133bb13"
+                    ]
+                },
+                "currentHeight": 307.5,
+                "statements": [
+                    {
+                        "delimiter": ";",
+                        "span": {
+                            "start": 0,
+                            "length": 19
+                        },
+                        "contentStart": 0,
+                        "state": 3
+                    }
+                ]
+            },
+            "data": [
+                {
+                    "tabId": "b79f6e60-46af-4136-81cf-53f04f65771c",
+                    "resultId": "7aca1ca9-cece-46b9-acfb-5b74d133bb13",
+                    "rows": [
+                        {
+                            "0": 1,
+                            "1": "John Template Doe",
+                            "2": "maria.garcia",
+                            "3": "maria.garcia@example.com",
+                            "4": "$2a$10$bTsLgO1Q29tBfkgInmKmF.t2DPmN2ScHBv.N4gZF3c1WVsxjof/ty",
+                            "5": "normal",
+                            "6": "https://beforeigosolutions.com/wp-content/uploads/2021/12/dummy-profile-pic-300x300-1.png",
+                            "7": "Calle Principal, 456",
+                            "8": "ES",
+                            "9": 0,
+                            "10": 1,
+                            "11": 1,
+                            "12": null,
+                            "13": null
+                        },
+                        {
+                            "0": 2,
+                            "1": "admin",
+                            "2": "admin",
+                            "3": "admin@alumniclub.pt",
+                            "4": "$2a$10$oBeE.aq/2rPiDznbUetPkumTJ/9kjW5CnuMjqTTLrYwzQdgpIpF..",
+                            "5": "admin",
+                            "6": "https://beforeigosolutions.com/wp-content/uploads/2021/12/dummy-profile-pic-300x300-1.png",
+                            "7": "null",
+                            "8": "null",
+                            "9": 0,
+                            "10": 0,
+                            "11": 1,
+                            "12": null,
+                            "13": null
+                        },
+                        {
+                            "0": 3,
+                            "1": "Francisco Gameiro",
+                            "2": "franciscogameiro",
+                            "3": "franciscogameiro@email.com",
+                            "4": "$2a$10$RNLq09eX1FZYUwZNDDxy9eAmi4ijOln.Qcny/r1b347qdAZJHEvVO",
+                            "5": "normal",
+                            "6": "https://beforeigosolutions.com/wp-content/uploads/2021/12/dummy-profile-pic-300x300-1.png",
+                            "7": "Rua do Bairro",
+                            "8": "PT",
+                            "9": 0,
+                            "10": 1,
+                            "11": 1,
+                            "12": null,
+                            "13": null
+                        }
+                    ],
+                    "columns": [
+                        {
+                            "title": "id",
+                            "field": "0",
+                            "dataType": {
+                                "type": 4
+                            }
+                        },
+                        {
+                            "title": "name",
+                            "field": "1",
+                            "dataType": {
+                                "type": 17
+                            }
+                        },
+                        {
+                            "title": "username",
+                            "field": "2",
+                            "dataType": {
+                                "type": 17
+                            }
+                        },
+                        {
+                            "title": "email",
+                            "field": "3",
+                            "dataType": {
+                                "type": 17
+                            }
+                        },
+                        {
+                            "title": "password",
+                            "field": "4",
+                            "dataType": {
+                                "type": 17
+                            }
+                        },
+                        {
+                            "title": "type",
+                            "field": "5",
+                            "dataType": {
+                                "type": 17
+                            }
+                        },
+                        {
+                            "title": "profilePicLink",
+                            "field": "6",
+                            "dataType": {
+                                "type": 17
+                            }
+                        },
+                        {
+                            "title": "address",
+                            "field": "7",
+                            "dataType": {
+                                "type": 17
+                            }
+                        },
+                        {
+                            "title": "nationality",
+                            "field": "8",
+                            "dataType": {
+                                "type": 17
+                            }
+                        },
+                        {
+                            "title": "restricted",
+                            "field": "9",
+                            "dataType": {
+                                "type": 4
+                            }
+                        },
+                        {
+                            "title": "consentJobs",
+                            "field": "10",
+                            "dataType": {
+                                "type": 4
+                            }
+                        },
+                        {
+                            "title": "consentDegrees",
+                            "field": "11",
+                            "dataType": {
+                                "type": 4
+                            }
+                        },
+                        {
+                            "title": "ZipCodeZipCode",
+                            "field": "12",
+                            "dataType": {
+                                "type": 4
+                            }
+                        },
+                        {
+                            "title": "UserFollowingId",
+                            "field": "13",
+                            "dataType": {
+                                "type": 4
+                            }
+                        }
+                    ],
+                    "executionInfo": {
+                        "text": "OK, 3 records retrieved in 0s"
+                    },
+                    "totalRowCount": 3,
+                    "hasMoreRows": false,
+                    "currentPage": 0,
+                    "index": 0,
+                    "sql": "SELECT * FROM Users"
+                }
+            ]
+        },
+        {
+            "state": {
+                "start": 3,
+                "end": 3,
+                "language": "mysql",
+                "result": {
+                    "type": "resultIds",
+                    "list": [
+                        "0d4235eb-fada-4631-e0b5-8d16da5282fe"
+                    ]
+                },
+                "currentHeight": 192.546875,
                 "statements": [
                     {
                         "delimiter": ";",
@@ -64,33 +284,18 @@
             },
             "data": [
                 {
-                    "tabId": "3c853408-9369-403d-94f2-e1fca8005d96",
-                    "resultId": "8d3171d1-f37b-4a92-dcc8-8c3d6a7e35b1",
+                    "tabId": "b79f6e60-46af-4136-81cf-53f04f65771c",
+                    "resultId": "0d4235eb-fada-4631-e0b5-8d16da5282fe",
                     "rows": [
                         {
-                            "0": 66,
-                            "1": "TSIW Event Test 2024 updated",
-                            "2": "Teste put via test"
-                        },
-                        {
-                            "0": 67,
-                            "1": "Torneio de código 2024",
-                            "2": "A coding competition where only the best of the best gan participate"
-                        },
-                        {
-                            "0": 68,
-                            "1": "Meeting-Updated",
-                            "2": "A cool meeting for every student and alumnus from TSIW degree"
-                        },
-                        {
-                            "0": 69,
-                            "1": "TSIW Event Test 2024 updated",
-                            "2": "Teste put via test"
-                        },
-                        {
-                            "0": 70,
+                            "0": 86,
                             "1": "TSIW Event Test 2024 via Test",
                             "2": "A cool meeting via Test"
+                        },
+                        {
+                            "0": 87,
+                            "1": "evento sem fornecer token",
+                            "2": "A coding competition where only the best of the best gan participate"
                         }
                     ],
                     "columns": [
@@ -117,9 +322,9 @@
                         }
                     ],
                     "executionInfo": {
-                        "text": "OK, 5 records retrieved in 9.216ms"
+                        "text": "OK, 2 records retrieved in 13.874ms"
                     },
-                    "totalRowCount": 5,
+                    "totalRowCount": 2,
                     "hasMoreRows": false,
                     "currentPage": 0,
                     "index": 0,
@@ -129,96 +334,95 @@
         },
         {
             "state": {
-                "start": 2,
-                "end": 2,
-                "language": "mysql",
-                "result": {
-                    "type": "text",
-                    "text": [
-                        {
-                            "type": 4,
-                            "index": 0,
-                            "resultId": "c83dd851-4023-4cd5-f4fc-cf362944702f",
-                            "content": "OK, 5 rows affected in 38.57ms"
-                        }
-                    ]
-                },
-                "currentHeight": 28,
-                "statements": [
-                    {
-                        "delimiter": ";",
-                        "span": {
-                            "start": 0,
-                            "length": 18
-                        },
-                        "contentStart": 1,
-                        "state": 3
-                    }
-                ]
-            },
-            "data": []
-        },
-        {
-            "state": {
-                "start": 3,
-                "end": 3,
-                "language": "mysql",
-                "result": {
-                    "type": "text",
-                    "text": [
-                        {
-                            "type": 4,
-                            "index": 0,
-                            "resultId": "88ebe1b7-3d41-468d-c8cd-cc6e98989c59",
-                            "content": "OK, 5 rows affected in 23.93ms"
-                        }
-                    ]
-                },
-                "currentHeight": 28,
-                "statements": [
-                    {
-                        "delimiter": ";",
-                        "span": {
-                            "start": 0,
-                            "length": 22
-                        },
-                        "contentStart": 1,
-                        "state": 3
-                    }
-                ]
-            },
-            "data": []
-        },
-        {
-            "state": {
                 "start": 4,
                 "end": 4,
                 "language": "mysql",
                 "result": {
-                    "type": "text",
-                    "text": [
-                        {
-                            "type": 4,
-                            "index": 0,
-                            "resultId": "3149bff0-be32-4ebb-96dc-fc5c81503f3f",
-                            "content": "OK, 3 rows affected in 10.569ms"
-                        }
+                    "type": "resultIds",
+                    "list": [
+                        "ad5e2846-0687-4bed-b212-7af565a1d545"
                     ]
                 },
-                "currentHeight": 28,
+                "currentHeight": 112.8125,
                 "statements": [
                     {
                         "delimiter": ";",
                         "span": {
                             "start": 0,
-                            "length": 29
+                            "length": 24
                         },
-                        "contentStart": 1,
+                        "contentStart": 0,
                         "state": 3
                     }
                 ]
             },
-            "data": []
+            "data": [
+                {
+                    "tabId": "b79f6e60-46af-4136-81cf-53f04f65771c",
+                    "resultId": "ad5e2846-0687-4bed-b212-7af565a1d545",
+                    "rows": [
+                        {
+                            "0": 221,
+                            "1": "2024-06-17",
+                            "2": "10:00:00",
+                            "3": "16:00:00",
+                            "4": 86
+                        },
+                        {
+                            "0": 222,
+                            "1": "2024-06-20",
+                            "2": "15:00:00",
+                            "3": "19:00:00",
+                            "4": 87
+                        }
+                    ],
+                    "columns": [
+                        {
+                            "title": "id",
+                            "field": "0",
+                            "dataType": {
+                                "type": 4
+                            }
+                        },
+                        {
+                            "title": "date",
+                            "field": "1",
+                            "dataType": {
+                                "type": 28
+                            }
+                        },
+                        {
+                            "title": "startTime",
+                            "field": "2",
+                            "dataType": {
+                                "type": 29
+                            }
+                        },
+                        {
+                            "title": "endTime",
+                            "field": "3",
+                            "dataType": {
+                                "type": 29
+                            }
+                        },
+                        {
+                            "title": "EventId",
+                            "field": "4",
+                            "dataType": {
+                                "type": 4
+                            }
+                        }
+                    ],
+                    "executionInfo": {
+                        "text": "OK, 2 records retrieved in 12.256ms"
+                    },
+                    "totalRowCount": 2,
+                    "hasMoreRows": false,
+                    "currentPage": 0,
+                    "index": 0,
+                    "sql": "SELECT * FROM EventDates"
+                }
+            ]
         },
         {
             "state": {
@@ -231,8 +435,8 @@
                         {
                             "type": 4,
                             "index": 0,
-                            "resultId": "0cc817b9-11da-4081-e34d-0e459161873e",
-                            "content": "OK, 0 records retrieved in 12.824ms"
+                            "resultId": "f7568cb1-3c87-412d-b298-529feb87c8c3",
+                            "content": "OK, 0 records retrieved in 0s"
                         }
                     ]
                 },
@@ -242,9 +446,9 @@
                         "delimiter": ";",
                         "span": {
                             "start": 0,
-                            "length": 27
+                            "length": 29
                         },
-                        "contentStart": 1,
+                        "contentStart": 0,
                         "state": 3
                     }
                 ]
@@ -255,6 +459,37 @@
             "state": {
                 "start": 6,
                 "end": 6,
+                "language": "mysql",
+                "result": {
+                    "type": "text",
+                    "text": [
+                        {
+                            "type": 4,
+                            "index": 0,
+                            "resultId": "48dc0c98-de10-40bd-b021-df10ed9dfe07",
+                            "content": "OK, 0 records retrieved in 4.541ms"
+                        }
+                    ]
+                },
+                "currentHeight": 28,
+                "statements": [
+                    {
+                        "delimiter": ";",
+                        "span": {
+                            "start": 0,
+                            "length": 31
+                        },
+                        "contentStart": 0,
+                        "state": 3
+                    }
+                ]
+            },
+            "data": []
+        },
+        {
+            "state": {
+                "start": 7,
+                "end": 7,
                 "language": "mysql",
                 "currentHeight": 180,
                 "statements": [
