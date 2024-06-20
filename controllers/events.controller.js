@@ -26,14 +26,15 @@ exports.findAll = async (req, res, next) => {
 
     let allEvents = await events.findAndCountAll({
       attributes: ['id', 'name', 'description'],
-      raw: true,
+      //raw: true,
       limit: limit,
       offset: currentPage * limit,
       where: {
         name: {
           [Op.like]: `%${req.query.search || ''}%`
         }
-      }
+      },
+      include:  [{model: eventsDate, attributes: ['date', 'startTime', 'endTime']}]
     });
     
     console.log(allEvents);
@@ -77,7 +78,8 @@ exports.findAll = async (req, res, next) => {
 exports.findOne = async (req, res) => {
   try {
     clear();console.log("Events---findOne")
-    let oneEvent = await events.findOne({ where: {id: req.params.id}});//console.log(oneInstititution);
+    let oneEvent = await events.findOne({ where: {id: req.params.id},
+      include:  [{model: eventsDate, attributes: ['date', 'startTime', 'endTime']}]});//console.log(oneInstititution);
     res.json(oneEvent)
   } 
   catch (err) {
