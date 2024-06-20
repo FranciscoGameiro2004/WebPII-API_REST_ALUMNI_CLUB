@@ -104,7 +104,8 @@ exports.findEventsParticipants = async (req, res, next) => {
     let participants = await eventsParticipant.findAll({
       attributes: ['role', 'UserID'],
       where: {EventId: req.params.id},
-      raw: true
+      raw: true,
+      include:  [{model: db.users, attributes: ['name', 'username']}]
     })
 
     let participantsInfo = []
