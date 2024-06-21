@@ -83,7 +83,7 @@ test("Inserir Curso", async () => {
       degreeType: 2,
     },
   });
-  console.log(response.data);
+  //console.log(response.data);
   expect(response.status).toBe(201);
 });
 
@@ -146,7 +146,7 @@ test("Obter Curso através da pesquisa de uma lista", async () => {
     params: params,
   });
   degreeId = response.data.data[0].id;
-  console.log(degreeId);
+  //console.log(degreeId);
   expect(response.status).toBe(200);
   expect(
     response.data.data.some(
@@ -203,6 +203,6 @@ test("Remover Curso", async () => {
     url: `${API_BASE_URL}/degrees/${degreeId}`,
     headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
   });
-  console.log(degreeId);
+  //console.log(degreeId);
   expect(response1.status).toBe(204);
 });

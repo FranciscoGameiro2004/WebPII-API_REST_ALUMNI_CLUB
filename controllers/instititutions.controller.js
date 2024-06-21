@@ -126,7 +126,6 @@ exports.createInstitution = async (req, res,next) => {
         url: req.body.url,
         phoneNumber: req.body.phone,
         logoUrl: req.body.logoUrl
-
       });
     } else {
       clear();console.log("401, An institution is already registered.");

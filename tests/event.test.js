@@ -37,6 +37,25 @@ beforeAll(async () => {
     JWT_TOKEN_NORMAL = response_normal.data.accessToken;
     normalId = response_normal.data.userToLogin.id;
 
+    const params = new URLSearchParams([
+      ["limit", 3],
+      ["page", 0],
+      ["search", "TSIW Event Test 2024 via Test"]
+    ]);
+    const response_event = await axios({
+      method: "get",
+      url: `${API_BASE_URL}/events`,
+      params: params,
+    }); //console.log(response_event.data.data);
+
+    eventId = response_event.data.data[0].id
+
+    let command = axios({
+      method: "delete",
+      url: `${API_BASE_URL}/events/${eventId}`,
+      params: params,
+    });
+
   })();
 });
 
@@ -80,11 +99,31 @@ test("Get events", async () => {
   expect(response.status).toBe(200);
 })
 
-test("Get one event", async () => {
+test("Get oneEvent", async () => {
   const response = await axios({
     method: "get",
     url: `${API_BASE_URL}/events/${eventId}`,
   });//console.log(response);
+  expect(response.status).toBe(200);
+})
+
+test("Get oneEventPartipants", async () => {
+  const params = new URLSearchParams([
+    ["limit", 3],
+    ["page", 0],
+    ["search", ""]
+  ]);
+  let events = await axios({
+    method: "get",
+    url: `${API_BASE_URL}/events`,
+    params: params,
+  });//console.log(events);
+  eventId = events.data.data[0].id; //console.log(eventId);
+
+  const response = await axios({
+    method: "get",
+    url: `${API_BASE_URL}/events/${eventId}/participants`,
+  });//console.log(response.data);
   expect(response.status).toBe(200);
 })
 /*---------------------------GET-------------------------------------*/
@@ -103,7 +142,8 @@ test("Criar evento", async () => {
         { date: "2024-06-17", startTime: "10:00:00", endTime: "16:00:00" }
       ],
     },
-  });
+  }); //console.log(response.data);
+  //console.log("Evento criado");
   expect(response.status).toBe(201);
 });
 
@@ -115,7 +155,7 @@ test("Criar evento sem fornecer nome", async () => {
       headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
       data: {
         description:
-          "A coding competition where only the best of the best gan participate",
+          "evento sem fornecer nome",
         dates: [
           { date: "2024-06-20", startTime: "15:00:00", endTime: "19:00:00" },
         ],
@@ -133,7 +173,7 @@ test("Criar evento sem fornecer descrição", async () => {
         url: `${API_BASE_URL}/events`,
         headers: { Authorization: `Bearer ${JWT_TOKEN_ADMIN}` },
         data: {
-          name: "Torneio de código 2024",
+          name: "evento sem fornecer descrição",
           dates: [
             { date: "2024-06-20", startTime: "15:00:00", endTime: "19:00:00" },
           ],
@@ -150,7 +190,7 @@ test("Criar evento sem fornecer token", async () => {
       method: "post",
       url: `${API_BASE_URL}/events`,
       data: {
-        name: "Torneio de código 2024",
+        name: "evento sem fornecer token",
         description:
         "A coding competition where only the best of the best gan participate",
         dates: [
@@ -170,7 +210,7 @@ test("Criar evento com um utilizador normal", async () => {
       url: `${API_BASE_URL}/events`,
       headers: { Authorization: `Bearer ${JWT_TOKEN_NORMAL}` },
       data: {
-        name: "Torneio de código 2024",
+        name: "evento com um utilizador normal",
         description:
         "A coding competition where only the best of the best gan participate",
         dates: [
@@ -185,8 +225,7 @@ test("Criar evento com um utilizador normal", async () => {
 /*---------------------------POST------------------------------------*/
 
 /*---------------------------PUT-------------------------------------*/
-test("Put one event", async () => {
-
+test("Put oneEvent", async () => {
   const params = new URLSearchParams([
     ["limit", 3],
     ["page", 0],
@@ -221,3 +260,28 @@ test("Put one event", async () => {
 
   expect(response.status).toBe(201);
 })
+/*---------------------------PUT-------------------------------------*/
+
+/*---------------------------DELETE----------------------------------*/
+test("delete oneEvent", async () => {
+  const params = new URLSearchParams([
+    ["limit", 3],
+    ["page", 0],
+    ["search", ""]
+  ]);
+  let response = await axios({
+    method: "get",
+    url: `${API_BASE_URL}/events`,
+    params: params,
+  }); //console.log(response.data.data);
+
+  let eventId = response.data.data[0].id; //console.log(eventId);
+
+  response = await axios({
+    method: "delete",
+    url: `${API_BASE_URL}/events/${eventId}`,
+  }); //console.log(response.status)
+
+  expect(response.status).toBe(201);
+})
+
