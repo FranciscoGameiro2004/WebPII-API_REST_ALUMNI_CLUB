@@ -142,6 +142,21 @@ try {
   consentDegrees: true,
 }); */
 
+/* const comps = require('./companies.js')
+let newId = 1
+for (let comp of comps){
+  let company = db.company.create({
+    id: newId,
+    designation: comp.name,
+    address: '',
+    logoUrl: comp.logo,
+    url: comp.domain,
+    email: `public@${comp.domain}`,
+    phoneNumber: 912345678
+  });
+  newId++
+} */
+
 
 /* await db.degreeType.create({
   designation: "Curso Técnico Superior"
