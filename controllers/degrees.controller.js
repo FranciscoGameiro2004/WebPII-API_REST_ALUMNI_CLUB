@@ -1,8 +1,10 @@
+const clear = require('clear');
+const { ErrorHandler } = require("../utils/error.js");
 const db = require("../models/index.js");
 let degrees = db.degrees
-const { clear } = require("console");
+
 const { Op, ValidationError, where, JSON } = require("sequelize");
-const { ErrorHandler } = require("../utils/error.js");
+const { raw } = require('mysql2');
 
 // Routes //
 exports.findAll = async (req, res, next) => {
