@@ -30,7 +30,11 @@
                 "lineNumber": 1,
                 "column": 1
             },
+<<<<<<< HEAD
             "firstPositionDeltaTop": -1
+=======
+            "firstPositionDeltaTop": 11
+>>>>>>> 7b2a4aa2f8cce45a291ce99bfbc12858a9b30859
         },
         "contributionsState": {
             "editor.contrib.folding": {},
@@ -49,8 +53,13 @@
                         {
                             "type": 4,
                             "index": 0,
+<<<<<<< HEAD
                             "resultId": "5c971e4e-2c3e-45ff-e6cb-f1d776d2c19f",
                             "content": "OK, 0 records retrieved in 14.725ms"
+=======
+                            "resultId": "6c4c5f5f-3107-45c1-e4fa-6b9d0a0b8520",
+                            "content": "OK, 0 records retrieved in 13.997ms"
+>>>>>>> 7b2a4aa2f8cce45a291ce99bfbc12858a9b30859
                         }
                     ]
                 },
@@ -77,7 +86,11 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
+<<<<<<< HEAD
                         "cbffc417-2031-4b72-f878-da76b26c2bb0"
+=======
+                        "e0aca089-e49c-4c04-a89d-49d643930455"
+>>>>>>> 7b2a4aa2f8cce45a291ce99bfbc12858a9b30859
                     ]
                 },
                 "currentHeight": 307.5,
@@ -95,8 +108,13 @@
             },
             "data": [
                 {
+<<<<<<< HEAD
                     "tabId": "63552b4c-fe1b-4f4d-aa66-40f887bd3032",
                     "resultId": "cbffc417-2031-4b72-f878-da76b26c2bb0",
+=======
+                    "tabId": "ed08080a-04f9-43cc-bc87-ddb2cf78cf07",
+                    "resultId": "e0aca089-e49c-4c04-a89d-49d643930455",
+>>>>>>> 7b2a4aa2f8cce45a291ce99bfbc12858a9b30859
                     "rows": [
                         {
                             "0": 37,
@@ -248,7 +266,11 @@
                         }
                     ],
                     "executionInfo": {
+<<<<<<< HEAD
                         "text": "OK, 3 records retrieved in 11.931ms"
+=======
+                        "text": "OK, 3 records retrieved in 14.342ms"
+>>>>>>> 7b2a4aa2f8cce45a291ce99bfbc12858a9b30859
                     },
                     "totalRowCount": 3,
                     "hasMoreRows": false,
@@ -266,7 +288,11 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
+<<<<<<< HEAD
                         "18242adc-7614-4855-c16e-150fc5453c5b"
+=======
+                        "1ee2a70f-4a5d-4878-cf7d-1bd79507a9c0"
+>>>>>>> 7b2a4aa2f8cce45a291ce99bfbc12858a9b30859
                     ]
                 },
                 "currentHeight": 192.546875,
@@ -284,8 +310,13 @@
             },
             "data": [
                 {
+<<<<<<< HEAD
                     "tabId": "63552b4c-fe1b-4f4d-aa66-40f887bd3032",
                     "resultId": "18242adc-7614-4855-c16e-150fc5453c5b",
+=======
+                    "tabId": "ed08080a-04f9-43cc-bc87-ddb2cf78cf07",
+                    "resultId": "1ee2a70f-4a5d-4878-cf7d-1bd79507a9c0",
+>>>>>>> 7b2a4aa2f8cce45a291ce99bfbc12858a9b30859
                     "rows": [
                         {
                             "0": 90,
@@ -322,7 +353,11 @@
                         }
                     ],
                     "executionInfo": {
+<<<<<<< HEAD
                         "text": "OK, 2 records retrieved in 12.518ms"
+=======
+                        "text": "OK, 2 records retrieved in 14.816ms"
+>>>>>>> 7b2a4aa2f8cce45a291ce99bfbc12858a9b30859
                     },
                     "totalRowCount": 2,
                     "hasMoreRows": false,
@@ -340,7 +375,11 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
+<<<<<<< HEAD
                         "b7e67ee4-aee7-4d85-e71e-511240c498fa"
+=======
+                        "e4aa39fd-0cd1-45c1-f79c-5b758e82e762"
+>>>>>>> 7b2a4aa2f8cce45a291ce99bfbc12858a9b30859
                     ]
                 },
                 "currentHeight": 112.8125,
@@ -358,8 +397,13 @@
             },
             "data": [
                 {
+<<<<<<< HEAD
                     "tabId": "63552b4c-fe1b-4f4d-aa66-40f887bd3032",
                     "resultId": "b7e67ee4-aee7-4d85-e71e-511240c498fa",
+=======
+                    "tabId": "ed08080a-04f9-43cc-bc87-ddb2cf78cf07",
+                    "resultId": "e4aa39fd-0cd1-45c1-f79c-5b758e82e762",
+>>>>>>> 7b2a4aa2f8cce45a291ce99bfbc12858a9b30859
                     "rows": [
                         {
                             "0": 223,
@@ -414,7 +458,11 @@
                         }
                     ],
                     "executionInfo": {
+<<<<<<< HEAD
                         "text": "OK, 2 records retrieved in 7.216ms"
+=======
+                        "text": "OK, 2 records retrieved in 12.548ms"
+>>>>>>> 7b2a4aa2f8cce45a291ce99bfbc12858a9b30859
                     },
                     "totalRowCount": 2,
                     "hasMoreRows": false,
@@ -435,8 +483,8 @@
                         {
                             "type": 4,
                             "index": 0,
-                            "resultId": "f7568cb1-3c87-412d-b298-529feb87c8c3",
-                            "content": "OK, 0 records retrieved in 0s"
+                            "resultId": "f306a448-f8ce-4d0c-81a7-d8ce34a117f4",
+                            "content": "OK, 0 records retrieved in 10.455ms"
                         }
                     ]
                 },
@@ -466,8 +514,8 @@
                         {
                             "type": 4,
                             "index": 0,
-                            "resultId": "48dc0c98-de10-40bd-b021-df10ed9dfe07",
-                            "content": "OK, 0 records retrieved in 4.541ms"
+                            "resultId": "d17b193e-8607-447c-f9cf-12d543384d6c",
+                            "content": "OK, 0 records retrieved in 15.048ms"
                         }
                     ]
                 },
