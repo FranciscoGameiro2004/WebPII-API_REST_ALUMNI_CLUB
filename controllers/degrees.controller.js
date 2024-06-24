@@ -8,19 +8,24 @@ const { raw } = require('mysql2');
 
 // Routes //
 exports.findAll = async (req, res, next) => {
-    clear();console.log("Degrees---findAll")
     try {
-      /* let degreeList = await degrees.findAll();
-      return res.status(200).json(degreeList) */
-
-    const currentPage = req.query.page >= 0 ? parseInt(req.query.page) : 0;
-    const limit = parseInt(req.query.limit);
+    clear();
+    console.log("Degrees---findAll")
+    
+    const currentPage = req.query.page >= 0 ? parseInt(req.query.page) : 0; console.log(currentPage);
+    const limit = parseInt(req.query.limit); console.log(limit);
 
     if (limit < 1 || !Number.isInteger(limit)) {
       throw new ErrorHandler(400, "Limit must be a positive integer, greater than or equal to 5");
     }
 
-    let degreeList = await degrees.findAndCountAll({
+    console.log("Query parameters:", {
+      limit: limit,
+      offset: currentPage * limit,
+      search: req.query.search || ''
+    });
+    
+    let Alldegrees = await degrees.findAndCountAll({
       attributes: ['id', 'designation', 'InstitutionId', 'DegreeTypeId'],
       raw: true,
       limit: limit,
@@ -30,10 +35,12 @@ exports.findAll = async (req, res, next) => {
           [Op.like]: `%${req.query.search || ''}%`
         }
       }
-    });
+    }); 
+    
+    console.log("Degrees found:", Alldegrees); // Log para verificar o que foi retornado pela consulta
 
-    degreeList.rows.forEach((degree, index) => {
-      degreeList.rows[index].links = [
+    Alldegrees.rows.forEach((degree, index) => {
+      Alldegrees.rows[index].links = [
         { rel: "self", href: `/degrees/${degree.id}`, method: "GET" },
       ];
       let degreeType
@@ -48,11 +55,11 @@ exports.findAll = async (req, res, next) => {
       } else if (degreeType == 5){
         degreeType = 'Doutoramento'
       }
-      degreeList.rows[index].type = degreeType
-      delete degreeList.rows[index].DegreeTypeId
+      Alldegrees.rows[index].type = degreeType
+      delete Alldegrees.rows[index].DegreeTypeId
     });
 
-    const numPages = Math.ceil(degreeList.count / limit);
+    const numPages = Math.ceil(Alldegrees.count / limit);
 
     let links = [];
     if (currentPage > 0) {
@@ -72,12 +79,12 @@ exports.findAll = async (req, res, next) => {
 
     res.status(200).json({
       pagination: {
-        total: degreeList.count,
+        total: Alldegrees.count,
         pages: numPages,
         current: currentPage,
         limit: limit,
       },
-      data: degreeList.rows,
+      data: Alldegrees.rows,
       links: links,
     });
     }

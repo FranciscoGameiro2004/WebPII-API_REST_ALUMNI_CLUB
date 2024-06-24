@@ -11,6 +11,7 @@ exports.findAll = async (req, res, next) => {
   try {
     clear();
     console.log("Institutions---findAll");
+    console.log(req.url)
 
     const currentPage = req.query.page >= 0 ? parseInt(req.query.page) : 0;
     const limit = parseInt(req.query.limit);
@@ -29,7 +30,7 @@ exports.findAll = async (req, res, next) => {
           [Op.like]: `%${req.query.search || ''}%`
         }
       }
-    });
+    }); console.log(allInstitutions)
 
     allInstitutions.rows.forEach((institution, index) => {
       allInstitutions.rows[index].links = [
