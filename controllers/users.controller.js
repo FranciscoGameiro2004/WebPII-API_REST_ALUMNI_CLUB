@@ -440,9 +440,6 @@ exports.login = async (req, res, next) => {
       throw new ErrorHandler(405, 'Not correct credentials')
     }
 
-    console.table(req.headers)
-
-
   } catch (err) {
     next(err);
   }

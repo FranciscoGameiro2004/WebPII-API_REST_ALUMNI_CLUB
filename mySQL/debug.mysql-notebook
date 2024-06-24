@@ -15,12 +15,12 @@
             {
                 "inSelectionMode": false,
                 "selectionStart": {
-                    "lineNumber": 2,
-                    "column": 20
+                    "lineNumber": 5,
+                    "column": 30
                 },
                 "position": {
-                    "lineNumber": 2,
-                    "column": 20
+                    "lineNumber": 5,
+                    "column": 30
                 }
             }
         ],
@@ -30,7 +30,7 @@
                 "lineNumber": 2,
                 "column": 1
             },
-            "firstPositionDeltaTop": 25
+            "firstPositionDeltaTop": 11
         },
         "contributionsState": {
             "editor.contrib.folding": {},
@@ -49,8 +49,8 @@
                         {
                             "type": 4,
                             "index": 0,
-                            "resultId": "fcae0716-9315-44dd-e9f7-52850276081c",
-                            "content": "OK, 0 records retrieved in 9.081ms"
+                            "resultId": "6c4c5f5f-3107-45c1-e4fa-6b9d0a0b8520",
+                            "content": "OK, 0 records retrieved in 13.997ms"
                         }
                     ]
                 },
@@ -77,7 +77,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "7aca1ca9-cece-46b9-acfb-5b74d133bb13"
+                        "e0aca089-e49c-4c04-a89d-49d643930455"
                     ]
                 },
                 "currentHeight": 307.5,
@@ -95,53 +95,53 @@
             },
             "data": [
                 {
-                    "tabId": "b79f6e60-46af-4136-81cf-53f04f65771c",
-                    "resultId": "7aca1ca9-cece-46b9-acfb-5b74d133bb13",
+                    "tabId": "ed08080a-04f9-43cc-bc87-ddb2cf78cf07",
+                    "resultId": "e0aca089-e49c-4c04-a89d-49d643930455",
                     "rows": [
                         {
-                            "0": 1,
-                            "1": "John Template Doe",
-                            "2": "maria.garcia",
-                            "3": "maria.garcia@example.com",
-                            "4": "$2a$10$bTsLgO1Q29tBfkgInmKmF.t2DPmN2ScHBv.N4gZF3c1WVsxjof/ty",
+                            "0": 37,
+                            "1": "John Doe",
+                            "2": "user",
+                            "3": "user.doe@example.com",
+                            "4": "$2a$10$35txOVPoeRf6W.PNLHcqh.j0wSjrsCgqEupgSVJHHPq2.vh8OTdrC",
                             "5": "normal",
                             "6": "https://beforeigosolutions.com/wp-content/uploads/2021/12/dummy-profile-pic-300x300-1.png",
-                            "7": "Calle Principal, 456",
-                            "8": "ES",
-                            "9": 0,
-                            "10": 1,
-                            "11": 1,
-                            "12": null,
-                            "13": null
-                        },
-                        {
-                            "0": 2,
-                            "1": "admin",
-                            "2": "admin",
-                            "3": "admin@alumniclub.pt",
-                            "4": "$2a$10$oBeE.aq/2rPiDznbUetPkumTJ/9kjW5CnuMjqTTLrYwzQdgpIpF..",
-                            "5": "admin",
-                            "6": "https://beforeigosolutions.com/wp-content/uploads/2021/12/dummy-profile-pic-300x300-1.png",
-                            "7": "null",
-                            "8": "null",
-                            "9": 0,
-                            "10": 0,
-                            "11": 1,
-                            "12": null,
-                            "13": null
-                        },
-                        {
-                            "0": 3,
-                            "1": "Francisco Gameiro",
-                            "2": "franciscogameiro",
-                            "3": "franciscogameiro@email.com",
-                            "4": "$2a$10$RNLq09eX1FZYUwZNDDxy9eAmi4ijOln.Qcny/r1b347qdAZJHEvVO",
-                            "5": "normal",
-                            "6": "https://beforeigosolutions.com/wp-content/uploads/2021/12/dummy-profile-pic-300x300-1.png",
-                            "7": "Rua do Bairro",
+                            "7": "Rua D.Sancho I",
                             "8": "PT",
                             "9": 0,
                             "10": 1,
+                            "11": 1,
+                            "12": null,
+                            "13": null
+                        },
+                        {
+                            "0": 38,
+                            "1": "Adminstrator",
+                            "2": "admin",
+                            "3": "admin@email.com",
+                            "4": "$2a$10$.sK8A.R1hJzU9PwBvD/H5uoCZE0qeRG/apZ.M58454LJ1FjLTVuju",
+                            "5": "admin",
+                            "6": "https://beforeigosolutions.com/wp-content/uploads/2021/12/dummy-profile-pic-300x300-1.png",
+                            "7": "Rua D. Sancho I",
+                            "8": "PT",
+                            "9": 0,
+                            "10": 1,
+                            "11": 1,
+                            "12": null,
+                            "13": null
+                        },
+                        {
+                            "0": 39,
+                            "1": "Francisco Gameiro",
+                            "2": "FranciscoGameiro2004",
+                            "3": "gameirofrancisco@email.com",
+                            "4": "$2a$10$qNrrdEiFiwrQ1Cfir0esnedsFoPfxoxkh6M5ClW2DT6VKnwvrB.re",
+                            "5": "normal",
+                            "6": "https://beforeigosolutions.com/wp-content/uploads/2021/12/dummy-profile-pic-300x300-1.png",
+                            "7": "Rua do Bairro Nº25",
+                            "8": "PT",
+                            "9": 0,
+                            "10": 0,
                             "11": 1,
                             "12": null,
                             "13": null
@@ -248,7 +248,7 @@
                         }
                     ],
                     "executionInfo": {
-                        "text": "OK, 3 records retrieved in 0s"
+                        "text": "OK, 3 records retrieved in 14.342ms"
                     },
                     "totalRowCount": 3,
                     "hasMoreRows": false,
@@ -266,7 +266,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "0d4235eb-fada-4631-e0b5-8d16da5282fe"
+                        "1ee2a70f-4a5d-4878-cf7d-1bd79507a9c0"
                     ]
                 },
                 "currentHeight": 192.546875,
@@ -284,18 +284,18 @@
             },
             "data": [
                 {
-                    "tabId": "b79f6e60-46af-4136-81cf-53f04f65771c",
-                    "resultId": "0d4235eb-fada-4631-e0b5-8d16da5282fe",
+                    "tabId": "ed08080a-04f9-43cc-bc87-ddb2cf78cf07",
+                    "resultId": "1ee2a70f-4a5d-4878-cf7d-1bd79507a9c0",
                     "rows": [
                         {
-                            "0": 86,
-                            "1": "TSIW Event Test 2024 via Test",
-                            "2": "A cool meeting via Test"
+                            "0": 90,
+                            "1": "WebPI",
+                            "2": "Venha ver os projetos feitos por alunos do 1º ano da Licenciatura em Tecnologias e Sistemas de Informação para a Web"
                         },
                         {
-                            "0": 87,
-                            "1": "evento sem fornecer token",
-                            "2": "A coding competition where only the best of the best gan participate"
+                            "0": 91,
+                            "1": "WebPII",
+                            "2": "Venha ver os projetos feitos por alunos do 2º ano da Licenciatura em Tecnologias e Sistemas de Informação para a Web"
                         }
                     ],
                     "columns": [
@@ -322,7 +322,7 @@
                         }
                     ],
                     "executionInfo": {
-                        "text": "OK, 2 records retrieved in 13.874ms"
+                        "text": "OK, 2 records retrieved in 14.816ms"
                     },
                     "totalRowCount": 2,
                     "hasMoreRows": false,
@@ -340,7 +340,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "ad5e2846-0687-4bed-b212-7af565a1d545"
+                        "e4aa39fd-0cd1-45c1-f79c-5b758e82e762"
                     ]
                 },
                 "currentHeight": 112.8125,
@@ -358,22 +358,22 @@
             },
             "data": [
                 {
-                    "tabId": "b79f6e60-46af-4136-81cf-53f04f65771c",
-                    "resultId": "ad5e2846-0687-4bed-b212-7af565a1d545",
+                    "tabId": "ed08080a-04f9-43cc-bc87-ddb2cf78cf07",
+                    "resultId": "e4aa39fd-0cd1-45c1-f79c-5b758e82e762",
                     "rows": [
                         {
-                            "0": 221,
-                            "1": "2024-06-17",
+                            "0": 223,
+                            "1": "2024-06-21",
                             "2": "10:00:00",
-                            "3": "16:00:00",
-                            "4": 86
+                            "3": "12:30:00",
+                            "4": 90
                         },
                         {
-                            "0": 222,
-                            "1": "2024-06-20",
-                            "2": "15:00:00",
-                            "3": "19:00:00",
-                            "4": 87
+                            "0": 224,
+                            "1": "2024-06-21",
+                            "2": "10:00:00",
+                            "3": "12:30:00",
+                            "4": 91
                         }
                     ],
                     "columns": [
@@ -414,7 +414,7 @@
                         }
                     ],
                     "executionInfo": {
-                        "text": "OK, 2 records retrieved in 12.256ms"
+                        "text": "OK, 2 records retrieved in 12.548ms"
                     },
                     "totalRowCount": 2,
                     "hasMoreRows": false,
@@ -435,8 +435,8 @@
                         {
                             "type": 4,
                             "index": 0,
-                            "resultId": "f7568cb1-3c87-412d-b298-529feb87c8c3",
-                            "content": "OK, 0 records retrieved in 0s"
+                            "resultId": "f306a448-f8ce-4d0c-81a7-d8ce34a117f4",
+                            "content": "OK, 0 records retrieved in 10.455ms"
                         }
                     ]
                 },
@@ -466,8 +466,8 @@
                         {
                             "type": 4,
                             "index": 0,
-                            "resultId": "48dc0c98-de10-40bd-b021-df10ed9dfe07",
-                            "content": "OK, 0 records retrieved in 4.541ms"
+                            "resultId": "d17b193e-8607-447c-f9cf-12d543384d6c",
+                            "content": "OK, 0 records retrieved in 15.048ms"
                         }
                     ]
                 },
