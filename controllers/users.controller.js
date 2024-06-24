@@ -425,8 +425,8 @@ exports.login = async (req, res, next) => {
         { id: userToLogin.id, type: userToLogin.type },
         JWTconfig.SECRET,
         {
-          // expiresIn: '24h' // 24 hours
-          expiresIn: "20m", // 20 minutes
+          expiresIn: '24h' // 24 hours
+          // expiresIn: "20m", // 20 minutes
           // expiresIn: '1s' // 1 second
         }
       );
