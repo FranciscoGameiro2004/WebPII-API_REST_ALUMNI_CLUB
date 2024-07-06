@@ -12,8 +12,8 @@ exports.findAll = async (req, res, next) => {
     clear();
     console.log("Degrees---findAll")
     
-    const currentPage = req.query.page >= 0 ? parseInt(req.query.page) : 0; console.log(currentPage);
-    const limit = parseInt(req.query.limit); console.log(limit);
+    const currentPage = req.query.page >= 0 ? parseInt(req.query.page) : 0; 
+    const limit = parseInt(req.query.limit); 
 
     if (limit < 1 || !Number.isInteger(limit)) {
       throw new ErrorHandler(400, "Limit must be a positive integer, greater than or equal to 5");
@@ -35,7 +35,7 @@ exports.findAll = async (req, res, next) => {
           [Op.like]: `%${req.query.search || ''}%`
         }
       }
-    }); 
+    })
     
     console.log("Degrees found:", Alldegrees); // Log para verificar o que foi retornado pela consulta
 
